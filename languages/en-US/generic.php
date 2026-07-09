@@ -2055,7 +2055,7 @@ if (isset($gks_lang_array['generic'])==false)
 'Το πιστωτικό του είναι'=>'The credit is',
 'Το δελτίο του είναι'=>'The delivery note is',
 'Εάν θα υπάρχει η δυνατότητα να προστεθούν'=>'If there will be the possibility of adding',
-'Νέο Ημερολόγιο'=>'New Calendar',
+'Νέο Ημερολόγιο'=>'New Journal',
 'Εάν θα επηρεάσει την αποθήκη, ομοίως σαν το'=>'If it will affect the warehouse, similarly as',
 'Κωδ'=>'Code',
 'Πρόθεμα'=>'Prefix',
