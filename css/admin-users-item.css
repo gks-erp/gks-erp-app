@@ -1,0 +1,93 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.gks_comm_email_div {
+  margin-bottom: 6px;
+}
+.gks_comm_email_delete {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.gks_comm_email_add {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.gks_comm_email_value {
+  width: calc(100% - 27px);
+  display: inline-block;
+}
+.gks_comm_email_primary {
+  color:gray;
+  cursor:pointer;  
+}
+.gks_comm_email_primary_sel {
+  color:blue;
+}
+.gks_comm_email_descr {
+  width: calc(100% - 44px);
+  display: inline-block;  
+}
+
+.gks_comm_phone_div {
+  margin-bottom: 6px;
+}
+.gks_comm_phone_delete {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.gks_comm_phone_add {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.gks_comm_phone_value {
+  width: calc(100% - 27px);
+  display: inline-block;
+}
+.gks_comm_phone_primary {
+  color:gray;
+  cursor:pointer;  
+}
+.gks_comm_phone_primary_sel {
+  color:blue;
+}
+.gks_comm_phone_descr {
+  width: calc(100% - 44px);
+  display: inline-block;  
+}
+
+.gks_comm_url_div {
+  margin-bottom: 6px;
+}
+.gks_comm_url_delete {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.gks_comm_url_add {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.gks_comm_url_value {
+  width: calc(100% - 27px);
+  display: inline-block;
+}
+.gks_comm_url_primary {
+  color:gray;
+  cursor:pointer;  
+}
+.gks_comm_url_primary_sel {
+  color:blue;
+}
+.gks_comm_url_descr {
+  width: calc(100% - 44px);
+  display: inline-block;  
+}
+

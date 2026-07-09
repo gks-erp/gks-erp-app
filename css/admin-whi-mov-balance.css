@@ -1,0 +1,20 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+#lightgallery_user > tbody > tr > td {
+  vertical-align: middle;
+}  
+#lightgallery_user > tbody > tr > th {
+  vertical-align: middle;
+}  
+#lightgallery_user > tbody > tr > .tdimg {
+  padding:0px;
+}
+.mytdypoloipo {
+  cursor:pointer;  
+}
+
+

@@ -1,0 +1,161 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.gks_eidos_label {
+  font-size:0.8rem;
+  /* font-weight: bold; */
+  padding: 5px 0px 5px 0px;
+  border-radius: 10px;
+  text-align: center; 
+  margin-top: 2px; 
+}
+#eidi_table .form-group input {
+  font-size:0.8rem;
+  margin-bottom: 4px;
+}
+#eidi_table .form-group p {
+  font-size:0.8rem;
+}
+
+.gks_ekptosi {
+  text-align: center;
+}
+.gks_ekptosi_poso {
+  font-size: 0.8rem;
+  color: red;
+  text-decoration1: line-through;
+  display: inline-block;
+  word-break: keep-all;
+}  
+.gks_ekptosi_pososto {
+  font-size: 0.8rem;
+  /*
+  color: red;
+  //padding-left: 6px;
+  //display: inline-block;
+  word-break: keep-all;
+  */
+} 
+.gks_price_final {
+  font-size: 0.8rem;  
+}
+.gks_reservation_delete_icon {
+  margin-right: 6px;
+  color:gray;
+  cursor:pointer;
+}
+.gks_reservation_delete_icon:hover {
+  color:red;
+}
+
+
+.coupons_span {
+  text-align:left;border: 1px solid gray;border-radius: 4px;padding:5px;margin-right: 6px;line-height: 35px;
+  background-color: lightyellow;
+}
+.gks_coupon {
+  text-align: center;
+  margin-top:4px;
+}
+.gks_coupon_item {
+  font-size: 0.8rem;
+  display1: inline-block;
+  word-break: keep-all;
+  border: 1px solid gray;
+  border-radius: 4px;
+  padding: 1px 4px;
+  line-height1: 35px;
+  background-color: lightyellow;
+} 
+.gks_coupon_item_disabled {
+  color: red;
+  text-decoration: line-through;
+  cursor:pointer;
+}
+
+
+.itemtd13 {
+  padding: 0px !important;
+  vertical-align: middle !important;
+  
+}
+.room_info_price {
+  cursor:pointer; 
+  font-size: 150%;
+  color:mediumblue; 
+}
+.rchilds_ages_list_item > option:disabled {
+  background-color: lightgray;
+  color: black;
+  
+}
+.total_row {
+ margin-bottom: 0px; 
+}
+
+
+.gks_flock {
+  height: unset !important;
+}
+.gks_flock_small {
+  font-size: 0.8rem;
+}
+.gks_quantity_lock {
+  width: calc(100% - 40px);
+  display: inline-block;
+  text-align: right;
+  font-size: 0.8rem;
+}
+.gks_monada_span_lock {
+  padding-top:4px;
+  width:34px;
+  display: inline-block;
+  font-size: 0.8rem;
+  height: 26px;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.gks_ekptosi_pososto_lock {
+  text-align: right;
+  font-size: 0.8rem;
+}
+.gks_coupon_item_disabled_lock {
+  color: red;
+  text-decoration: line-through;
+}
+.gks_price_lock {
+  text-align: right;
+  font-size: 0.8rem;
+}
+.gks_ekptosi_lock {
+  text-align: right;
+}
+.gks_fpa_div_lock {
+    font-size: 0.8rem;
+    text-align: center;
+    overflow: hidden;
+    vertical-align: middle;
+
+}
+
+#dialog_print_zoom_slider_handle {
+  width: 50px;
+  height: 30px;
+  top: 50%;
+  margin-top: -15px;
+  text-align: center;
+  line-height: 1.6em;
+  padding: 5px 5px;
+  margin-left: -25px;
+  cursor: pointer;
+}
+
+#dialog_room_area .form-group {
+  margin-bottom: 2px;
+}
+#dialog_room_area label {
+  line-height: 1;
+}

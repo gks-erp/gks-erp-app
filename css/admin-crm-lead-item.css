@@ -1,0 +1,21 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.lead_status_this {
+  margin-right:6px;
+  cursor:pointer;
+  opacity: 0.2;
+  border-radius11: 0px 12px 12px 0px;
+  display: inline-block;
+  margin-bottom: 4px;
+  
+}
+.lead_status_selected {
+  font-weight:bold;
+  border: 2px solid black;
+  border-radius1: 0px;
+  opacity: 1;
+}

@@ -1,0 +1,10 @@
+
+ul.tagit li.tagit-choice {
+    font-weight: normal;
+}
+.tagit-autocomplete .ui-menu .ui-menu-item a.ui-state-active {
+    font-weight: normal;
+}
+.ui-widget {
+    font-size: 0.9em !important;
+}

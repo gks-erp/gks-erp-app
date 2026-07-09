@@ -1,0 +1,306 @@
+<!-- build:remove -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ContextMenu.js - Highly Customizable JavaScript & CSS3 Drop Down Menus</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/xcode.min.css" rel="stylesheet" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="../contextmenu.min.css" rel="stylesheet" />
+        <link href="style.css" rel="stylesheet" />
+        
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="../contextmenu.js"></script>
+        <script src="script.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/languages/javascript.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+    <body>
+        <div class="container">
+            <!-- /build -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="example text-center">
+                        <h2>ContextMenu.js</h2>
+                        <p style="margin-bottom: 40px"><strong>ContextMenu.js</strong> is a jQuery plugin for creating highly customizable drop down menus triggerable by various mouse events. Use it to create context menus, drop down lists, navigations, and more.
+                            Here are a few examples of the power of ContextMenu.js:</p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="demo-box">
+                                    <h3><span>As a Context Menu</span></h3>
+                                    <div id="context-click" class="context-click-area">Right Click Here</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="demo-box">
+                                    <h3><span>As a Drop-Down List</span></h3>
+                                    <input type="text" placeholder="Search US States" id="autocomplete">
+                                    <p style="margin: 10px 0; color: gray; font-style: italic"><i class="fa fa-info-circle"></i> You can also use the arrow keys to navigate</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="demo-box">
+                                    <h3><span>As a Navigation</span></h3>
+                                    <nav id="demo-nav">
+                                        <ul>
+                                            <li><i class="fa fa-home"></i> Home
+                                                <ul>
+                                                    <li><a href="#">News</a></li>
+                                                    <li><a href="#">Statistics</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><i class="fa fa-gears"></i> Services
+                                                <ul>
+                                                    <li><a href="#">WordPress Plugin Development</a></li>
+                                                    <li><a href="#">WordPress Theme Development</a></li>
+                                                    <li><a href="#">Web Application Development</a></li>
+                                                    <li><a href="#">Web Design</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><i class="fa fa-info"></i> About Us</li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="example">
+                        <h2>Menu Items</h2>
+                        <p>Menus can be constructed using one or more of the 4 available menu item types: <code>divider</code>, <code>title</code>, <code>item</code>, <code>checkbox</code>.
+                        The <code>item</code> type can have nested items, or "sub menus".</p>
+                        <div id="item-types" class="context-click-area">Right Click Here</div>
+                        <p></p>
+<pre class="lang-javascript" data-visibility="hidden"><code class="javascript">$('#element').contextMenu({
+    items: [
+        {type: 'title', text: 'Title'},
+        {type: 'item', text: 'Item'},
+        {type: 'item', text: 'Item with submenu',
+            items: [
+                {type: 'item', text: 'Submenu item 1'},
+                {type: 'item', text: 'Submenu item 2'},
+                {type: 'item', text: 'Submenu item 3'}
+            ]
+        },
+        {type: 'divider'},
+        {type: 'checkbox', text: 'Checkbox', checked: true}
+    ]
+});</code></pre>
+                    </div>
+                    <div class="example">
+                        <h2>Positioning</h2>
+                        <p>Drop down menus can be positioned relative to the <strong>target element</strong>. 
+                            The syntax used is similar to the one used by <a href="http://api.jqueryui.com/position/">jQuery.position</a>. Additionally, by setting <code>at: 'mouse'</code> the menu can be positioned according to the <strong>mouse coordinates</strong>.</p>
+                        <p>Notice that the menu will automatically be <strong>placed inside the screen</strong> if it collides with the window's boundaries.</p>
+                        <div class="text-center">
+                            <div class="context-click-box contextmenu-position" data-position-my="left bottom" data-position-at="center top-5" style="line-height: 40px;width: 200px"><code>my: 'left bottom'</code><br/><code>at: 'center top-5'</code></div>
+                            <div class="context-click-box contextmenu-position" data-position-my="left top+5" data-position-at="left bottom" style="line-height: 40px;width: 200px"><code>my: 'left top+5'</code><br/><code>at: 'left bottom'</code></div>
+                            <div class="context-click-box contextmenu-position" data-position-my="right-5 top" data-position-at="left top" style="line-height: 40px;width: 200px"><code>my: 'right-5 top'</code><br/><code>at: 'left top'</code></div>
+                            <div class="context-click-box contextmenu-position" data-position-my="left top" data-position-at="right+5 top" style="line-height: 40px;width: 200px"><code>my: 'left top'</code><br/><code>at: 'right+5 top'</code></div>
+                        </div>
+                        <p>It is also possible to reposition the menu when clicking on certain children of the target element:</p>
+                        <div class="text-center">
+                            <div class="context-click-box contextmenu-position" data-position-my="left top+5" data-position-at="left bottom" style="padding: 15px 5px 5px 15px">
+                                <div class="context-click-subitem">Subitem</div>
+                                <div class="context-click-subitem">Subitem</div>
+                                <div class="context-click-subitem">Subitem</div><br/>
+                                <div class="context-click-subitem">Subitem</div>
+                                <div class="context-click-subitem">Subitem</div>
+                                <div class="context-click-subitem">Subitem</div>
+                            </div>
+                        </div>
+                        <p></p>
+<pre class="lang-javascript" data-visibility="hidden"><code class="javascript">$('#element').contextMenu({
+    position: {
+        my: 'left top',
+        at: 'center bottom', 
+        children: '.context-click-subitem'
+    },
+    items: [ ... ]
+});</code></pre>
+                    </div>
+                    <div class="example">
+                        <h2>Item Events</h2>
+                        <p>Hover and click event listeners can be assigned to each menu item using the <code>hover</code> and <code>click</code> arguments.</p>
+                        <div id="item-events" class="context-click-area">Right Click Here</div>
+                        <p></p>
+<pre class="lang-javascript" data-visibility="hidden"><code class="javascript">$('#element').contextMenu({
+    items: [
+        {
+            type: 'item', 
+            text: 'Click Me', 
+            click: function(e) {
+                alert('Item clicked');
+            }
+        },
+        {
+            type: 'item', 
+            text: 'Hover Over Me', 
+            hover: function(e) {
+                alert('Item hovered over');
+            }
+        }
+    ]
+});</code></pre>
+                        <hr/>
+                        <h2>Menu-wide events</h2>
+                        <p>You can set click & hover event listeners to all menu items at once by using the <code>click</code> and <code>hover</code> general options.</p>
+                        <div id="menu-wide-events" class="context-click-area">Right Click Here</div>
+                        <p></p>
+                        <pre class="lang-javascript" data-visibility="hidden"><code class="javascript">$('#element').contextMenu({
+    click: function(e) {
+        // 'this' refers to the clicked item
+        alert('The item "'+this.text+'" was clicked');
+    },
+    items: [
+        {type: 'item', text: 'Item 1'},
+        {type: 'item', text: 'Item 2'},
+        {type: 'item', text: 'Item 3', click: function(e){alert('Click event overridden by '+this.text);}}
+    ]
+});</code></pre>
+                    </div>
+                    <div class="example">
+                        <h2>Dynamic Event Binding</h2>
+                        <p>Context menus can be bound to dynamically created elements using the <code>selector</code> argument.</p>
+                        <p class="text-center">
+                            <button id="element-creator">Create Element</button>
+                        </p>
+                        <pre class="lang-javascript" data-visibility="hidden"><code class="javascript">// Select any element that exists at the time of the call
+$('html').contextMenu({ 
+    // Selector string pointing to the dynamic element
+    selector: '.dynamic-child', 
+    items: [ ... ]
+});</code></pre>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="example">
+                        <h2>Transition Effects</h2>
+                        <p>There are various custom transition effects that can be used to show/hide the menu. Here are a few examples (right click to show menu):</p>
+                        <div class="context-click-box transition" data-transition="none">None</div>
+                        <div class="context-click-box transition" data-transition="fadeIn">Fade In</div>
+                        <div class="context-click-box transition" data-transition="slideTop">Slide Top</div>
+                        <div class="context-click-box transition" data-transition="slideBottom">Slide Bottom</div>
+                        <div class="context-click-box transition" data-transition="slideLeft">Slide Left</div>
+                        <div class="context-click-box transition" data-transition="slideRight">Slide Right</div>
+                        <div class="context-click-box transition" data-transition="flipHorizontal">Flip Horizontal</div>
+                        <div class="context-click-box transition" data-transition="flipVertical">Flip Vertical</div>
+                        <p></p>
+<pre class="lang-javascript" data-visibility="hidden"><code class="javascript">$('#element').contextMenu({
+    transition {
+        speed: 300, // In milliseconds
+        type: 'fadeIn'
+    },
+    items: [ ... ]
+});</code></pre>
+                    </div>
+                    <div class="example">
+                        <h2>Auto Hiding</h2>
+                        <p>Context menus can be set to automatically hide when the cursor moves out of them.</p>
+                        <div id="autohide" class="context-click-area">Right Click Here</div>
+                        <p></p>
+<pre class="lang-javascript" data-visibility="hidden"><code class="javascript">$('#element').contextMenu({
+    autoHide: 500, // Time in milliseconds, 
+                   // or 'false' to disable auto hiding
+    items: [ ... ]
+});</code></pre>
+                    </div>
+                    <div class="example">
+                        <h2>Triggering Events</h2>
+                        <p>Drop down menus can be triggered by different mouse events. This can be used in conjunction with the custom positioning option to create menus for different purposes.</p>
+                        <p>Note that hover context menus are <strong>auto-hidden by default</strong>. For that reason, it is recommended to set the <code>autoHide</code> option to something other than the default 0.</p>
+                        <div class="context-click-box triggering-events" data-event="hover">Hover</div>
+                        <div class="context-click-box triggering-events" data-event="click">Click</div>
+                        <div class="context-click-box triggering-events" data-event="dblclick">Double Click</div>
+                        <div class="context-click-box triggering-events" data-event="contextmenu">Context Menu</div>
+                        <input class="triggering-events" data-event="focus" placeholder="Focus" style="width:100px;padding:4px 10px"/>
+                        <p></p>
+                        <pre class="lang-javascript" data-visibility="hidden"><code class="javascript">$('#element').contextMenu({
+    autoHide: 300, // Wait 300ms before hiding the menu
+    event: 'hover', // Or [click|dblclick|contextmenu|focus]
+    items: [ ... ]
+});</code></pre>
+
+                    </div>
+                    <div class="example">
+                        <h2>Dynamic Items</h2>
+                        <p>Menus can be dynamically constructed after an event has been triggered. This can be used to create <strong>event-specific menus</strong> on the fly. The menus are destroyed and reconstructed every time.</p>
+                        <p>In the following example, a different menu will be generated for each of the subitems.</p>
+                        <div id="build-callback" class="context-click-box" style="padding: 15px 5px 5px 15px">
+                            <div class="context-click-subitem">Subitem 1</div>
+                            <div class="context-click-subitem">Subitem 2</div>
+                            <div class="context-click-subitem">Subitem 3</div><br/>
+                            <div class="context-click-subitem">Subitem 4</div>
+                            <div class="context-click-subitem">Subitem 5</div>
+                            <div class="context-click-subitem">Subitem 6</div>
+                        </div>
+                        <p></p>
+<pre class="lang-javascript" data-visibility="hidden"><code class="javascript">$('#element').contextMenu({
+    items: function(e) {
+        return [
+            {type: 'title', text: $(e.target).is('.context-click-subitem') ? e.target.innerHTML : 'All Items'},
+            {type: 'divider'},
+            {type: 'item', text: 'Cut', icon: 'fa fa-scissors'},
+            {type: 'item', text: 'Copy', icon: 'fa fa-files-o'},
+            {type: 'item', text: 'Paste', icon: 'fa fa-clipboard'},
+        ]
+    }
+});</code></pre>
+                    </div>
+                    <div class="example">
+                        <h2>Action Hooks</h2>
+                        <p>There are 3 actions that can be hooked to for running custom functions at specific times. In the following example, two of them, <code>position</code> and <code>hide</code>, are used to change the color of the elements currently active.</p>
+                        <div class="text-center">
+                            <div id="action-hooks" class="context-click-box" style="padding: 15px 5px 5px 15px">
+                                <div class="context-click-subitem">Subitem</div>
+                                <div class="context-click-subitem">Subitem</div>
+                                <div class="context-click-subitem">Subitem</div><br/>
+                                <div class="context-click-subitem">Subitem</div>
+                                <div class="context-click-subitem">Subitem</div>
+                                <div class="context-click-subitem">Subitem</div>
+                            </div>
+                        </div>
+                        <p></p>
+<pre class="lang-javascript" data-visibility="hidden"><code class="javascript">$('#element').contextMenu({
+    items: [ ... ],
+    hooks: {
+        // Called when the menu is shown
+        show: function(e) {},
+        
+        // Called when the menu is repositioned (also called every time the menu is shown)
+        position: function(e){
+            if(typeof activeItem !== 'undefined')
+            {
+                $(activeItem).css({'box-shadow':'none'});
+            }
+            activeItem = e.target;
+            $(e.target).css({'box-shadow':'0 0 0 4px #f1c40f'});
+        },
+
+        // Called when the menu is hidden
+        hide: function(e){
+            $(activeItem).css({'box-shadow':'none'});
+        }
+    }
+});</code></pre>
+                    </div>
+                </div>
+            </div>
+            <!-- build:script inline contextmenu --><!-- /build -->
+            <!-- build:script inline script --><!-- /build -->
+            <!-- build:style inline contextmenu --><!-- /build -->
+            <!-- build:style inline style --><!-- /build -->
+            <!-- build:remove -->
+        </div>
+    </body>
+</html>
+<!-- /build -->

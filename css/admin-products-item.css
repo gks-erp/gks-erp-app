@@ -1,0 +1,254 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.gks_add_xarakt_esoda {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;  
+  font-size:80%;  
+}
+.gks_add_xarakt_eksoda {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;  
+  font-size:80%;  
+}
+.gks_clone_eidos_xarakt_esoda {
+  color: deepskyblue;
+  cursor:pointer;
+  vertical-align: middle;
+  font-size:80%;  
+}
+.gks_clone_eidos_xarakt_eksoda {
+  color: deepskyblue;
+  cursor:pointer;
+  vertical-align: middle;
+  font-size:80%;  
+}
+.gks_delete_eidos_xarakt_esoda {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+  font-size:80%;  
+}
+.gks_delete_eidos_xarakt_eksoda {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+  font-size:80%;  
+}
+.gks_eidos_extra_label {
+  font-size:0.8rem;
+  padding: 5px 0px 5px 0px;
+  text-align: center; 
+  margin-top: 2px; 
+}
+
+.span_sum_xarakt_esoda {
+  padding-right:12px;
+}
+.span_sum_xarakt_eksoda {
+  padding-right:12px;
+}
+
+#xarakt_table .form-group input {
+  font-size:0.8rem;
+  margin-bottom: 4px;
+}
+#xarakt_table .form-group select {
+  font-size:0.8rem;
+  margin-bottom: 4px;
+}
+#xarakt_table .form-group p {
+  font-size:0.8rem;
+}
+.eshop_sync {
+  font-size: 200%;
+  vertical-align: middle;
+  color: blue;
+  cursor: pointer;
+}
+
+#div_idiotites ul.tagit {
+  margin-bottom:0px;
+    
+}
+.gks_idiotita_delete {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.variables_combo {
+  width:unset;
+  display:inline-block;
+  margin-right: 10px;
+  margin-bottom: 4px;
+}
+
+.variables_id {
+  position: relative;
+  top: 1px;
+  color: #fff;
+  background-color: #6c757d;
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 100%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  border:1px solid #6c757d;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;  
+}
+.variables_id:hover {
+  color: #6c757d;
+  background-color: #fff;
+  border-color:#6c757d;
+}
+
+.variable_product_delete {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+  cursor: pointer;
+  font-size: 16px;
+  position: absolute;
+  right: 77px;
+  top: 18px;
+}
+.sortorder_handle {
+  vertical-align: middle;
+  font-size: 16px;
+  position: absolute;
+  right: 50px;
+  top: 18px;
+}
+#div_variables_list .gks_card_expand_icon {
+  font-size: 16px;
+  top: 18px;
+}
+#span_variables_count {
+  font-weight:bold;
+    
+}
+
+.card_header_opoiodipote {
+  background-color: #fff3cd;
+}
+.card_header_mydouble {
+  background-color: #f8d7da;
+}
+
+.variable_product_photo_img {
+  max-width:96px;
+  max-height:96px;
+  cursor:pointer;
+}
+
+.variable_product_photo_reset {
+  width:16px;
+  border:0px solid gray;
+  cursor:pointer; 
+}
+.dialog_variable_photo_img {
+
+  margin: 10px;
+  display: inline-block;
+  max-height: 96px;
+  cursor: pointer;  
+}
+#dialog_variable_photo_list {
+  text-align: center;
+}
+
+#dialog_variable_prices .gkslabelprice {
+  margin-bottom:0px;
+  margin-right:10px  
+}
+input[name=variable_product_price_dialog_type] {
+  
+}
+
+
+#dialog_variable_list_table > table > tbody > tr > th, #dialog_variable_list_table > table > tbody > tr > td{
+  padding:0px;
+}
+
+.dialog_variable_list_table_th {
+  resize: horizontal;
+  overflow: hidden;
+  width: 120px;
+  height1: 120px;
+  margin: 0px;
+  padding: 0px;
+  border1: 1px solid black;
+  display:block;  
+}
+td div.dialog_variable_list_table_th {
+  border: 0;
+  width: auto;
+  height: auto;
+  min-height: 20px;
+  min-width: 20px;
+}
+
+.dialog_variable_list_table_photo_img {
+  max-width: 100%;
+  max-height: 96px;
+  cursor: pointer;
+  position1: relative;
+}
+.variable_product_photo_reset_list {
+  position: absolute;
+  bottom: 0px;
+  width: 16px;
+  left: calc(50% - 8px);
+  border:0px solid gray;
+  cursor:pointer; 
+  display:none;
+}
+.td_variable_product_photo_img_list:hover .variable_product_photo_reset_list {
+  display:block;
+}
+
+
+.dialog_variable_list_table_text {padding: 2px;}
+.dialog_variable_list_table_number {padding: 2px;text-align: right;}
+.dialog_variable_list_table_number3 {width:33%;padding: 2px;text-align: right;display: inline-block;}
+
+
+.def_column_show_span {
+  white-space: nowrap;
+}
+.def_column_show_check {
+  cursor: pointer;
+}
+.def_column_show_label {
+  display:inline;padding-right:18px;padding-left: 3px;cursor: pointer;
+}
+#product_taric, .variable_product_taric {
+ width:calc(98% - 22px);
+ display:inline; 
+}
+.product_taric_get_descr {
+  color: goldenrod;
+  cursor: pointer;
+  vertical-align: middle; 
+}
+.product_taric_descr {
+  display:none;
+  margin: 8px 0px;
+}
+.product_taric_descr_table {
+  background-color: white;
+}
+.product_taric_descr_text {
+  font-size: 0.875rem;
+  margin-bottom: 10px;
+}
+  

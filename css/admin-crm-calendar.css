@@ -1,0 +1,254 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+
+#calendar_div.fc-theme-bootstrap {
+  font-family: var(--gks_erp_app_font_family);
+  font-size: 14px;
+}
+
+.fc-event-main {
+  overflow: hidden;
+}
+.fc-daygrid-event-harness {
+  overflow: hidden;
+}
+
+
+.gks_calendar_time {
+  white-space: nowrap;
+  font-size: var(--fc-small-font-size, .85em);
+  margin-bottom: 1px;  
+}
+
+.gks_calendar_container {
+  
+}
+.gks_calendar_title {
+  
+}
+
+.gks_calendar_message {
+  
+}
+
+.c_notification_item {
+	text-align: left;
+}
+.c_participant_item {
+	text-align: left;
+}
+
+.c_notification_type {
+	width: unset;
+  display: inline-block;
+}
+.c_notification_number {
+	display: inline-block;
+	max-width:100px;
+}
+.c_notification_unit {
+	width: unset;
+  display: inline-block;
+}
+.c_participant_name {
+	display: inline-block;
+	max-width:200px;
+}
+
+.c_participant_is_org {
+  font-size:150%;
+  cursor: pointer;
+  vertical-align: middle; 
+  padding-left: 20px;
+}
+.c_participant_is_org0 {
+  color:black;
+  padding-right: 9px;
+}
+.c_participant_is_org1 {
+  color:blue;
+}
+.c_participant_is_opt {
+  font-size:150%;
+  cursor: pointer;
+  vertical-align: middle; 
+  padding-left: 20px;
+}
+.c_participant_is_opt0 {
+  color:black;
+}
+.c_participant_is_opt1 {
+  color:gray;
+}
+
+.c_participant_r_type {
+  font-size:150%;
+  cursor: pointer;
+  vertical-align: middle;
+  padding-left: 20px; 
+}
+.c_participant_r_type0 {
+  color:gray;
+}
+.c_participant_r_typeyes {
+  color:green;
+}
+.c_participant_r_typeno {
+  color:red;
+}
+.c_participant_r_typeisos {
+  color:darkorange;
+}
+
+
+.c_notification_delete {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+  padding-left: 20px;
+}
+.c_participant_delete {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+  padding-left: 20px;
+}
+
+.c_notification_add {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+  padding-left: 20px;
+}
+.c_participant_add {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+  padding-left: 20px;
+}
+
+#c_notification_add_alone {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+  font-size:150%;
+}
+#c_participant_add_alone {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+  font-size:150%;
+}
+
+
+.gks_label {
+  font-size: 0.875rem;
+}
+
+
+
+
+#main_panel_left {
+  width:270px;
+  float:left;
+  padding: 0px 0px 0px 24px;
+}
+#main_panel_right {
+  width:calc(100% - 270px);
+  float:left;
+  padding: 0px 24px 0px 24px;
+}
+
+@media (max-width: 1200px) {
+  #main_panel_left {
+    width:100%;
+    padding: 0px 24px 60px 24px;
+    text-align:center;
+  }
+  #main_panel_right {
+    width:100%;
+    padding: 0px 24px 60px 24px;
+  }  
+  
+}
+
+#cal_submenu_static {
+  font-size:150%;
+  color:black;
+  cursor:pointer;
+}
+#cal_submenu_fixed {
+  font-size:150%;
+  color:black;
+  cursor:pointer;
+  position:absolute;
+  top:71px;
+  left:0px;
+}
+gks_main_container.gks_menu_pos_left #cal_submenu_fixed {
+  position:absolute;
+  left:0px;
+  top:85px;
+}
+
+
+.cal_user_label, .cal_user_label_task, .cal_user_label_activ {
+  font-size: 0.875rem;
+  margin-bottom: 0px;
+}
+.cal_user_remove, .cal_user_remove_task, .cal_user_remove_activ {
+  color: #dc3545;
+  cursor: pointer;
+  vertical-align: middle;
+}
+#cal_user_add, #cal_user_add_task, #cal_user_add_activ {
+  color: #35dc35;
+  cursor: pointer;
+  vertical-align: top;
+  position: relative;
+  top: 6px;  
+}
+#cal_user_add_user, #cal_user_add_user_task, #cal_user_add_user_activ {
+  width: calc(100% - 24px);
+  max-width:250px;
+}
+.cal_user_row, .cal_user_row_task, .cal_user_row_activ {
+  min-height:26px;  
+}
+.cal_user_color1 {
+  opacity: 0;
+  width:20px;
+  height:16px;
+  display: block;
+  border: none;
+  cursor: pointer;
+}
+.cal_user_color_con1 {
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  top: 4px;
+  
+}
+.cal_user_color_wra1 {
+  float: left;
+}
+
+#gks_calendar_users_list1 {
+  position1: absolute;
+  margin-top:24px;
+  overflow: auto;
+  overflow-x: hidden;
+}
+#gks_calendar_users_list1::-webkit-scrollbar {width: 5px;}
+#gks_calendar_users_list1::-webkit-scrollbar-track {background: #c0dac4; }
+#gks_calendar_users_list1::-webkit-scrollbar-thumb {background: #458c50;}
+#gks_calendar_users_list1::-webkit-scrollbar-thumb:hover {background: #23aa38;} 
+
+.calendar_activity_status {
+  margin:10px 0px;
+}

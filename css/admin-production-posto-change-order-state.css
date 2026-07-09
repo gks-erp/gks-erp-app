@@ -1,0 +1,41 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+
+.mybtn_change_order_state {
+  font-size: 20pt;
+  color: #47a447;
+  cursor: pointer
+}  
+
+
+.ddate_today {
+  background-color: black;
+  color: white;
+  border-radius: 10px;  
+}
+.ddate_future {
+  background-color: #e4e400;
+  color: black;
+  border-radius: 10px;  
+}
+.ddate_future_more {
+  background-color: greenyellow;
+  color: black;
+  border-radius: 10px;  
+}
+.ddate_past {
+  background-color: red;
+  color: white;
+  border-radius: 10px;  
+}
+.ddate_past_more {
+  background-color: orangered;
+  color: white;
+  border-radius: 10px; 
+  font-weight: bold;
+}
+

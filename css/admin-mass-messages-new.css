@@ -1,0 +1,101 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.divrole, .divgroup, .sent_with_type {
+  font-size: 0.875rem;
+}
+.divrole label, .divgroup label, .sent_with_type label {
+  margin-bottom: 0;
+  cursor:pointer;
+}
+.divrole input, .divgroup input, .sent_with_type input {
+  cursor:pointer;
+}
+
+
+
+.user_result {
+  display: flex; 
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content:space-between;
+  align-items: center;
+  border: 1px solid #bbbbbb;
+  margin: 4px 0px;
+  padding: 4px;
+  background-color: #eeeeee;
+} 
+.user_result1 {
+  width:50%;
+  font-size: 0.875rem;
+}
+.user_result2 {
+  width:25%;
+  text-align: center;
+}
+.user_result2 > .imgviber {
+  width: 20px;
+}
+.user_result2 > .imgsms {
+  width: 20px;
+}
+.user_result2 > .imgemail {
+  width: 20px;
+}
+.user_result3 {
+  width:25%;
+  text-align: right;
+}
+.user_result3 > img  {
+  cursor:pointer;
+  width: 20px;
+}
+
+#users_span, #users_span2, #search_span, #search_span2 {
+  font-size: 0.875rem;
+}
+
+#search_results .list_del {
+  display:none;
+}
+#users_list .list_add {
+  display:none;
+}
+
+
+#send_exec_result {
+  text-align: center;
+  font-size: 0.875rem;
+}
+#send_exec_result table {
+  width:100%;
+}
+#test_send {
+  font-size: 0.875rem;
+  margin-bottom:10px;
+}
+
+#test_send .my2side {
+  display:flex;
+  gap: 6px;flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+#test_send .my2side label {
+  width:100%;
+  max-width: 70px;
+  
+}
+#test_send .my2side div {
+  width:100%;
+  margin: 4px 0px;
+}
+
+#mybutton_test {
+  margin-bottom:20px;
+}

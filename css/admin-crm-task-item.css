@@ -1,0 +1,31 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.task_status_this {
+  margin-right:6px;
+  cursor:pointer;
+  opacity: 0.2;
+  border-radius11: 0px 12px 12px 0px;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+.task_status_selected {
+  font-weight:bold;
+  border: 2px solid black;
+  border-radius1: 0px;
+  opacity: 1;
+}
+#dialog_print_zoom_slider_handle {
+  width: 50px;
+  height: 30px;
+  top: 50%;
+  margin-top: -15px;
+  text-align: center;
+  line-height: 1.6em;
+  padding: 5px 5px;
+  margin-left: -25px;
+  cursor: pointer;
+}

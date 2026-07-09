@@ -1,0 +1,182 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.gks_eidos_label {
+  font-size:0.8rem;
+  padding: 5px 0px 5px 0px;
+  border-radius: 10px;
+  text-align: center; 
+  margin-top: 2px; 
+}
+.gks_eidos_extra_label {
+  font-size:0.8rem;
+  padding: 5px 0px 5px 6px;
+  text-align: center; 
+  margin-top: 2px; 
+}
+#eidi_table .form-group input {
+  font-size:0.8rem;
+  margin-bottom: 4px;
+}
+#eidi_table .form-group select {
+  font-size:0.8rem;
+  margin-bottom: 4px;
+}
+#eidi_table .form-group p {
+  font-size:0.8rem;
+}
+
+.gks_flock {
+  height: unset !important;
+}
+.gks_code {
+  width11:calc(100% - 60px);
+  display: inline-block;
+}
+
+.gks_eidos {
+  padding-top: 4px;
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  margin-bottom:0px;
+}
+.gks_eidos:nth-child(even) {
+  background-color: #eeeeee;
+}
+.gks_eidos:nth-child(odd) {
+  background-color: #dddddd;
+}
+
+.gks_photo_link {
+  float:left;
+  margin-top: -4px;
+}
+.gks_photo_link > img {
+  max-width11:33px;
+  max-height:38px;
+  padding-right:10px;
+}
+.gks_info_descr {
+  float: right;
+  margin-right: 4px;
+}
+.gks_descr {
+  font-size:0.8rem;
+  width:calc(100% - 90px);
+  min-height:29px !important;
+  margin-bottom: 4px;
+}
+.gks_product_zoom {
+  float: right;
+  /*position: relative;
+  top: 20px;
+  left: 18px;*/
+  cursor:pointer;
+}
+.gks_comments {
+  font-size:0.8rem;
+  min-height:29px !important;
+  margin-bottom: 4px;
+}
+.gks_delete_eidos {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.gks_add_eidos {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.gks_pbom_kostos_type {
+  width:34px;
+  display:inline-block;
+  padding: 0px;
+}
+.gks_pbom_kostos_value {
+  width:calc(100% - 40px);
+  display:inline-block;
+  
+}
+
+
+#cost_table .form-group input {
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
+
+.gks_cost_label {
+  font-size:0.8rem;
+  padding: 5px 0px 5px 0px;
+  border-radius: 10px;
+  text-align: center; 
+  margin-top: 2px; 
+}
+.gks_cost_line {
+  padding-top: 4px;
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  margin-bottom:0px;
+}
+.gks_cost_line:nth-child(even) {
+  background-color: #eeeeee;
+}
+.gks_cost_line:nth-child(odd) {
+  background-color: #dddddd;
+}
+.gks_cbom_cost {
+  width11:calc(100% - 60px);
+  display: inline-block;
+  font-size:0.8rem;
+}
+
+.gks_cbom_note {
+  font-size:0.8rem;
+  min-height:29px !important;
+  margin-bottom: 4px;
+}
+.gks_cbom_kostos_value {
+  width11:calc(100% - 40px);
+  display:inline-block;
+  
+}
+
+.gks_delete_cost {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.gks_add_cost {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.sortorder_cost_handle {
+  vertical-align: middle;
+  cursor: move;
+  color: blue;
+  font-size: 18px;
+  padding: 0px !important;
+}
+.gks_div_rows:nth-child(odd) {
+  background-color: #dddddd;
+}
+.gks_div_rows:nth-child(even) {
+  background-color: #eeeeee;
+}
+
+#gks_report > .gks_div_rows > .gks_eidos_label {
+  border-right: 1px solid gray;
+  border-radius: 0px;
+  padding-right: 6px;    
+}
+#gks_report > .gks_div_rows > .gks_eidos_label:last-child {
+  border-right: 0px solid gray;
+}
+
+#gks_report > .gks_div_rows:hover {
+  background-color: #ddffdd !important;
+}

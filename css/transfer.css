@@ -1,0 +1,46 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+
+.transfer_availability_0          {border-radius: 10px; background: #e93636; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+.transfer_availability_1          {border-radius: 10px; background: #73AD21; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+
+.transfer_reservation_status_005prodraft     {border-radius: 10px; background: #777777; padding:0px 10px 0px 10px; border: 1px solid #787878; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_status_010draft        {border-radius: 10px; background: #aaaaaa; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_status_040cancelled    {border-radius: 10px; background: #e93636; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_status_050rejected     {border-radius: 10px; background: #d2322d; padding:0px 10px 0px 10px; border: 1px solid #962420; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_status_070wait_payment {border-radius: 10px; background: #5bc0de;; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_status_080confirm      {border-radius: 10px; background: #ff7f00; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;} 
+.transfer_reservation_status_100completed    {border-radius: 10px; background: #73AD21; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_status_110payment      {border-radius: 10px; background: #00335f; padding:0px 10px 0px 10px; border: 1px solid #001d36; color:#ffffff;white-space: nowrap;}
+
+.button_transfer_reservation_status_010draft                  {background: #aaaaaa; border: 1px solid #787878; color:#ffffff;}
+.button_transfer_reservation_status_010draft:hover            {background: #787878; border: 1px solid #787878; color:#ffffff;}
+.button_transfer_reservation_status_040cancelled              {background: #ff0000; border: 1px solid #c30000; color:#ffffff;}
+.button_transfer_reservation_status_040cancelled:hover        {background: #c30000; border: 1px solid #c30000; color:#ffffff;}
+.button_transfer_reservation_status_050rejected               {background: #d2322d; border: 1px solid #962420; color:#ffffff;}
+.button_transfer_reservation_status_050rejected:hover         {background: #962420; border: 1px solid #962420; color:#ffffff;}
+.button_transfer_reservation_status_070wait_payment                {background: #5bc0de; border: 1px solid #4896ad; color:#ffffff;}
+.button_transfer_reservation_status_070wait_payment:hover          {background: #4896ad; border: 1px solid #4896ad; color:#ffffff;}
+.button_transfer_reservation_status_080confirm             {background: #ff7f00; border: 1px solid #a85400; color:#ffffff;}
+.button_transfer_vreservation_status_080confirm:hover       {background: #e37100; border: 1px solid #a85400; color:#ffffff;}
+.button_transfer_reservation_status_100completed              {background: #47a447; border: 1px solid #2e6b2e; color:#ffffff;}
+.button_transfer_reservation_status_100completed:hover        {background: #2e6b2e; border: 1px solid #2e6b2e; color:#ffffff;}
+
+
+
+.transfer_reservation_oxima_status_210draft         {border-radius: 10px; background: #777777; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_oxima_status_215info          {border-radius: 10px; background: #004eff; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_oxima_status_220waittotime    {border-radius: 10px; background: #dfdf00; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#000000;white-space: nowrap;}
+.transfer_reservation_oxima_status_230gotopickup    {border-radius: 10px; background: #00dcdc; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#000000;white-space: nowrap;}
+.transfer_reservation_oxima_status_240waittopickup  {border-radius: 10px; background: #808000; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_oxima_status_250start         {border-radius: 10px; background: #008000; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_oxima_status_260traffic       {border-radius: 10px; background: #c0ff00; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#000000;white-space: nowrap;} 
+.transfer_reservation_oxima_status_270extrastop     {border-radius: 10px; background: #bf8700; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_oxima_status_280end           {border-radius: 10px; background: #167288; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_oxima_status_290gotonext      {border-radius: 10px; background: #643c6a; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.transfer_reservation_oxima_status_300gotoparking   {border-radius: 10px; background: #836394; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+

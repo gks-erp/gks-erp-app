@@ -1,0 +1,28 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+.gks_itemrow {
+	border-bottom:1px solid gray;
+	padding: 2px 0px;
+}
+.import_ap_lianikis, .open_admin_aade_delivery_note, .external_link {
+	font-size: 150%;
+	margin-left: 6px;
+	color: #007bff;
+	cursor: pointer;
+	vertical-align:bottom;
+}
+.delete_scan {
+	font-size: 150%;
+	margin-left: 6px;
+    color: #dc3545;
+	cursor: pointer;
+	vertical-align:bottom;
+}
+ 
+.user_create {
+  color: #35dc35;
+  cursor: pointer;
+}

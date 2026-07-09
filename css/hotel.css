@@ -1,0 +1,694 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+
+.room_type_status_disable     {border-radius: 10px; background: #e93636; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+.room_type_status_renovation  {border-radius: 10px; background: #b800ff; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+.room_type_status_available   {border-radius: 10px; background: #73AD21; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+
+.room_status_disable     {border-radius: 10px; background: #e93636; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+.room_status_renovation  {border-radius: 10px; background: #b800ff; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+.room_status_available   {border-radius: 10px; background: #73AD21; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+
+.hotel_availability_0          {border-radius: 10px; background: #e93636; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+.hotel_availability_1          {border-radius: 10px; background: #73AD21; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+
+.reservation_status_005prodraft     {border-radius: 10px; background: #777777; padding:0px 10px 0px 10px; border: 1px solid #787878; color:#ffffff;white-space: nowrap;}
+.reservation_status_010draft        {border-radius: 10px; background: #aaaaaa; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.reservation_status_040cancelled    {border-radius: 10px; background: #e93636; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.reservation_status_050rejected     {border-radius: 10px; background: #d2322d; padding:0px 10px 0px 10px; border: 1px solid #962420; color:#ffffff;white-space: nowrap;}
+.reservation_status_070wait_payment {border-radius: 10px; background: #5bc0de;; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.reservation_status_080confirm      {border-radius: 10px; background: #ff7f00; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;} 
+.reservation_status_100completed    {border-radius: 10px; background: #73AD21; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.reservation_status_110payment      {border-radius: 10px; background: #00335f; padding:0px 10px 0px 10px; border: 1px solid #001d36; color:#ffffff;white-space: nowrap;}
+
+.button_reservation_status_010draft                  {background: #aaaaaa; border: 1px solid #787878; color:#ffffff;}
+.button_reservation_status_010draft:hover            {background: #787878; border: 1px solid #787878; color:#ffffff;}
+.button_reservation_status_040cancelled              {background: #ff0000; border: 1px solid #c30000; color:#ffffff;}
+.button_reservation_status_040cancelled:hover        {background: #c30000; border: 1px solid #c30000; color:#ffffff;}
+.button_reservation_status_050rejected               {background: #d2322d; border: 1px solid #962420; color:#ffffff;}
+.button_reservation_status_050rejected:hover         {background: #962420; border: 1px solid #962420; color:#ffffff;}
+.button_reservation_status_070wait_payment                {background: #5bc0de; border: 1px solid #4896ad; color:#ffffff;}
+.button_reservation_status_070wait_payment:hover          {background: #4896ad; border: 1px solid #4896ad; color:#ffffff;}
+.button_reservation_status_080confirm             {background: #ff7f00; border: 1px solid #a85400; color:#ffffff;}
+.button_reservation_status_080confirm:hover       {background: #e37100; border: 1px solid #a85400; color:#ffffff;}
+.button_reservation_status_100completed              {background: #47a447; border: 1px solid #2e6b2e; color:#ffffff;}
+.button_reservation_status_100completed:hover        {background: #2e6b2e; border: 1px solid #2e6b2e; color:#ffffff;}
+
+
+
+.order_state_prodraft1111    {border-radius: 10px; background: #ffff00; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#0000ff;white-space: nowrap;}
+.order_state_prodraft11111     {border-radius: 10px; background: #e936de; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.order_state_wait_payment111     {border-radius: 10px; background: #518df1; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+
+
+
+
+
+.room_type_amenity_label {
+  display:block;
+  line-height: 34px !important;
+  margin-bottom:0px;
+}
+.room_type_amenity_label_text {
+  display:block;
+  font-size:70%;
+}
+.avprcal_past {
+  background: #aaaaaa;
+}
+.avprcal_odd {
+  background: #f8f8f8;
+}
+.avprcal_even {
+  background: #f0f0f0;
+}
+.avprcal_odd_sk {
+  background: #fafafa;
+}
+.avprcal_even_sk {
+  background: #f2f2f2;
+}
+.avprcal_month {
+  display: inline-block;
+  -webkit-writing-mode: vertical-rl;
+  -ms-writing-mode: tb-rl;
+  writing-mode: vertical-rl;
+  height: 500px;
+  width: calc(50% + 30px);
+  position: absolute;
+  top: -250px;
+  left: 0px;
+  font-size:200%;
+}
+.calendartddate {
+  width:100%;
+  height:24px;
+  font-weight:bold;
+}
+.calendartdprice {
+  width:100%;
+  height:24px;
+}
+.calendartdstatus {
+  width:100%;
+  height:24px;
+}
+.calendartdstatus0 {
+  background: #e93636;
+  color:white;
+}
+.calendartdstatus1 {
+  background: #73AD21;
+  color:white;
+}
+.calendartdreserve {
+  width:100%;
+  height:24px;
+}
+
+.plan-room-type {
+  font-size:100%;
+  cursor:pointer;
+}
+.plan_th {
+  font-size:14px;
+  
+}
+.plan_month1_cell {
+  border-left: 2px solid blue !important;
+}
+.plan_past_cell {
+  background-image:url('/my/img/hotel-past-cell.png');
+}
+.plan_sk_cell {
+  background-color: rgba(0,0,255,0.1);
+}
+.plan_today_cell {
+  background-color: rgba(238,232,170,0.3);
+}
+
+
+.plan_r_both {
+  background-image:url('/my/img/plan_r_both.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+.plan_r_both_005prodraft_005prodraft {
+  background-image:url('/my/img/plan_r_left_005prodraft.svg'),url('/my/img/plan_r_right_005prodraft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_005prodraft_010draft {
+  background-image:url('/my/img/plan_r_left_005prodraft.svg'),url('/my/img/plan_r_right_010draft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_005prodraft_040cancelled {
+  background-image:url('/my/img/plan_r_left_005prodraft.svg'),url('/my/img/plan_r_right_040cancelled.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_005prodraft_050rejected {
+  background-image:url('/my/img/plan_r_left_005prodraft.svg'),url('/my/img/plan_r_right_050rejected.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_005prodraft_070wait_payment {
+  background-image:url('/my/img/plan_r_left_005prodraft.svg'),url('/my/img/plan_r_right_070wait_payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_005prodraft_080confirm {
+  background-image:url('/my/img/plan_r_left_005prodraft.svg'),url('/my/img/plan_r_right_080confirm.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_005prodraft_100completed {
+  background-image:url('/my/img/plan_r_left_005prodraft.svg'),url('/my/img/plan_r_right_100completed.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_005prodraft_110payment {
+  background-image:url('/my/img/plan_r_left_005prodraft.svg'),url('/my/img/plan_r_right_110payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+
+.plan_r_both_010draft_005prodraft {
+  background-image:url('/my/img/plan_r_left_010draft.svg'),url('/my/img/plan_r_right_005prodraft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_010draft_010draft {
+  background-image:url('/my/img/plan_r_left_010draft.svg'),url('/my/img/plan_r_right_010draft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_010draft_040cancelled {
+  background-image:url('/my/img/plan_r_left_010draft.svg'),url('/my/img/plan_r_right_040cancelled.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_010draft_050rejected {
+  background-image:url('/my/img/plan_r_left_010draft.svg'),url('/my/img/plan_r_right_050rejected.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_010draft_070wait_payment {
+  background-image:url('/my/img/plan_r_left_010draft.svg'),url('/my/img/plan_r_right_070wait_payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_010draft_080confirm {
+  background-image:url('/my/img/plan_r_left_010draft.svg'),url('/my/img/plan_r_right_080confirm.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_010draft_100completed {
+  background-image:url('/my/img/plan_r_left_010draft.svg'),url('/my/img/plan_r_right_100completed.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_010draft_110payment {
+  background-image:url('/my/img/plan_r_left_010draft.svg'),url('/my/img/plan_r_right_110payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+
+
+.plan_r_both_040cancelled_005prodraft {
+  background-image:url('/my/img/plan_r_left_040cancelled.svg'),url('/my/img/plan_r_right_005prodraft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_040cancelled_010draft {
+  background-image:url('/my/img/plan_r_left_040cancelled.svg'),url('/my/img/plan_r_right_010draft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_040cancelled_040cancelled {
+  background-image:url('/my/img/plan_r_left_040cancelled.svg'),url('/my/img/plan_r_right_040cancelled.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_040cancelled_050rejected {
+  background-image:url('/my/img/plan_r_left_040cancelled.svg'),url('/my/img/plan_r_right_050rejected.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_040cancelled_070wait_payment {
+  background-image:url('/my/img/plan_r_left_040cancelled.svg'),url('/my/img/plan_r_right_070wait_payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_040cancelled_080confirm {
+  background-image:url('/my/img/plan_r_left_040cancelled.svg'),url('/my/img/plan_r_right_080confirm.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_040cancelled_100completed {
+  background-image:url('/my/img/plan_r_left_040cancelled.svg'),url('/my/img/plan_r_right_100completed.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_040cancelled_110payment {
+  background-image:url('/my/img/plan_r_left_040cancelled.svg'),url('/my/img/plan_r_right_110payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+
+
+.plan_r_both_050rejected_005prodraft {
+  background-image:url('/my/img/plan_r_left_050rejected.svg'),url('/my/img/plan_r_right_005prodraft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_050rejected_010draft {
+  background-image:url('/my/img/plan_r_left_050rejected.svg'),url('/my/img/plan_r_right_010draft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_050rejected_040cancelled {
+  background-image:url('/my/img/plan_r_left_050rejected.svg'),url('/my/img/plan_r_right_040cancelled.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_050rejected_050rejected {
+  background-image:url('/my/img/plan_r_left_050rejected.svg'),url('/my/img/plan_r_right_050rejected.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_050rejected_070wait_payment {
+  background-image:url('/my/img/plan_r_left_050rejected.svg'),url('/my/img/plan_r_right_070wait_payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_050rejected_080confirm {
+  background-image:url('/my/img/plan_r_left_050rejected.svg'),url('/my/img/plan_r_right_080confirm.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_050rejected_100completed {
+  background-image:url('/my/img/plan_r_left_050rejected.svg'),url('/my/img/plan_r_right_100completed.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_050rejected_110payment {
+  background-image:url('/my/img/plan_r_left_050rejected.svg'),url('/my/img/plan_r_right_110payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+
+.plan_r_both_070wait_payment_005prodraft {
+  background-image:url('/my/img/plan_r_left_070wait_payment.svg'),url('/my/img/plan_r_right_005prodraft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_070wait_payment_010draft {
+  background-image:url('/my/img/plan_r_left_070wait_payment.svg'),url('/my/img/plan_r_right_010draft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_070wait_payment_040cancelled {
+  background-image:url('/my/img/plan_r_left_070wait_payment.svg'),url('/my/img/plan_r_right_040cancelled.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_070wait_payment_050rejected {
+  background-image:url('/my/img/plan_r_left_070wait_payment.svg'),url('/my/img/plan_r_right_050rejected.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_070wait_payment_070wait_payment {
+  background-image:url('/my/img/plan_r_left_070wait_payment.svg'),url('/my/img/plan_r_right_070wait_payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_070wait_payment_080confirm {
+  background-image:url('/my/img/plan_r_left_070wait_payment.svg'),url('/my/img/plan_r_right_080confirm.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_070wait_payment_100completed {
+  background-image:url('/my/img/plan_r_left_070wait_payment.svg'),url('/my/img/plan_r_right_100completed.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_070wait_payment_110payment {
+  background-image:url('/my/img/plan_r_left_070wait_payment.svg'),url('/my/img/plan_r_right_110payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+
+.plan_r_both_080confirm_005prodraft {
+  background-image:url('/my/img/plan_r_left_080confirm.svg'),url('/my/img/plan_r_right_005prodraft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_080confirm_010draft {
+  background-image:url('/my/img/plan_r_left_080confirm.svg'),url('/my/img/plan_r_right_010draft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_080confirm_040cancelled {
+  background-image:url('/my/img/plan_r_left_080confirm.svg'),url('/my/img/plan_r_right_040cancelled.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_080confirm_050rejected {
+  background-image:url('/my/img/plan_r_left_080confirm.svg'),url('/my/img/plan_r_right_050rejected.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_080confirm_070wait_payment {
+  background-image:url('/my/img/plan_r_left_080confirm.svg'),url('/my/img/plan_r_right_070wait_payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_080confirm_080confirm {
+  background-image:url('/my/img/plan_r_left_080confirm.svg'),url('/my/img/plan_r_right_080confirm.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_080confirm_100completed {
+  background-image:url('/my/img/plan_r_left_080confirm.svg'),url('/my/img/plan_r_right_100completed.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_080confirm_110payment {
+  background-image:url('/my/img/plan_r_left_080confirm.svg'),url('/my/img/plan_r_right_110payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+
+
+.plan_r_both_100completed_005prodraft {
+  background-image:url('/my/img/plan_r_left_100completed.svg'),url('/my/img/plan_r_right_005prodraft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_100completed_010draft {
+  background-image:url('/my/img/plan_r_left_100completed.svg'),url('/my/img/plan_r_right_010draft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_100completed_040cancelled {
+  background-image:url('/my/img/plan_r_left_100completed.svg'),url('/my/img/plan_r_right_040cancelled.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_100completed_050rejected {
+  background-image:url('/my/img/plan_r_left_100completed.svg'),url('/my/img/plan_r_right_050rejected.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_100completed_070wait_payment {
+  background-image:url('/my/img/plan_r_left_100completed.svg'),url('/my/img/plan_r_right_070wait_payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_100completed_080confirm {
+  background-image:url('/my/img/plan_r_left_100completed.svg'),url('/my/img/plan_r_right_080confirm.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_100completed_100completed {
+  background-image:url('/my/img/plan_r_left_100completed.svg'),url('/my/img/plan_r_right_100completed.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_100completed_110payment {
+  background-image:url('/my/img/plan_r_left_100completed.svg'),url('/my/img/plan_r_right_110payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+
+
+.plan_r_both_110payment_005prodraft {
+  background-image:url('/my/img/plan_r_left_110payment.svg'),url('/my/img/plan_r_right_005prodraft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_110payment_010draft {
+  background-image:url('/my/img/plan_r_left_110payment.svg'),url('/my/img/plan_r_right_010draft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_110payment_040cancelled {
+  background-image:url('/my/img/plan_r_left_110payment.svg'),url('/my/img/plan_r_right_040cancelled.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_110payment_050rejected {
+  background-image:url('/my/img/plan_r_left_110payment.svg'),url('/my/img/plan_r_right_050rejected.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_110payment_070wait_payment {
+  background-image:url('/my/img/plan_r_left_110payment.svg'),url('/my/img/plan_r_right_070wait_payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_110payment_080confirm {
+  background-image:url('/my/img/plan_r_left_110payment.svg'),url('/my/img/plan_r_right_080confirm.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_110payment_100completed {
+  background-image:url('/my/img/plan_r_left_110payment.svg'),url('/my/img/plan_r_right_100completed.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_both_110payment_110payment {
+  background-image:url('/my/img/plan_r_left_110payment.svg'),url('/my/img/plan_r_right_110payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+
+.plan_r_full {
+  background-image:url('/my/img/plan_r_full.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_full_005prodraft {
+  background-image:url('/my/img/plan_r_full_005prodraft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_full_010draft {
+  background-image:url('/my/img/plan_r_full_010draft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_full_040cancelled {
+  background-image:url('/my/img/plan_r_full_040cancelled.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_full_050rejected {
+  background-image:url('/my/img/plan_r_full_050rejected.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_full_070wait_payment {
+  background-image:url('/my/img/plan_r_full_070wait_payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_full_080confirm {
+  background-image:url('/my/img/plan_r_full_080confirm.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_full_100completed {
+  background-image:url('/my/img/plan_r_full_100completed.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_full_110payment {
+  background-image:url('/my/img/plan_r_full_110payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+  color: white;
+  //mix-blend-mode: difference;
+}
+
+
+
+
+.plan_r_left {
+  background-image:url('/my/img/plan_r_left.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_left_005prodraft {
+  background-image:url('/my/img/plan_r_left_005prodraft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_left_010draft {
+  background-image:url('/my/img/plan_r_left_010draft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_left_040cancelled {
+  background-image:url('/my/img/plan_r_left_040cancelled.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_left_050rejected {
+  background-image:url('/my/img/plan_r_left_050rejected.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_left_070wait_payment {
+  background-image:url('/my/img/plan_r_left_070wait_payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_left_080confirm {
+  background-image:url('/my/img/plan_r_left_080confirm.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_left_100completed {
+  background-image:url('/my/img/plan_r_left_100completed.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_left_110payment {
+  background-image:url('/my/img/plan_r_left_110payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+
+.plan_r_right {
+  background-image:url('/my/img/plan_r_right.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_right_005prodraft {
+  background-image:url('/my/img/plan_r_right_005prodraft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_right_010draft {
+  background-image:url('/my/img/plan_r_right_010draft.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_right_040cancelled {
+  background-image:url('/my/img/plan_r_right_040cancelled.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_right_050rejected {
+  background-image:url('/my/img/plan_r_right_050rejected.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_right_070wait_payment {
+  background-image:url('/my/img/plan_r_right_070wait_payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_right_080confirm {
+  background-image:url('/my/img/plan_r_right_080confirm.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_right_100completed {
+  background-image:url('/my/img/plan_r_right_100completed.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_right_110payment {
+  background-image:url('/my/img/plan_r_right_110payment.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+
+
+.plan_f_both {
+  background-image:url('/my/img/plan_f_both.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_f_full {
+  background-image:url('/my/img/plan_f_full.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_f_left {
+  background-image:url('/my/img/plan_f_left.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_f_right {
+  background-image:url('/my/img/plan_f_right.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+.plan_fr_both {
+  background-image:url('/my/img/plan_fr_both.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_rf_both {
+  background-image:url('/my/img/plan_rf_both.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+
+}
+#plantable .mytd {
+  text-align:center;  
+  vertical-align: middle;
+  font-size: 75%;
+  cursor:pointer;
+}
+
+.plan_disable {
+  background-color:rgba(233,54,54,0.5);
+  text-align:center;
+}
+.plan_renovation {
+  background-color:rgba(184,0,255,0.5);
+  text-align:center;
+}
+
+#elem_GKS_HOTEL_CHILD_ACCEPT_MAX_AGE {
+  font-size:70%;
+  font-style: italic;  
+}
+
+.plan_test {
+
+  background-image:url('/my/img/plan_r_left_100completed.svg'),url('/my/img/plan_r_right_080confirm.svg') ;
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+.gks_room_for_delete {
+  text-decoration: line-through;
+}
+.gks_input_child_age {
+  margin-right: 2px;  
+}
+
+

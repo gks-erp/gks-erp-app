@@ -1,0 +1,73 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.local_set_lang > option:disabled {
+  background-color: lightgray;
+  color: black;
+  
+}  
+#edit_mode_div {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+}  
+
+#parameters_table .form-group input, #attach_params_table .form-group input {
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
+
+.gks_parameter_label, .gks_attach_param_label {
+  font-size:0.8rem;
+  padding: 5px 0px 5px 0px;
+  border-radius: 10px;
+  text-align: center; 
+  margin-top: 2px; 
+}
+.gks_parameter_line, .gks_attach_param_line {
+  padding-top: 4px;
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  margin-bottom:0px;
+}
+.gks_parameter_line:nth-child(even), .gks_attach_param_line:nth-child(even) {
+  background-color: #eeeeee;
+}
+.gks_parameter_line:nth-child(odd), .gks_attach_param_line:nth-child(odd) {
+  background-color: #dddddd;
+}
+
+.gks_delete_parameterline, .gks_delete_attach_paramline {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.gks_add_parameterline, .gks_add_attach_paramline {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.sortorder_parameterline_handle, .sortorder_attach_paramline_handle {
+  vertical-align: middle;
+  cursor: move;
+  color: blue;
+  font-size: 18px;
+  padding: 0px !important;
+}
+
+.gks_attach_param_relative_path_div {
+  display: flex ;
+  gap: 10px;
+  flex-direction: row;
+  align-items: baseline;  
+}
+.gks_attach_param_relative_path {
+  
+}
+.gks_attach_param_relative_path_btn {
+  
+}

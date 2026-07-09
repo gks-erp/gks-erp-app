@@ -1,0 +1,235 @@
+/* 
+Κώστας Γουτούδης
+gks ERP
+www.gks.gr
+*/
+
+.gks_customtableview_btn_group {
+  
+}
+.gks_customtableview_btn_button {
+  justify-content: center!important;
+}
+.gks_customtableview_btn_items {
+  background-color: #fafcff;
+  box-shadow: 0px 4px 24px 12px rgb(0 0 0 / 20%), 0px 6px 20px 0px rgb(0 0 0 / 19%);  
+  
+}
+
+.gks_customtableview_btn_item {
+  cursor:pointer;
+}
+.gks_customtableview_btn_item > i {
+  color:#f9a825;
+  margin-left: 10px;
+}
+
+
+#gks_customtableview_main_div {
+  position:fixed;
+  top:20px;
+  right:20px;
+  bottom:20px;
+  width:300px;
+  max-width:calc(100% - 40px);
+  opacity:0.7;
+  border: 1px solid gray;
+  z-index: 1020;   
+  background-color: #f4f4f4;
+  box-shadow1: -12px 0 48px 0 rgba(0, 0, 0, .12), 0 0 1px 0 rgba(0, 0, 0, .06);
+  box-shadow: 0 0px 20px 0 rgb(22 20 20 / 70%);
+  padding: 10px;
+  border-radius: 20px; 
+  display:none;
+  font-size: 0.8rem; 
+}
+
+@media (max-width: 768px) { 
+  #gks_customtableview_main_div {
+    opacity:1;
+  }
+}
+#gks_customtableview_main_div:hover {
+  opacity:1;
+}
+
+#gks_customtableview_header {
+  position: relative;
+}
+
+
+#gks_customtableview_header_title {
+  cursor: move;
+  width: calc(100% - 50px);
+  margin-top: 10px;
+}
+#gks_customtableview_header_title span {
+  font-weight: bold;
+  font-size1: 0.8rem;
+}
+#gks_customtableview_header_close {
+  color: #007bff;
+  font-size: 30px;
+  position: absolute;
+  right: 8px;
+  top: -6px;
+  cursor: pointer;
+}
+
+#gks_customtableview_list {
+  overflow-y: auto;
+  height: calc(100% - 170px);
+  margin: 20px 0px; 
+  border-radius: 10px;
+}
+
+#gks_customtableview_list::-webkit-scrollbar {width: 5px;}
+#gks_customtableview_list::-webkit-scrollbar-track {background: #c0dac4; }
+#gks_customtableview_list::-webkit-scrollbar-thumb {background: #458c50;}
+#gks_customtableview_list::-webkit-scrollbar-thumb:hover {background: #23aa38;} 
+
+#gks_customtableview_footer {
+  font-weight: bold;
+  font-size1: 0.8rem;  
+  
+}
+#gks_customtableview_footer_name {
+  
+}
+#gks_customtableview_footer_text {
+  margin: 8px 0px;
+}
+#gks_customtableview_footer_buttons {
+  display:flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;  
+}
+
+#gks_customtableview_list_data {
+  padding-right: 6px;
+  background-color: white;
+}
+
+.gks_customtableview_list_item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;  
+  gap: 6px;
+  margin: 2px 0px;
+  border-bottom: 1px solid #eeeeee;
+}
+.gks_customtableview_list_item.ui-sortable-helper {
+  background-color:rgba(255,132,0,0.5);
+  border-width:0px;
+  border-radius:10px;
+  color:white;
+  font-weight1:bold;
+}
+
+.gks_customtableview_list_item_placeholder {
+  height:40px;
+  background-color:rgba(0,123,255,0.5);
+  border-radius:10px;
+}
+
+.gks_customtableview_list_item i {
+  font-size:20px;  
+}
+.gks_customtableview_list_item i:nth-child(1) {
+  margin-right:12px;
+}
+.gks_customtableview_list_item_handle {
+  flex: 0 0 auto;
+  color: #007bff;
+  cursor: move;
+}
+
+.gks_customtableview_list_item_visible {
+  flex: 0 0 auto;
+}
+
+
+
+.gks_customtableview_list_item_text {
+  cursor: move;
+  flex: 1 1 auto; 
+  overflow-wrap: anywhere; 
+}
+.gks_customtableview_list_item_pixels {
+  flex: 0 0 auto;
+  width: 50px;
+  text-align: right;
+  margin: 2px 0px 2px 0px;
+}
+.gks_customtableview_list_item_compress {
+  flex: 0 0 auto;
+  cursor:pointer;
+}
+.gks_customtableview_list_item_compress_checked {
+  color: #007bff;
+}
+
+.gks_customtableview_list_item_expand {
+  flex: 0 0 auto;
+  cursor:pointer;
+}
+.gks_customtableview_list_item_expand_checked {
+  color: #007bff;
+}
+
+
+
+.gkstable_gks_customtableview {
+  display:block;
+  width: 96%;
+}
+.gkstable_gks_customtableview > thead  {
+  display:block;  
+}
+.gkstable_gks_customtableview > thead > tr {
+  display: flex;
+  flex-direction: row;
+  flex-wrap1: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex: 1 1 auto;
+  gap: 0px 0px;
+  padding: 0px 0px;
+}
+.gkstable_gks_customtableview > thead > tr > th {    
+  display1: flex;
+  flex: 0 0 auto; 
+  border-width: 0px;
+  border-right: 1px solid white;
+  align-content: end;
+}
+
+.gkstable_gks_customtableview > tbody  {
+  display:block;  
+}
+.gkstable_gks_customtableview > tbody > tr {
+  display: flex;
+  flex-direction: row;
+  flex-wrap1: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex: 1 1 auto;
+  gap: 0px 0px;
+  padding: 0px 0px;
+}
+.gkstable_gks_customtableview > tbody > tr > th {    
+  display1: flex;
+  flex: 0 0 auto;
+  border-width: 0px; 
+  align-content: center;
+ 
+}
+.gkstable_gks_customtableview > tbody > tr > td {    
+  display1: flex;
+  flex: 0 0 auto;
+  border-width: 0px; 
+  align-content: center;
+}

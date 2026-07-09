@@ -1,0 +1,115 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.ui-state-highlight {
+  min-height:46px;  
+  border-radius: 10px; 
+  margin-bottom: 10px;
+}
+.connectedSortable {
+  min-height:53px;
+}
+.gks_div_custom_field_card_name {
+  text-align: center;
+  width: calc(100% - 100px);
+  margin: auto;
+  font-size: 16px;   
+}
+
+
+.gks_div_custom_field {
+  position:relative;
+  background-color: lightblue;
+  padding: 10px;
+  border: 1px solid blue;
+  border-radius: 10px; 
+  margin-bottom: 10px;
+}
+
+.gks_div_custom_field_text {
+  padding: 0px 90px 0px 30px;
+}
+
+.gks_div_custom_field_handle {
+  position:absolute;
+  left:10px;
+  top:7px; 
+  cursor:move;
+  font-size: 150%
+}
+
+.gks_div_custom_field_expand {
+  position:absolute;
+  right:70px;
+  top:5px; 
+  cursor:pointer;
+  color:#0012be;
+  font-size:150%
+}
+.gks_div_custom_field_remove {
+  position:absolute;
+  right:40px;
+  top:5px; 
+  cursor:pointer;
+  color:#dc3545;
+  font-size:150%
+  
+}
+.gks_div_custom_field_add {
+  position:absolute;
+  right:10px;
+  top:5px; 
+  cursor:pointer;
+  color:green;
+  font-size:150%
+  
+}
+
+.gks_div_custom_field_properties {
+  margin-top: 17px;
+  border-top: 1px solid gray;
+}
+.gks_div_custom_field_attr_options_td_value_add {
+  color: green;
+  cursor: pointer;
+  vertical-align: middle;
+  font-size: 150%;
+}
+.gks_div_custom_field_attr_options_td_value_remove {
+  color: #dc3545;
+  cursor: pointer;
+  vertical-align: middle;
+  font-size: 150%;
+  padding-right: 4px;
+}
+
+.gks_div_card_add_field {
+  color: green;
+  cursor: pointer;
+  font-size: 150%;
+  
+}
+.gks_div_card_add_card {
+  color: green;
+  cursor: pointer;
+  font-size: 200%;
+  
+}
+
+
+.gks_section_title {
+  padding-top: 0;
+}
+.gks_section_settings {
+  margin-bottom: 1.25rem;
+  padding: 1.25rem;
+  padding-bottom: 0px;
+  background-color:rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-width:0px 1px 1px 1px;
+  border-radius: 0px 0px 10px 10px;
+  
+}

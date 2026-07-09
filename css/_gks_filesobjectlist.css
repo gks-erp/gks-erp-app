@@ -1,0 +1,515 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+#filesobjectlist_f_button_add_files_photo_buttons > span {
+  position:relative;
+  display: inline-block;
+}
+#filesobjectlist_f_button_add_files_photo_buttons > span > input  {
+  width: 100%;
+  height: 100%;
+}
+
+
+.filesobjectlist_f_button_add_files_photo_info {
+  font-size: 0.875rem;  
+}
+#filesobjectlist_table_imagelist_photo .tdimg {
+  padding: 0px;
+}
+
+#filesobjectlist_table_imagelist_photo i.filesobjectlist_delete_upload_photo {
+  font-size:120%;
+  color:#dc3545;
+  cursor:pointer;
+}
+
+#filesobjectlist_table_imagelist_photo th.fol_th_name {
+  min-width:100px;
+}
+
+#filesobjectlist_table_imagelist_photo td.fol_td_name {
+  word-break: break-all;
+  padding-left:0px;
+}
+#filesobjectlist_table_imagelist_photo td.fol_td_date {
+  
+}
+
+#filesobjectlist_table_imagelist_photo i.fol_td_download {
+  font-size:200%;
+  vertical-align:middle;
+  color:blue;
+}
+#filesobjectlist_table_imagelist_photo td.fol_selprint {
+
+}
+
+
+#aws_button {
+	text-align:center;
+	border-top: 1px solid gray;
+	padding-top: 10px;
+}
+
+
+#gks_webcam_div {
+	text-align:center;
+	border-top: 1px solid gray;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+#gks_webcam_panel {
+	padding: 20px;
+  position: fixed;
+  background-color: lightgray;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 1020;
+  display:none;
+}
+.gks_webcam_panel_body {
+    overflow: hidden; 
+}
+#gks_webcam_panel_video {
+	height: calc(100% - 31px);
+  position: relative;
+}
+
+#gks_webcam_panel_buttons {
+	padding: 10px 0px;
+	text-align: center;
+}
+#gks_webcam_video {
+	max-width: 100%; 
+	max-height:100%; 
+	display: block;
+	margin: auto;
+}
+#gks_webcam_select {
+  vertical-align: middle;
+  width: unset;
+  display: inline-block; 
+  margin: 3px; 
+}
+#gks_webcam_pixels {
+  vertical-align: middle;
+}  
+
+#gks_webcam_canvas {
+  display:none;
+}    
+#gks_webcam_img {
+	max-width: 100%; 
+	max-height:100%; 
+	display: block;
+	margin: auto; 
+	border: 6px solid #007bff;
+	border-radius: 10px;
+}
+#gks_webcam_message_ok {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: white;
+  color: black;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center; 
+   
+}
+
+#gks_webcam_capture, #gks_webcam_cancel_capture, #gks_webcam_save, #gks_webcam_stop {
+  margin: 3px; 
+}
+
+.filesobjectlist_set_print_photo {
+  cursor:pointer;
+  width:28px;
+}
+.filesobjectlist_set_public_file {
+  cursor:pointer;
+  width:28px;  
+}
+.filesobjectlist_lightgallery_gks_fileserver_item > img {
+  max-width:96px;
+  max-height:96px;  
+}
+
+#filesobjectlist_table_imagelist_photo td.tdimg_descr {
+  background-image:unset;
+  cursor:pointer;
+  padding-right: 20px !important;
+  word-break: break-all;
+}  
+#filesobjectlist_table_imagelist_photo td.tdimg_descr:hover {
+  background-image:url('/my/img/pencil-16.png');
+  background-repeat: no-repeat;
+  background-position: right;
+}  
+
+#filesobjectlist_table_imagelist_photo td.filesobjectlist_edit_descr_edit {
+  padding-right: 0.3rem !important;
+}
+#filesobjectlist_table_imagelist_photo td.filesobjectlist_edit_descr_edit:hover {
+  background-image:unset;
+}
+
+.filesobjectlist_edit_descr_input {
+  width: 100%;
+  display: inline-block;
+}
+.filesobjectlist_edit_descr_save {
+  font-size: 31px;
+  margin-left: 6px;
+  color: #007bff;
+  vertical-align: bottom;  
+}
+.filesobjectlist_edit_descr_cancel {
+  font-size: 31px;
+  margin-left: 6px;
+  color: #dc3545;
+  vertical-align: bottom;  
+  
+}
+
+#dialog_filesobjectlist_set_public_file_title {
+  text-align:center;
+  font-weight: bold;
+  font-size: 130%;
+  margin-bottom: 6px;  
+}
+#dialog_filesobjectlist_set_public_file_alert {
+  text-align:center;  
+}
+
+#dialog_filesobjectlist_set_public_file_url {
+  overflow-wrap: anywhere;
+}
+
+#f_button_add_files_photo {
+  padding-top:10px;
+  width: 100%;
+  text-align: center;
+}
+
+#f_button_add_files_photo_buttons > span {
+  position:relative;
+  display: inline-block;
+}
+#f_button_add_files_photo_buttons > span > input  {
+  width: 100%;
+  height: 100%;
+}
+#f_button_add_files_photo_info {
+  font-size: 0.875rem;
+}
+#gks_filesexplore_div {
+  padding: 20px;
+}
+
+#gks_filesexplore_div_inner {
+  height: 100%;
+}
+
+    
+#gks_filesexplore_div_header {
+  background-color1: #007bff;  
+}
+#gks_filesexplore_div_header_row1 {
+  font-size:150%;  
+}
+#gks_filesexplore_div_header_row2 > div {
+  display:inline-block;
+}
+#gks_filesexplore_basefolder {
+  margin-right:10px;  
+}
+
+#gks_filesexplore_div_body {
+  background-color1: #ff7b00;  
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  border: 1px solid lightgray;
+  border-top-width1:0px;
+  font-size: 0.875rem;
+  overflow: hidden;
+}
+#gks_filesexplore_div_panel {
+  background-color1: #00ff7b;  
+  flex: 250px 0 0;
+  border-right: 1px solid lightgray;
+  overflow: auto;
+  overflow-x: hidden;
+}
+#gks_filesexplore_div_panel::-webkit-scrollbar {width: 5px;}
+#gks_filesexplore_div_panel::-webkit-scrollbar-track {background: #c0dac4; }
+#gks_filesexplore_div_panel::-webkit-scrollbar-thumb {background: #458c50;}
+#gks_filesexplore_div_panel::-webkit-scrollbar-thumb:hover {background: #23aa38;} 
+
+
+
+
+
+#gks_filesexplore_div_content {
+  background-color1: #7b00ff;  
+  flex1: auto 1 0;
+  padding-right: 10px;
+  width: 100%;
+  overflow1: auto;
+  overflow-x1: hidden;
+}
+#gks_filesexplore_div_settings {
+  margin: 10px 0px;
+  padding: 0px 4px;
+  display: flex;  
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+#gks_filesexplore_settings_grid {
+  font-size:150%; 
+  cursor:pointer;  
+}
+#gks_filesexplore_settings_list {
+  font-size:150%;   
+  cursor:pointer;
+}
+.gks_filesexplore_settings_selected {
+  color:#007bff;  
+}
+
+#gks_filesexplore_settings_dummy{
+  flex-grow: 1;
+}
+#gks_filesexplore_files_count{
+ font-size:0.875rem;  
+}
+
+#gks_filesexplore_div_footer {
+  background-color1: #ff007b;  
+  border: 1px solid lightgray;
+  border-top-width:0px;
+  text-align:center;
+  
+}
+#gks_filesexplore_div_footer > div {
+  padding:10px;
+}
+
+.gks_filesexplore_div_footer_hide {
+  display:none;  
+}
+
+#gks_filesexplore_basefolder {
+  width:unset;
+  display: inline-block;  
+}
+
+#gks_filesexplore_folder {
+  width:unset;
+  display: inline-block;  
+}
+
+.gkssubdirlisthidden {
+  display:none;  
+}
+.gks_filesexplore_dir {
+  cursor:pointer;
+  overflow-wrap: anywhere;  
+}
+.gks_filesexplore_dir_selected {
+  background-color: lightgray;
+  border-radius: 10px;
+  font-weight: bold; 
+  padding-left: 10px; 
+}
+#gks_filesexplore_div_files {
+  width1: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+}
+#gks_filesexplore_div_files::-webkit-scrollbar {width: 5px;}
+#gks_filesexplore_div_files::-webkit-scrollbar-track {background: #bfb3c2; }
+#gks_filesexplore_div_files::-webkit-scrollbar-thumb {background: #9147b0;}
+#gks_filesexplore_div_files::-webkit-scrollbar-thumb:hover {background: #8010af;} 
+
+
+
+
+.gks_filesexplore_file {
+  width: var(--gks_filesexplore_file_width);
+  height: var(--gks_filesexplore_file_height);
+  border: 1px solid lightgray;
+  margin: 4px;
+  padding: 4px;
+  display: inline-block;
+  overflow: hidden;
+  cursor: pointer;
+  background-color:white;
+
+  transition-duration: 0.3s, 0.3s;
+  transition-timing-function: ease, ease;
+  transition-property: border-color, background-color;
+}
+
+
+.gks_filesexplore_file_name {
+  overflow-wrap: anywhere;
+}
+#gks_filesexplore_div_panel ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  display: block;
+  list-style-type: disc;
+  margin-block-start1: 1em;
+  margin-block-end1: 1em;
+  padding-inline-start: 20px;
+  unicode-bidi: isolate;  
+}
+#gks_filesexplore_div_panel li {
+  display: list-item;
+  text-align: -webkit-match-parent;
+  unicode-bidi: isolate;
+}    
+.gks_filesexplore_filed1 {
+  position: relative;
+  width: 100%;
+  height: var(--gks_filesexplore_file_img_height);
+  overflow: hidden;  
+}
+.gks_filesexplore_filed2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translate(50%, 50%);  
+}
+.gks_filesexplore_file_lightgallery {
+  display: block;
+}
+.gks_filesexplore_file_lightgallery > img {
+  max-width:100%;
+  height1:100%;  
+  max-height1: var(--gks_filesexplore_file_img_height);
+  transform: translate(-50%, -50%);
+  cursor: zoom-in;
+  -webkit-transition: max-width 0.3s ease;
+  -moz-transition: max-width 0.3s ease;
+  -ms-transition: max-width 0.3s ease;  
+  transition: max-width 0.3s ease;
+}
+#gks_filesexplore_files_loadmore {
+  text-align:center;
+  margin: 20px 0px;  
+}
+
+
+.gks_filesexplore_div_files_list .gks_filesexplore_file {
+  width: calc(100% - 10px);
+  display: flex;
+  flex-direction: row;
+  justify-content: start;  
+  align-items: center;
+  height:110px;
+  gap:10px;
+}
+
+.gks_filesexplore_div_files_list .gks_filesexplore_file .gks_filesexplore_filed1 {
+  width: 100px;
+}
+.gks_filesexplore_file_names, .gks_filesexplore_file_name {
+  flex-grow: 1;
+}
+.gks_filesexplore_div_files_list .gks_filesexplore_file_names {
+  
+}
+ 
+.gks_filesexplore_file_size, 
+.gks_filesexplore_file_date {
+  display:none;  
+}
+.gks_filesexplore_div_files_list .gks_filesexplore_file_size, 
+.gks_filesexplore_div_files_list .gks_filesexplore_file_date {
+  display:block; 
+  width: 120px;
+  flex-grow: 0; 
+  text-align: center;
+}
+.gks_filesexplore_file_selected {
+  background-color: yellow;
+  border-color: blue;
+}
+
+.gks_filesexplore_file_selected .gks_filesexplore_file_lightgallery > img {
+  max-width: 80%;  
+}
+ 
+@media only screen and (max-width: 768px) {
+  #gks_filesexplore_div_panel {
+    flex: 200px 0 0;
+  }
+  #gks_filesexplore_div_header_row2 > div {
+    display:block;
+  }
+  #gks_filesexplore_div_panel ul {
+    padding-inline-start: 10px;
+    list-style-type: none;
+  }
+  #gks_filesexplore_div_panel > ul {
+    padding-inline-start: 2px;
+  }  
+}
+
+@media only screen and (max-width: 576px) {
+  #gks_filesexplore_div_panel {
+    flex: 150px 0 0;
+  }
+  #gks_filesexplore_div_panel ul {
+    padding-inline-start: 6px;
+    list-style-type: none;
+  }
+  #gks_filesexplore_div_panel > ul {
+    padding-inline-start: 2px;
+  }  
+}
+
+.gks_filesexplore_div_in_item {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1020;
+}
+.gks_filesexplore_div_in_item #gks_filesexplore_div_inner {
+  position: fixed;
+  top: 20px;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 20px;
+  box-shadow: 0 0px 20px 0 rgb(22 20 20 / 70%);
+  padding: 10px;
+  height: calc(100% - 40px);
+}
+#gks_filesexplode_div_info_close {
+  display:none;
+  color: blue;
+  font-size: 30px;
+  position: absolute;
+  right: 8px;
+  cursor: pointer;  
+}
+  

@@ -1,0 +1,930 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+
+.div_radio_payment_type_one_multi {
+  border-bottom: 1px solid lightgray;
+  margin: 10px 0px 5px 0px;
+  font-size: 0.9rem;
+  padding-bottom: 5px;  
+}
+.div_radio_payment_type_one_multi label {
+  cursor:pointer;  
+}
+#div_payment_type_multi {
+  margin-bottom1: 24px;  
+}
+#div_payment_type_multi_header {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin-bottom:5px;
+}
+.div_payment_type_multi_header_label1, .div_payment_type_multi_header_label2 {
+  font-size: 0.8rem;
+  padding: 5px 0px 5px 0px;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 2px;
+  color: #fff;
+  background-color: #343a40;
+  width:calc(50% - 40px);   
+}
+.div_payment_type_multi_header_label3 {
+  font-size: 0.8rem;
+  padding: 5px 0px 5px 0px;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 2px;
+  color: #fff;
+  background-color: #343a40;
+  width:50px;   
+}
+.div_payment_type_multi_header_label3 > i {
+  font-size:120%;
+  vertical-align:middle;
+}
+
+
+
+#div_payment_type_multi_footer {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+#div_payment_type_multi_footer_text {
+  font-size: 0.8rem;
+  padding: 5px 0px 5px 0px;
+  width:calc(50% - 40px); 
+  
+}
+#div_payment_type_multi_footer_sum {
+  font-size: 0.8rem;
+  padding: 5px 24px 5px 0px;
+  width:calc(50% - 40px); 
+  text-align: right;
+}
+#div_payment_type_multi_footer_rest {
+  width:50px;
+  text-align: center;
+  
+}
+#div_payment_type_multi_footer_rest > i {
+  font-size:150%;
+  vertical-align: middle;
+}
+.div_payment_type_multi_item_pos_rest_ok {
+  color:green;  
+}
+.div_payment_type_multi_item_pos_rest_error {
+  color:red;  
+}
+
+.div_payment_type_multi_item {
+  border-bottom: 1px solid lightgray;
+  padding: 4px 0px;
+}
+
+.div_payment_type_multi_item_row1 {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.div_payment_type_multi_item_select {
+  width:calc(50% - 40px);
+  font-size: 0.8rem;
+}
+.div_payment_type_multi_item_input {
+  width:calc(50% - 40px);
+  text-align: right;
+  font-size: 0.8rem;
+}
+.div_payment_type_multi_item_input[data-lock_value] {
+  padding-right:24px;
+}
+.div_payment_type_multi_item_row2 {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+}
+
+
+
+
+.div_payment_type_multi_item_pos_start {
+  padding: 3px 0.5rem;
+  width:calc(50% - 40px);
+}
+.div_payment_type_multi_item_pos_terminal {
+  width:calc(50% - 40px);
+}
+.div_payment_type_multi_item_pos_rest {
+  width:50px;
+}
+.div_payment_type_multi_item_row2_text {
+  font-size: 0.8rem;
+}
+
+
+
+.div_payment_type_multi_item_icons {
+  width:50px;
+  text-align: right;
+}
+
+
+
+.payment_type_multi_add {
+  color: #35dc35;
+  cursor: pointer;
+  vertical-align: middle;  
+}
+.payment_type_multi_del {
+  color: #dc3545;
+  cursor: pointer;
+  vertical-align: middle;  
+  margin-right: 10px;
+}
+
+
+
+.div_payment_one_terminal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0px 0px 0px 20px;
+  font-size: 0.8rem;
+}
+.div_payment_one_terminal_start_css {
+  width:calc(50% - 10px);
+}
+
+
+.div_payment_one_terminal_terminal {
+  width:calc(50% - 10px);
+  align-self: center;
+}
+#dialog_payment_with_title {
+  font-size: 120%;
+  font-weight: bold;
+  text-align:center;
+  width: 100%;
+}
+
+#dialog_payment_with_td1 {
+  width:1%;
+  vertical-align:top;
+  text-align: center;
+}
+#dialog_payment_with_td2 {
+  width:99%;
+  vertical-align:top;
+  padding-top:10px;
+}
+#dialog_payment_with_text1 {
+  font-size:1em !important;
+}
+#dialog_payment_with_text2 {
+  font-size:1em !important;
+  color: green;
+  padding-top: 10px;  
+}
+#dialog_payment_with_delete {
+  padding-top: 10px;
+}
+#dialog_payment_with_text3 {
+  font-size:1em !important;
+  color: green;
+  padding-top: 10px;  
+}
+#dialog_payment_with_text4 {
+  font-size:1em !important;
+  color: green;
+  padding-top: 10px;  
+}
+#dialog_payment_with_text5 {
+  font-size:1em !important;
+  color: green;
+  padding-top: 10px;  
+}
+#dialog_payment_with_text_error {
+  font-size:1em !important;
+  color:rgb(203, 0, 0); 
+  padding-top: 10px;  
+}
+#dialog_payment_with_start > i {
+  color:green;  
+}
+#dialog_payment_with_cancel > i {
+  color:rgb(203, 0, 0);  
+}
+#dialog_payment_with_pb {
+  max-width:90%;  
+}
+.gks_viva_transaction_StatusId_gks_done {
+  border-width: 0px;background-color: green;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.gks_viva_transaction_StatusId_F {
+  border-width: 0px;background-color: green;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.gks_viva_transaction_StatusId_E {
+  border-width: 0px;background-color: red;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.gks_viva_transaction_StatusId_X {
+  border-width: 0px;background-color: #cdb635;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.gks_cardlink_transaction_responseCode_00 {
+  border-width: 0px;background-color: green;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;  
+}
+.gks_cardlink_transaction_responseCode_xx {
+  border-width: 0px;background-color: red;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.gks_payment_rawdata {
+  color: green;
+  font-size: 150%;
+}
+.gks_payment_receipt {
+  color: green;
+  font-size: 150%;
+  margin-left:10px;
+}
+.gks_payment_next_actions {
+  color: red;
+  font-size: 150%; 
+  margin-left:10px;
+  cursor:pointer;
+}
+.gks_marker_gps {
+  color: green;
+  font-size: 150%;
+}
+
+
+.gks_payment_receipt:hover, .gks_payment_rawdata:hover, .gks_marker_gps:hover, .gks_payment_next_actions:hover {
+  color:#007bff;  
+}
+
+.gks_mellon_transaction_approved {
+  border-width: 0px;background-color: green;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;  
+  
+}
+.gks_mellon_transaction_not_approved {
+  border-width: 0px;background-color: red;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;  
+}
+.gks_mellon_transaction_voided {
+  border-width: 0px;background-color: red;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;   
+}
+.gks_epay_transaction_approved {
+  border-width: 0px;background-color: green;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;  
+  
+}
+.gks_epay_transaction_not_approved {
+  border-width: 0px;background-color: red;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;  
+}
+.gks_epay_transaction_voided {
+  border-width: 0px;background-color: red;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;   
+}
+.gks_worldline_transaction_approved {
+  border-width: 0px;background-color: green;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;  
+  
+}
+.gks_worldline_transaction_not_approved {
+  border-width: 0px;background-color: red;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;  
+}
+.gks_worldline_transaction_voided {
+  border-width: 0px;background-color: red;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;   
+}
+
+.gks_eftpos_transaction_actions {
+  border-radius: 0px;  
+}
+
+.eftpos_status_draft {border-width: 0px;background-color: #999999;color: white;font-weight: bold;}
+.eftpos_status_async {border-width: 0px;background-color: #FCF5C9;color: black;font-weight: bold;}
+.eftpos_status_processed {border-width: 0px;background-color: #cdb635;color: white;font-weight: bold;}
+.eftpos_status_canceled {border-width: 0px;background-color: red;color: white;font-weight: bold;}
+.eftpos_status_abort {border-width: 0px;background-color: #A30000;color: white;font-weight: bold;}
+.eftpos_status_done {border-width: 0px;background-color: green;color: white;font-weight: bold;}
+.eftpos_status_agnosto {border-width: 0px;background-color: #C109E1;color: white;font-weight: bold;}
+
+#dialog_payment_with_td1 > i {
+  display:block;  
+}
+#dialog_payment_with_icon, #dialog_payment_with_icon2 {
+  font-size: 500%; 
+}
+#dialog_payment_with_icon2 {
+  margin-top:10px;
+}
+
+.dialog_payment_with_icon_transaction_type_sale, 
+.dialog_payment_with_icon_transaction_type_saleerp {
+  color: green; 
+}
+.dialog_payment_with_icon_transaction_type_fullvoid,
+.dialog_payment_with_icon_transaction_type_fullvoiderp {
+  color: #A30000; 
+}
+.dialog_payment_with_icon_transaction_type_refund,
+.dialog_payment_with_icon_transaction_type_refunderp {
+  color: red; 
+}
+
+.div_payment_type_multi_item_has_refund,
+.div_payment_type_multi_item_has_refunderp,
+.div_payment_type_multi_item_has_refunderpfree, 
+.div_payment_type_multi_item_has_refundfree {
+  background-color: #cdb63577 !important;
+  
+}
+.div_payment_type_multi_item_has_fullvoid,
+.div_payment_type_multi_item_has_fullvoiderp {
+  background-color: #ff000077 !important;
+  text-decoration: line-through !important;
+}
+
+.div_payment_type_multi_item_is_refund,
+.div_payment_type_multi_item_is_refunderp,
+.div_payment_type_multi_item_is_refunderpfree, 
+.div_payment_type_multi_item_is_refundfree {
+  background-color: #cdb635bb !important;
+}
+.div_payment_type_multi_item_is_fullvoid,
+.div_payment_type_multi_item_is_fullvoiderp {
+  background-color: #ff0000bb !important;
+}
+
+
+.megeftpos_responseCode_0 {
+  border-width: 0px;background-color: green;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.megeftpos_responseCode_1,.megeftpos_responseCode_2,.megeftpos_responseCode_3,.megeftpos_responseCode_4 {
+  border-width: 0px;background-color: red;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.megeftpos_responseCode_4,.megeftpos_responseCode_5,.megeftpos_responseCode_6,.megeftpos_responseCode_7,.megeftpos_responseCode_8 {
+  border-width: 0px;background-color: #cdb635;color: white;font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+
+.dialog_payment_with_tip1 {
+  margin-top: 10px;
+  display: flex; 
+  flex-flow: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  align-items: baseline;
+  
+}
+.dialog_payment_with_tip1 > div {
+  margin:2px 0px;  
+}
+
+#dialog_payment_with_tip_val {
+  width:60px;  
+}
+#dialog_payment_with_tip_pososto {
+  width:60px;
+}
+
+
+.dialog_payment_with_doseis1 {
+  margin-top: 10px;
+  display: flex; 
+  flex-flow: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  align-items: baseline;
+}
+.dialog_payment_with_doseis1 > div {
+  margin:2px 0px;  
+}
+#dialog_payment_with_doseis_val {
+  width:150px; 
+}
+
+.dialog_payment_with_refund1 {
+  margin-top: 10px;
+  display: flex; 
+  flex-flow: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  align-items: baseline;
+  
+}
+.dialog_payment_with_refund1 > div {
+  margin:2px 0px;  
+}
+
+#dialog_payment_with_refund_val {
+  width:100px;  
+}
+
+
+@media only screen and (max-width: 640px) {
+  #dialog_payment_with_icon, #dialog_payment_with_icon2 {
+    font-size: 250%;
+  }
+}
+  
+
+#dialog_payment_with_preferred_payment_method {
+  display: flex;
+  gap: 4px;
+  margin: 10px 0px;
+  flex-direction: row;
+  align-items: baseline;  
+  flex-wrap: wrap;
+}
+#dialog_payment_with_ppm_tap > input {
+  position: relative;
+  top: 2px;
+}
+#dialog_payment_with_ppm_tap > label > img {
+  height:37px;
+  cursor:pointer;
+  rotate: 17deg;
+}
+#dialog_payment_with_ppm_iris > input {
+  position: relative;
+  top: 3px;  
+}
+#dialog_payment_with_ppm_iris > label > img {
+  height:30px;
+  cursor:pointer;  
+}
+
+.viva_tra_CardTypeName_VISA:after,
+.viva_tra_CardTypeName_Visa_Debit:after,
+.viva_tra_CardTypeName_Visa_DEBIT:after,
+.viva_tra_CardTypeName_VISA_CREDIT:after,
+.viva_tra_CardTypeName_Visa_Prepaid:after,
+.viva_tra_CardTypeName_VISA_DEBITO:after,
+.viva_tra_CardTypeName_Visa_Gold_Credit:after,
+.viva_tra_BankId_NET_VISA:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 90px;
+  background: url(/my/img/visa.svg) no-repeat;
+  vertical-align: middle;
+  margin-left: 10px;  
+}
+.viva_tra_CardTypeName_MasterCard:after,
+.viva_tra_CardTypeName_MASTERCARD:after,
+.viva_tra_CardTypeName_DEBIT_MASTERCARD:after,
+.viva_tra_CardTypeName_Debit_Mastercard:after,
+.viva_tra_BankId_NET_MASTER:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 52px;
+  background: url(/my/img/mastercard.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 59px 47px;
+  margin-left: 10px;  
+  background-position: -5px -9px;
+}
+.viva_tra_CardTypeName_Maestro:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 48px;
+  background: url(/my/img/maestro.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 60px 43px;
+  margin-left: 10px;  
+  background-position: -7px -7px;
+}
+
+.viva_tra_CardTypeName_AMEX:after,
+.viva_tra_CardTypeName_AMEX_CREDIT:after,
+.viva_tra_CardTypeName_AMERICAN_EXPRESS:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 72px;
+  background: url(/my/img/american-express3.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 72px 40px;
+  margin-left: 10px;
+  background-position: 0px -4px;
+  background-color: #2557D6;
+}
+.viva_tra_CardTypeName_Diners:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 47px;
+  background: url(/my/img/diners-club.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 47px 30px;
+  margin-left: 10px;
+  background-position: 0px 0px;
+}
+.viva_tra_CardTypeName_Discover:after,
+.viva_tra_CardTypeName_DISCOVER:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 49px;
+  background: url(/my/img/discover.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 49px 30px;
+  margin-left: 10px;
+  background-position: 0px 0px;
+}
+.viva_tra_CardTypeName_Bancontact:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 49px;
+  background: url(/my/img/bancontact.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 49px 30px;
+  margin-left: 10px;
+  background-position: 0px 0px;
+}
+.viva_tra_BankId_NET_IRIS:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 73px;
+  background: url(/my/img/payment_iris_90.png) no-repeat;
+  vertical-align: middle;
+  background-size: 73px 30px;
+  margin-left: 10px;
+}
+
+
+.mellon_tra_CardType_Visa:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 90px;
+  background: url(/my/img/visa.svg) no-repeat;
+  vertical-align: middle;
+  margin-left: 10px;  
+}
+.mellon_tra_CardType_Mastercard:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 52px;
+  background: url(/my/img/mastercard.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 59px 47px;
+  margin-left: 10px;  
+  background-position: -5px -9px;
+}
+.mellon_tra_CardType_Maestro:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 48px;
+  background: url(/my/img/maestro.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 60px 43px;
+  margin-left: 10px;  
+  background-position: -7px -7px;
+}
+.mellon_tra_CardType_AMEX:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 72px;
+  background: url(/my/img/american-express3.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 72px 40px;
+  margin-left: 10px;
+  background-position: 0px -4px;
+  background-color: #2557D6;
+}
+.mellon_tra_CardType_Diners:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 47px;
+  background: url(/my/img/diners-club.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 47px 30px;
+  margin-left: 10px;
+  background-position: 0px 0px;
+}
+.mellon_tra_CardType_Discover:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 49px;
+  background: url(/my/img/discover.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 49px 30px;
+  margin-left: 10px;
+  background-position: 0px 0px;
+}
+.mellon_tra_PaymentType_1:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 73px;
+  background: url(/my/img/payment_iris_90.png) no-repeat;
+  vertical-align: middle;
+  background-size: 73px 30px;
+  margin-left: 10px;
+}
+
+
+.cardlink_tra_cardType_VISA:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 90px;
+  background: url(/my/img/visa.svg) no-repeat;
+  vertical-align: middle;
+  margin-left: 10px;  
+}
+.cardlink_tra_cardType_MASTERCARD:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 52px;
+  background: url(/my/img/mastercard.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 59px 47px;
+  margin-left: 10px;  
+  background-position: -5px -9px;
+}
+.cardlink_tra_cardType_MAESTRO:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 48px;
+  background: url(/my/img/maestro.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 60px 43px;
+  margin-left: 10px;  
+  background-position: -7px -7px;
+}
+.cardlink_tra_cardType_AMEX:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 72px;
+  background: url(/my/img/american-express3.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 72px 40px;
+  margin-left: 10px;
+  background-position: 0px -4px;
+  background-color: #2557D6;
+}
+.cardlink_tra_cardType_DINERS:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 47px;
+  background: url(/my/img/diners-club.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 47px 30px;
+  margin-left: 10px;
+  background-position: 0px 0px;
+}
+.cardlink_tra_cardType_DISCOVER:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 49px;
+  background: url(/my/img/discover.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 49px 30px;
+  margin-left: 10px;
+  background-position: 0px 0px;
+}
+.cardlink_tra_cardType_IRIS:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 73px;
+  background: url(/my/img/payment_iris_90.png) no-repeat;
+  vertical-align: middle;
+  background-size: 73px 30px;
+  margin-left: 10px;
+}
+
+
+
+
+
+.epay_tra_CardType_VISA:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 90px;
+  background: url(/my/img/visa.svg) no-repeat;
+  vertical-align: middle;
+  margin-left: 10px;  
+}
+.epay_tra_CardType_MASTERCARD:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 52px;
+  background: url(/my/img/mastercard.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 59px 47px;
+  margin-left: 10px;  
+  background-position: -5px -9px;
+}
+.epay_tra_CardType_MAESTRO:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 48px;
+  background: url(/my/img/maestro.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 60px 43px;
+  margin-left: 10px;  
+  background-position: -7px -7px;
+}
+.epay_tra_CardType_AMEX:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 72px;
+  background: url(/my/img/american-express3.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 72px 40px;
+  margin-left: 10px;
+  background-position: 0px -4px;
+  background-color: #2557D6;
+}
+.epay_tra_CardType_DINERS:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 47px;
+  background: url(/my/img/diners-club.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 47px 30px;
+  margin-left: 10px;
+  background-position: 0px 0px;
+}
+.epay_tra_CardType_DISCOVER:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 49px;
+  background: url(/my/img/discover.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 49px 30px;
+  margin-left: 10px;
+  background-position: 0px 0px;
+}
+.epay_tra_PaymentType_1:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 73px;
+  background: url(/my/img/payment_iris_90.png) no-repeat;
+  vertical-align: middle;
+  background-size: 73px 30px;
+  margin-left: 10px;
+}
+
+
+
+
+
+.worldline_tra_card_label_Visa_Debit:after, 
+.worldline_tra_card_label_Visa_Debit_Contactless:after,
+.worldline_tra_card_label_Visa_Credit:after, 
+.worldline_tra_card_label_Visa_Credit_Contactless:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 90px;
+  background: url(/my/img/visa.svg) no-repeat;
+  vertical-align: middle;
+  margin-left: 10px;  
+}
+.worldline_tra_card_label_Mastercard:after, 
+.worldline_tra_card_label_MasterCard_Contactless:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 52px;
+  background: url(/my/img/mastercard.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 59px 47px;
+  margin-left: 10px;  
+  background-position: -5px -9px;
+}
+.worldline_tra_card_label_Maestro:after,
+.worldline_tra_card_label_Maestro_Contactless:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 48px;
+  background: url(/my/img/maestro.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 60px 43px;
+  margin-left: 10px;  
+  background-position: -7px -7px;
+}
+.worldline_tra_card_label_AMEX:after,
+.worldline_tra_card_label_AMEX_Contactless:after,
+.worldline_tra_card_label_American_Express:after,
+.worldline_tra_card_label_American_Express_Contactless:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 72px;
+  background: url(/my/img/american-express3.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 72px 40px;
+  margin-left: 10px;
+  background-position: 0px -4px;
+  background-color: #2557D6;
+}
+.worldline_tra_card_label_Diners:after,
+.worldline_tra_card_label_Diners_Contactless:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 47px;
+  background: url(/my/img/diners-club.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 47px 30px;
+  margin-left: 10px;
+  background-position: 0px 0px;
+}
+.worldline_tra_card_label_Discover,
+.worldline_tra_card_label_Discover_Contactless:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 49px;
+  background: url(/my/img/discover.svg) no-repeat;
+  vertical-align: middle;
+  background-size: 49px 30px;
+  margin-left: 10px;
+  background-position: 0px 0px;
+}
+.worldline_tra_card_label_IRIS:after {
+  content: '';
+  display: inline-block;
+  height: 30px;
+  width: 73px;
+  background: url(/my/img/payment_iris_90.png) no-repeat;
+  vertical-align: middle;
+  background-size: 73px 30px;
+  margin-left: 10px;
+}
+#dialog_payment_show_card_terminal_btn_viva {
+  appearance: button;
+  color:white;
+}

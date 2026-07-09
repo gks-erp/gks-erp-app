@@ -1,0 +1,492 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.gks_footer_last_p {
+  display:none;
+}
+#gks_main_panel {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  border-top: 1px dotted #ddd;
+}
+
+#gks_main_panel_users {
+  display: flex;
+  flex: 0 0 300px;
+  -ms-flex: 0 0 300px;
+  -webkit-box-flex: 0;
+  flex-direction: column;
+  align-items1: center;
+  justify-content1: center;
+  padding: 10px;
+  max-width1: 25%;
+  border-right: 1px dotted #ddd;
+  height:100%;  
+
+}
+#gks_main_panel_users_list {
+  overflow: auto;
+  overflow-x: hidden;
+  height:100%;  
+}
+
+#gks_main_panel_users_list::-webkit-scrollbar {width: 5px;}
+#gks_main_panel_users_list::-webkit-scrollbar-track {background: #c0dac4; }
+#gks_main_panel_users_list::-webkit-scrollbar-thumb {background: #458c50;}
+#gks_main_panel_users_list::-webkit-scrollbar-thumb:hover {background: #23aa38;} 
+
+
+#gks_main_panel_chat {
+  display: flex;
+  flex: 3;
+  -ms-flex: 0 0 25%;
+  -webkit-box-flex: 0;
+  flex-direction: column;
+  align-items1: center;
+  justify-content1: center;
+  padding: 10px;
+  border-right: 1px dotted #ddd;
+  height:100%; 
+  min-width:300px;
+}
+
+#gks_main_panel_details {
+  display: flex;
+  flex: 0 0 300px;
+  -ms-flex: 0 0 300px;
+  -webkit-box-flex: 0;  
+  flex-direction: column;
+  align-items1: center;
+  justify-content1: center;
+  padding: 15px;
+  height:100%;
+}
+#gks_main_panel_details_list {
+  font-size:12px;  
+  overflow: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+#gks_main_panel_details_list::-webkit-scrollbar {width: 5px;}
+#gks_main_panel_details_list::-webkit-scrollbar-track {background: #c0dac4; }
+#gks_main_panel_details_list::-webkit-scrollbar-thumb {background: #458c50;}
+#gks_main_panel_details_list::-webkit-scrollbar-thumb:hover {background: #23aa38;} 
+
+
+#gks_main_panel_users_title, #gks_main_panel_chat_title, #gks_main_panel_details_title {
+  font-weight:bold;  
+}
+
+#search_user {
+  margin-bottom:10px;  
+}
+
+.gks_sms_user_div {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin: 5px 0px 5px 0px;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0);
+}
+.gks_sms_user_div:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.gks_sms_user_div_hidden {
+  display:none;  
+}
+
+
+.gks_sms_user_div:hover {
+  background-color: #ddffdd;
+}
+
+
+.gks_sms_user_div_photo {
+  display: flex;
+  flex: 0 0 80px;
+  -ms-flex: 0 0 80px;
+  -webkit-box-flex: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;  
+  margin: 4px 0px;
+}
+.gks_sms_user_div_photo img {
+  border-radius:50%;  
+}
+
+.gks_sms_user_div_detail {
+  display: flex;
+  flex: 3;
+  -ms-flex: 0 0 100%;
+  -webkit-box-flex: 0;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  cursor:pointer;
+  padding-right: 10px;
+}
+
+.gks_sms_user_div_name {
+  font-size:14px; 
+  font-weight:bold;
+}
+.gks_sms_user_div_name_from_mobile {
+  font-weight:normal;
+  font-style: italic;
+}
+.gks_sms_user_div_selected .gks_sms_user_div_name_from_mobile {
+  font-weight:bold;
+}
+
+.gks_sms_user_div_selected {
+  background-color: #bfdfff !important;
+  font-weight: bold;
+  border: 1px solid #72b9ff;
+}
+
+.gks_sms_user_div_number {
+  
+  font-size:12px;  
+}
+.gks_sms_user_div_date {
+  font-size:10px;
+  text-align: right;
+} 
+
+#gks_main_panel_chat_list {
+  overflow: auto;
+  overflow-x: hidden;
+  height:100%;  
+  
+  align-items1: center;
+  justify-content1: center;
+}
+#gks_main_panel_chat_list2 {
+  max-width: 800px;
+  margin: auto;
+  padding: 0px 20px;
+}
+
+
+#gks_main_panel_chat_list::-webkit-scrollbar {width: 5px;}
+#gks_main_panel_chat_list::-webkit-scrollbar-track {background: #c0dac4; }
+#gks_main_panel_chat_list::-webkit-scrollbar-thumb {background: #458c50;}
+#gks_main_panel_chat_list::-webkit-scrollbar-thumb:hover {background: #23aa38;} 
+
+#gks_main_panel_chat_new {
+  margin-top:10px;  
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+
+}
+#gks_main_panel_chat_new1 {
+    display: flex;
+    flex: 0 0 52px;
+    -ms-flex: 0 0 50px;
+    -webkit-box-flex: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 10px;
+    max-width: 25%;
+}
+#gks_main_panel_chat_new2 {
+    display: flex;
+    flex: 0 0 155px;
+    -ms-flex: 0 0 155px;
+    -webkit-box-flex: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    padding: 0px;
+}
+
+#gks_main_panel_chat_new3 {
+    display: flex;
+    flex: 3;
+    -ms-flex: 3;
+    -webkit-box-flex: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+}
+
+#gks_main_panel_chat_new4 {
+    display: flex;
+    flex: 0 0 52px;
+    -ms-flex: 0 0 50px;
+    -webkit-box-flex: 0;
+    flex-direction: column;
+    align-items: end;
+    justify-content: center;
+    padding: 0px 0px 0px 10px;
+}
+#send_message {
+  display:inline-block;  
+}
+.gks_msgs_item {
+  
+
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row; 
+  margin: 10px 0px;  
+}
+
+.gks_msgs_item_cell1, .gks_msgs_item_cell2 {
+  overflow-wrap: anywhere;  
+}
+.gks_msgs_item_cell1 {
+  display: flex;
+  flex: 0 50%;
+  -ms-flex: 0 0 50%;
+  -webkit-box-flex: 0;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+}
+.gks_msgs_item_cell2 {
+  display: flex;
+  flex: 2;
+  -ms-flex: 0 0 50%;
+  -webkit-box-flex: 0;
+  flex-direction: column;
+  align-items: end;
+  justify-content: center;
+}
+
+.gks_msgs_item_inbox .gks_msgs_item_cell1 {
+  flex: 0 70%;
+  -ms-flex: 0 0 70%;
+}
+.gks_msgs_item_inbox .gks_msgs_item_cell2 {
+  flex: 0 30%;
+  -ms-flex: 0 0 30%;
+}
+.gks_msgs_item_sent .gks_msgs_item_cell1 {
+  flex: 0 30%;
+  -ms-flex: 0 0 30%;
+}
+.gks_msgs_item_sent .gks_msgs_item_cell2 {
+  flex: 0 70%;
+  -ms-flex: 0 0 70%;
+}
+
+
+.msg_text {
+  background-color: #eeeeee;
+  padding: 10px 20px;
+  font-size:14px;
+  display:block;
+  
+}
+.msg_time {
+  font-size:10px;
+  display:block;
+  
+}
+.gks_msgs_item_inbox .msg_text {
+  border-radius: 0px 20px 20px 20px;
+}
+.gks_msgs_item_sent .msg_text {
+  border-radius: 20px 0px 20px 20px;
+  background-color: #bfdfff;
+}
+.msg_text span { 
+  vertical-align: text-bottom;
+}
+
+.gks_msgs_item_inbox .msg_time {
+  text-align:left;
+}
+.gks_msgs_item_sent .msg_time {
+  text-align:right;
+}
+.count_msgs {
+  font-size:10px;
+}
+
+.icon_ret, .icon_status {
+  font-size: 16px;
+  margin-left: 4px;
+}
+.icon_ret_ok {
+ color:#73AD21; 
+}
+.icon_ret_error {
+  color:#e93636;
+}
+.icon_color_yellow {
+  color:#ffff00;
+}
+.icon_color_blue {
+  color:blue;
+}
+.icon_color_green {
+  color:#73AD21;
+}
+.icon_color_red {
+  color:#e93636;
+}
+.icon_color_gray {
+  color:#777777;
+}
+.icon_resend {
+  font-size: 16px;
+  margin-left: 4px;
+  background-color: #0069d9;
+  color: white;
+  border-radius: 50%;
+  font-size: 10px;
+  padding: 3px;  
+  position: relative;
+  top: -2px;
+  cursor:pointer;
+}
+.icon_space_resend {
+  display:inline-block;
+  width:20px;
+  height:10px;
+}
+
+.gks_sms_date_sep {
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold; 
+  border-top: 1px dotted gray; 
+}
+#sms_from_label {
+  display: none;
+  sss: inline-block;
+}
+
+
+#sms_from {
+  width:80px;
+  display: inline-block;
+  margin-left: 0px;
+  padding: 4px 0px;
+}
+#sms_template {
+  width:80px;
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 4px 0px;
+  
+}
+.user_icons {
+  text-align: justify;
+  display: flex;
+  flex-direction: row;
+}
+.user_icons a {
+  display: flex;
+  flex: 3;  
+}
+
+.user_icons i {
+  font-size:24px;  
+  vertical-align: middle;
+}
+.user_icons a:hover {
+  text-decoration: none;
+}
+.user_icons img  {
+  width:24px;  
+  vertical-align: middle;
+}
+
+@media only screen and (max-width: 900px) {
+  #gks_main_panel {
+    width: calc(100% - 0px);
+  }
+  #gks_main_panel_users {
+    flex: 0 0 300px;
+    border-bottom: 1px dotted #ddd;
+    border-right: 1px dotted #ddd;
+    height: 400px;
+  }
+  #gks_main_panel_chat {
+    flex: 3;
+    border-bottom: 1px dotted #ddd;
+    border-right: 1px dotted #ddd;    
+    height: 400px;
+  }
+  #gks_main_panel_details {
+    flex: 0 0 100%;
+  }
+  #gks_main_panel_chat_new2 {
+    flex: 0 0 100%;
+  }
+  #gks_main_panel_chat_new3 {
+    flex: 0 0 100%;
+  }
+  #gks_main_panel_chat_new4 {
+    flex: 0 0 100%;
+  }
+  #gks_main_panel_chat_list2 {
+    max-width:unset;  
+  }
+  
+  #sms_from {
+    width: 50%;
+  }
+  #sms_template {
+    width: 50%;
+    margin-right: 0px;
+  }
+
+}
+
+@media only screen and (max-width: 600px) {
+  #gks_main_panel {
+    width: calc(100% - 50px);
+  }
+  #gks_main_panel_users {
+    flex: 0 0 100%;
+    border-bottom: 1px dotted #ddd;
+    border-right: 1px dotted #ddd;
+    height: 400px;
+  }
+  #gks_main_panel_chat {
+    flex: 0 0 100%;
+    border-bottom: 1px dotted #ddd;
+    border-right: 1px dotted #ddd;    
+    height: 400px;
+  }
+  #gks_main_panel_details {
+    flex: 0 0 100%;
+    border-right: 1px dotted #ddd;
+    height: 400px;
+  }  
+  
+  #gks_main_panel_chat_new2 {
+    flex: 0 0 100%;
+  }
+  
+  #sms_from {
+    width: 50%;
+  }
+  #sms_template {
+    width: 50%;
+    margin-right: 0px;
+  }
+  
+  
+}
+
+
+

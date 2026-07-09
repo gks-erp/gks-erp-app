@@ -1,0 +1,61 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+#qrUrl_get_mark_results {
+  font-size: 0.875rem;
+}
+
+.gks_deltio_cmd_info {
+  font-size: 0.875rem;  
+}
+.gks_deltio_cmd_params_title {
+  text-align:center;
+  font-weight:bold;  
+  font-size: 0.875rem;
+} 	
+#params_register_timeStamp {
+  max-width: 200px;
+}
+
+.gks_eidos_label {
+  font-size: 0.8rem;
+  padding: 5px 0px 5px 0px;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 2px;
+}
+.gks_items_col {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.gks_eidos_label {
+  font-size: 0.8rem;
+  padding: 5px 0px 5px 0px;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 2px;
+}
+.gks_delete_deliveredPackaging {
+  color: #dc3545;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.gks_add_deliveredPackaging {
+  color: #35dc35;
+  cursor: pointer;
+  vertical-align: middle;
+}
+#needs_mark > span > i,
+#needs_qrUrl > span > i {
+  color:red;
+}
+#needs_mark.gks_f_optional > span > i,
+#needs_qrUrl.gks_f_optional > span > i {
+  color:orange;
+}
+#needs_mark.gks_f_optional > span > i:before,
+#needs_qrUrl.gks_f_optional > span > i:before {
+  content: "\f005";
+}

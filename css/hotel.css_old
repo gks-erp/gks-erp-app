@@ -1,0 +1,178 @@
+
+
+.room_type_status_disable     {border-radius: 10px; background: #e93636; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+.room_type_status_renovation  {border-radius: 10px; background: #b800ff; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+.room_type_status_available   {border-radius: 10px; background: #73AD21; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+
+.room_status_disable     {border-radius: 10px; background: #e93636; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+.room_status_renovation  {border-radius: 10px; background: #b800ff; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+.room_status_available   {border-radius: 10px; background: #73AD21; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+
+.hotel_availability_0          {border-radius: 10px; background: #e93636; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+.hotel_availability_1          {border-radius: 10px; background: #73AD21; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;}
+
+.reservation_status_01draft    {border-radius: 10px; background: #aaaaaa; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.reservation_status_10cancel   {border-radius: 10px; background: #e93636; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.reservation_status_20confirm  {border-radius: 10px; background: #ff7f00; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;} 
+.reservation_status_30complete {border-radius: 10px; background: #73AD21; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+
+
+
+.order_state_prodraft1111    {border-radius: 10px; background: #ffff00; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#0000ff;white-space: nowrap;}
+.order_state_prodraft11111     {border-radius: 10px; background: #e936de; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+.order_state_wait_payment111     {border-radius: 10px; background: #518df1; padding:0px 10px 0px 10px; border: 1px solid #000000; color:#ffffff;white-space: nowrap;}
+
+
+
+.room_type_amenity_label {
+  display:block;
+  line-height: 34px !important;
+  margin-bottom:0px;
+}
+.room_type_amenity_label_text {
+  display:block;
+  font-size:70%;
+}
+.avprcal_past {
+  background: #aaaaaa;
+}
+.avprcal_odd {
+  background: #f8f8f8;
+}
+.avprcal_even {
+  background: #f0f0f0;
+}
+.avprcal_odd_sk {
+  background: #fafafa;
+}
+.avprcal_even_sk {
+  background: #f2f2f2;
+}
+.avprcal_month {
+  display: inline-block;
+  -webkit-writing-mode: vertical-rl;
+  -ms-writing-mode: tb-rl;
+  writing-mode: vertical-rl;
+  height: 500px;
+  width: calc(50% + 30px);
+  position: absolute;
+  top: -250px;
+  left: 0px;
+  font-size:200%;
+}
+.calendartddate {
+  width:100%;
+  height:24px;
+  font-weight:bold;
+}
+.calendartdprice {
+  width:100%;
+  height:24px;
+}
+.calendartdstatus {
+  width:100%;
+  height:24px;
+}
+.calendartdstatus0 {
+  background: #e93636;
+  color:white;
+}
+.calendartdstatus1 {
+  background: #73AD21;
+  color:white;
+}
+.calendartdreserve {
+  width:100%;
+  height:24px;
+}
+
+.plan-room-type {
+  font-size:100%;
+  cursor:pointer;
+}
+.plan_th {
+  font-size:14px;
+  
+}
+.plan_month1_cell {
+  border-left: 2px solid blue !important;
+}
+.plan_past_cell {
+  background-image:url('/my/img/hotel-past-cell.png');
+}
+.plan_sk_cell {
+  background-color: rgba(0,0,255,0.1);
+}
+.plan_today_cell {
+  background-color: rgba(238,232,170,0.3);
+}
+
+
+.plan_r_both {
+  background-image:url('/my/img/plan_r_both.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_full {
+  background-image:url('/my/img/plan_r_full.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_left {
+  background-image:url('/my/img/plan_r_left.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_r_right {
+  background-image:url('/my/img/plan_r_right.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+.plan_f_both {
+  background-image:url('/my/img/plan_f_both.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_f_full {
+  background-image:url('/my/img/plan_f_full.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_f_left {
+  background-image:url('/my/img/plan_f_left.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_f_right {
+  background-image:url('/my/img/plan_f_right.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+.plan_fr_both {
+  background-image:url('/my/img/plan_fr_both.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+.plan_rf_both {
+  background-image:url('/my/img/plan_rf_both.svg');
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+
+}
+#plantable .mytd {
+  text-align:center;  
+  vertical-align: middle;
+  font-size: 75%;
+  cursor:pointer;
+}
+
+.plan_disable {
+  background-color:rgba(233,54,54,0.5);
+  text-align:center;
+}
+.plan_renovation {
+  background-color:rgba(184,0,255,0.5);
+  text-align:center;
+}

@@ -1,0 +1,248 @@
+@import 'compass/css3';
+
+$border-color: rgba(0,0,0,0.2);
+$bg-color: #fff;
+$hover-gradient: linear-gradient(to bottom,#3498db,#2980b9);
+$transitions: fadeIn slideTop slideBottom slideLeft slideRight flipHorizontal flipVertical;
+
+#contextmenu {
+    position: absolute;
+    z-index: 1000;
+    @include opacity( 0 );
+    @include transform-origin( center, top );
+    @include user-select( none );
+    
+    &.contextmenu-arrow-left:before,
+    &.contextmenu-arrow-right:before,
+    &.contextmenu-arrow-top:before,
+    &.contextmenu-arrow-bottom:before {
+        content:'';
+        position: absolute;
+        border-style: solid;
+        border-color: transparent;
+        border-width: 6px;
+    }
+    &.contextmenu-arrow-left:after,
+    &.contextmenu-arrow-right:after,
+    &.contextmenu-arrow-top:after,
+    &.contextmenu-arrow-bottom:after {
+        content:'';
+        position: absolute;
+        border-style: solid;
+        border-color: transparent;
+        border-width: 5px;
+    }
+
+    &.contextmenu-arrow-left {
+        &:before {left: -12px;top: 19px;border-right-color: $border-color;}
+        &:after {left: -9px;top: 20px;border-right-color: $bg-color;}
+    }
+
+    &.contextmenu-arrow-right {
+        &:before {right: -12px;top: 19px;border-left-color: $border-color;}
+        &:after {right: -9px;top: 20px;border-left-color: $bg-color;}
+    }
+
+    &.contextmenu-arrow-top {
+        &:before {top: -12px;left: 19px;border-bottom-color: $border-color;}
+        &:after {top: -9px;left: 20px;border-bottom-color: $bg-color;}
+    }
+
+    &.contextmenu-arrow-bottom {
+        &:before {bottom: -12px;left: 19px;border-top-color: $border-color;}
+        &:after {bottom: -9px;left: 20px;border-top-color: $bg-color;}
+    }
+    
+    /*--------------------------------------------*\
+     * Transitions
+    \*--------------------------------------------*/
+    &.contextmenu-visible {@include opacity( 1 );}
+    
+    @each $transition in $transitions {
+        &.contextmenu-transition-#{$transition} {
+            @include animation-name( #{$transition}-off );
+            &.contextmenu-visible {@include animation-name( #{$transition}-on );}
+        }
+    }
+    
+    &>.contextmenu-menu {position: relative !important;z-index: 0 !important;}
+    
+    .contextmenu-menu {
+        position: absolute;
+        min-width: 160px;
+        padding: 5px 0;
+        list-style: none;
+        background-color: $bg-color;
+        border: 1px solid $border-color;
+        margin:0;
+        z-index: 1;
+        @include border-radius( 6px );
+        @include box-shadow( 0 5px 10px rgba(0,0,0,0.2) );
+        @include background-clip( padding-box );
+        
+        li {
+            line-height: 20px;
+            
+            &.contextmenu-title {
+                padding: 3px 10px;
+                color: #9FA6AF;
+                font-weight: bold;
+                font-size: 12px;
+            }
+            
+            &.contextmenu-divider {
+                height: 1px;
+                margin: 9px 1px;
+                overflow: hidden;
+                background-color: #e5e5e5;
+                border-bottom: 1px solid #fxff;
+            }
+            
+            &.contextmenu-item,
+            &.contextmenu-checkbox {
+                display: block;
+                padding: 3px 20px;
+                clear: both;
+                font-weight: normal;
+                line-height: 20px;
+                color: #333;
+                white-space: nowrap;
+                font-size: 14px;
+                position: relative;
+
+                &.active {
+                    cursor: pointer;
+                    color: #fff;
+                    text-decoration: none;
+                    background-color: #0081c2;
+                    background-repeat: repeat-x;
+                    outline: none;
+                    @include background-image( $hover-gradient );
+                    
+                    &> .contextmenu-menu {display: block;}
+                }
+                
+                &.contextmenu-disabled {@include opacity(0.5);}
+                
+                .fa {margin-right: 5px;}
+            }
+            
+            &.contextmenu-item {
+                &> .contextmenu-menu {
+                    display: none;
+                    top: 0;
+                    left: 100%;
+                    margin-top: -6px;
+                    margin-left: -1px;
+                    @include border-radius( 0 6px 6px 6px );
+                }
+                
+                &.contextmenu-submenu:after {
+                    display: block;
+                    float: right;
+                    width: 0;
+                    height: 0;
+                    margin-top: 5px;
+                    margin-right: -10px;
+                    border-color: transparent;
+                    border-left-color: #ccc;
+                    border-style: solid;
+                    border-width: 5px 0 5px 5px;
+                    content: " ";
+                }
+                
+                &.active:after {
+                    border-left-color: #fff;
+                }
+            }
+            
+            &.contextmenu-checkbox {
+                &.contextmenu-checked{
+                    text-indent: 5px;
+                    
+                    &:before {
+                        font: normal normal normal 14px/1 FontAwesome;
+                        font-size: inherit;
+                        text-rendering: auto;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        content: "\f00c";
+                        position: absolute;
+                        left: 0px;
+                        line-height: 20px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include keyframes( fadeIn-on ) {
+  from {@include opacity( 0 );}
+    to {@include opacity( 1 );}
+}
+
+@include keyframes( fadeIn-off ) {
+  from {@include opacity( 1 );}
+    to {@include opacity( 0 );}
+}
+
+@include keyframes( slideTop-on ) {
+  from {@include opacity( 0 );@include transform( translateY( -30px ) );}
+    to {@include opacity( 1 );@include transform( translateY( 0 ) );}
+}
+
+@include keyframes( slideTop-off ) {
+  from {@include opacity( 1 );@include transform( translateY( 0 ) );}
+    to {@include opacity( 0 );@include transform( translateY( -30px ) );}
+}
+
+@include keyframes( slideBottom-on ) {
+  from {@include opacity( 0 );@include transform( translateY( 30px ) );}
+    to {@include opacity( 1 );@include transform( translateY( 0 ) );}
+}
+
+@include keyframes( slideBottom-off ) {
+  from {@include opacity( 1 );@include transform( translateY( 0 ) );}
+    to {@include opacity( 0 );@include transform( translateY( 30px ) );}
+}
+
+@include keyframes( slideLeft-on ) {
+  from {@include opacity( 0 );@include transform( translateX( -30px ) );}
+    to {@include opacity( 1 );@include transform( translateX( 0 ) );}
+}
+
+@include keyframes( slideLeft-off ) {
+  from {@include opacity( 1 );@include transform( translateX( 0 ) );}
+    to {@include opacity( 0 );@include transform( translateX( -30px ) );}
+}
+
+@include keyframes( slideRight-on ) {
+  from {@include opacity( 0 );@include transform( translateX( 30px ) );}
+    to {@include opacity( 1 );@include transform( translateX( 0 ) );}
+}
+
+@include keyframes( slideRight-off ) {
+  from {@include opacity( 1 );@include transform( translateX( 0 ) );}
+    to {@include opacity( 0 );@include transform( translateX( 30px ) );}
+}
+
+@include keyframes( flipHorizontal-on ) {
+  from {@include opacity( 0 );@include transform( rotateY(90deg) );}
+    to {@include opacity( 1 );@include transform( rotateY( 0 ) );}
+}
+
+@include keyframes( flipHorizontal-off ) {
+  from {@include opacity( 1 );@include transform( rotateY( 0 ) );}
+    to {@include opacity( 0 );@include transform( rotateY(90deg) );}
+}
+
+@include keyframes( flipVertical-on ) {
+  from {@include opacity( 0 );@include transform( rotateX(90deg) );}
+    to {@include opacity( 1 );@include transform( rotateX( 0 ) );}
+}
+
+@include keyframes( flipVertical-off ) {
+  from {@include opacity( 1 );@include transform( rotateX( 0 ) );}
+    to {@include opacity( 0 );@include transform( rotateX(90deg) );}
+}

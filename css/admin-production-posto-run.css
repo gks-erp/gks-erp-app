@@ -1,0 +1,136 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.gks_hide_tr {
+  display:none;  
+}
+.call_sxolio {  
+  min-height: 40px !important;
+}
+
+.mybtn_processing {
+  font-size:20pt;
+  color:#337AB7; 
+  cursor:pointer;
+}  
+.mybtn_processing_disable {
+  font-size:20pt;
+  color:#337AB7; 
+  opacity:0.2;  
+}
+.mybtn_pause {
+  font-size:20pt;
+  color:#ed9c28; 
+  cursor:pointer;
+} 
+.mybtn_pause_disable {
+  font-size:20pt;
+  color:#ed9c28; 
+  opacity:0.2;  
+}
+.mybtn_completed {
+  font-size:20pt;
+  color:#47a447; 
+  cursor:pointer;
+}
+.mybtn_completed_disable {
+  font-size:20pt;
+  color:#47a447; 
+  opacity:0.2;
+}
+.mybtn_failed {
+  font-size:20pt;
+  color:#ff3a00; 
+  cursor:pointer;
+}  
+.mybtn_failed_disable {
+  font-size:20pt;
+  color:#ff3a00; 
+  opacity:0.2;
+}  
+.mybtn_cancelled {
+  font-size:20pt;
+  color:#ff0000; 
+  cursor:pointer;
+}
+.mybtn_cancelled_disable {
+  font-size:20pt;
+  color:#ff0000; 
+  opacity:0.2;
+}
+.call_sxolio {
+  width:100%;
+  height:40px; 
+  
+}
+.ddate_today {
+  background-color: black;
+  color: white;
+  border-radius: 10px;  
+}
+.ddate_future {
+  background-color: #e4e400;
+  color: black;
+  border-radius: 10px;  
+}
+.ddate_future_more {
+  background-color: greenyellow;
+  color: black;
+  border-radius: 10px;  
+}
+.ddate_past {
+  background-color: red;
+  color: white;
+  border-radius: 10px;  
+}
+.ddate_past_more {
+  background-color: orangered;
+  color: white;
+  border-radius: 10px; 
+  font-weight: bold;
+}
+
+.gks_multiselectcheck {
+  font-size:20pt;
+  cursor:pointer;
+    
+}
+.gks_multiselectcheck_selected {
+  font-weight: 900;
+}
+.gks_multiselectcheck_selected:before {
+  content: "\f058";
+}
+
+.gks_multiselect_div {    
+  font-size: 0.8rem;
+  width: 96%;
+  margin: auto;
+  margin-bottom:10px;
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+#gks_multiselect_all {
+  margin-left:5px;
+}
+#gks_multiselect_cc {
+  position: relative;
+  top: 2px;    
+}
+#gks_multiselect_cc span {
+  font-weight:bold;  
+}
+#gks_multiselect_cmd {
+  position: relative;
+  top: 2px;    
+  
+}
+
+       

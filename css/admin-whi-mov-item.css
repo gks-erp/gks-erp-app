@@ -1,0 +1,530 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.gks_eidos_label {
+  font-size:0.8rem;
+  padding: 5px 0px 5px 0px;
+  border-radius: 10px;
+  text-align: center; 
+  margin-top: 2px; 
+}
+#eidi_table .form-group input {
+  font-size:0.8rem;
+  margin-bottom: 4px;
+}
+#eidi_table .form-group select {
+  font-size:0.8rem;
+  margin-bottom: 4px;
+}
+#eidi_table .form-group p {
+  font-size:0.8rem;
+}
+
+.gks_code {
+  width11:calc(100% - 60px);
+  display: inline-block;
+}
+
+
+.gks_eidos {
+  padding-top: 4px;
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  margin-bottom:0px;
+}
+.gks_eidos_even {
+  background-color: #eeeeee;
+}
+.gks_eidos_odd {
+  background-color: #dddddd;
+}
+.gks_eidos_radup {
+  border-radius: 12px 12px 0px 0px;
+}
+.gks_eidos_raddown {
+  border-radius: 0px 0px 12px 12px;
+}
+
+
+.gks_descr {
+  font-size:0.8rem;
+  width:calc(100% - 90px);
+  min-height:29px !important;
+  margin-bottom: 4px;
+}
+.gks_comments {
+  font-size:0.8rem;
+  min-height:29px !important;
+  margin-bottom: 4px;
+}
+
+.gks_delete_eidos {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.gks_delete_eidos_extra {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+  font-size:80%;
+}
+
+
+
+
+.gks_add_eidos {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+}
+
+
+
+
+
+
+.gks_info_descr {
+  float: right;
+  margin-right: 4px;
+}
+.gks_product_zoom {
+  float: right;
+  /*position: relative;
+  top: 20px;
+  left: 18px;*/
+  cursor:pointer;
+}
+.gks_photo_link {
+  float:left;
+  margin-top: -4px;
+}
+.gks_photo_link > img {
+  max-width:48px;
+  max-height1:38px;
+  padding-right:10px;
+}
+.gks_whi_mov_delete_icon {
+  margin-right: 6px;
+  color:gray;
+  cursor:pointer;
+}
+.gks_whi_mov_delete_icon:hover {
+  color:red;
+}
+.gks_order_delete_icon {
+  margin-right: 6px;
+  color:gray;
+  cursor:pointer;
+}
+.gks_order_delete_icon:hover {
+  color:red;
+}
+
+
+.total_row {
+ margin-bottom: 0px; 
+}
+
+.gks_flock {
+  height: unset !important;
+}
+.gks_flock_small {
+  font-size: 0.8rem;
+}
+.gks_quantity_lock {
+  width: calc(100% - 40px);
+  display: inline-block;
+  text-align: right;
+  font-size: 0.8rem;
+}
+.gks_quantity_apografi {
+  background-color: lightyellow;
+  border: 1px solid gray;
+}
+
+.gks_monada_span_lock {
+  padding-top:4px;
+  width:34px;
+  display: inline-block;
+  font-size: 0.8rem;
+  height: 26px;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.gks_price_lock {
+  text-align: right;
+  font-size: 0.8rem;
+}
+
+#dialog_print_zoom_slider_handle {
+  width: 50px;
+  height: 30px;
+  top: 50%;
+  margin-top: -15px;
+  text-align: center;
+  line-height: 1.6em;
+  padding: 5px 5px;
+  margin-left: -25px;
+  cursor: pointer;
+}
+
+.span_bg_orange {
+  background-color: orange;
+}
+.gks_peritem_net_s {
+  width:calc(100% - 20px);
+  display: inline-block;  
+}
+
+#eidi_footer1 {
+  margin-top: 10px;
+}
+
+/* lots */
+.gks_eidos_lots_serials {
+  margin-bottom: 0px;
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  border-color: #dee2e6;
+}
+    
+.gks_eidos_lots_serials_label {
+  font-size: 0.8rem;
+  padding1: 5px 0px 5px 6px;
+  text-align: center;
+  margin-top1: 2px;  
+}
+
+.gks_add_eidos_lots_serials {
+    color: #35dc35;
+    cursor: pointer;
+    vertical-align: middle;
+    font-size: 80%;
+}
+.gks_delete_eidos_lots_serials {
+    color: #dc3545;
+    cursor: pointer;
+    vertical-align: middle;
+    font-size: 80%;
+}
+.gks_eidos_lots_serials_descr {
+    font-size: 0.8rem;
+    min-height: 29px !important;
+    margin-bottom: 4px;
+}
+
+.gks_eidos_lots_serials_col1 {
+  border-top: 1px solid #aaaaaa;
+  border-bottom1: 1px solid #aaaaaa;
+}
+
+.img_eidos_lots_serials_sum_quantity {
+  height: 16px;
+}
+.gks_eidos_lots_serials_name {
+  width: calc(100% - 20px);  
+  display: inline-block;
+}
+
+.gks_eidos_lots_serials_zoom > img {
+  margin-left: 4px;
+  width:16px;
+}
+
+.gks_eidos_lots_serials_quantity {
+  width: calc(100% - 30px);  
+  display: inline-block;  
+}
+.gks_eidos_lots_serials_balance {
+  font-size: 22px;
+  vertical-align: middle; 
+  padding-left: 4px;
+  color: blueviolet;
+}
+.gks_row_lot_selected {
+  font-weight:bold;
+  background-color:yellow;
+}
+.span_eidos_lots_serials_sum_quantity_lock {
+  margin-right: 46px;
+}
+
+#paxoros_check_processing, #paxoros_check_files, #paxoros_send_pdf, #paroxos_get_docstate {
+  margin-top:6px;
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+  padding: 1px 6px;
+  border-radius: 6px; 
+  cursor:pointer;   
+}
+
+@media (min-width: 576px) {
+  #warehouses_id_from_div {
+    border-right: 1px solid lightgray;
+  }
+}
+@media (max-width: 575px) {
+  #warehouses_id_from_div {
+    border-bottom: 1px solid lightgray;
+    padding-bottom:20px;
+    margin-bottom:20px;
+  }
+  
+}
+
+.gks_other_entity_label {
+  font-size:0.8rem;
+  padding: 5px 0px 5px 0px;
+  border-radius: 10px;
+  text-align: center; 
+  margin-top: 2px; 
+}
+
+.gks_other_entity_col {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.gks_other_entity_delete {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+}
+
+.gks_other_entity_add {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.oeitem_address_text {
+  font-size: 0.8rem;
+}
+.gks_other_entity_item {
+  border-bottom: 0px solid lightgray;
+  margin-bottom: 4px;
+  padding-top: 8px;
+  padding-bottom: 8px;  
+  border-radius:12px;
+}
+.gks_other_entity_even {
+  background-color: #eeeeee;
+}
+.gks_other_entity_odd {
+  background-color: #dddddd;
+}
+
+
+
+.gks_correlated_invoices_label,
+.gks_multiple_connected_marks_label,
+.gks_packings_declarations_label {
+  font-size:0.8rem;
+  padding: 5px 0px 5px 0px;
+  border-radius: 10px;
+  text-align: center; 
+  margin-top: 2px; 
+}
+
+.gks_correlated_invoices_col,
+.gks_multiple_connected_marks_col,
+.gks_packings_declarations_col {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.gks_correlated_invoices_delete,
+.gks_multiple_connected_marks_delete,
+.gks_packings_declarations_delete {
+  color: #dc3545;
+  cursor:pointer;
+  vertical-align: middle;
+}
+
+.gks_correlated_invoices_add, 
+.gks_multiple_connected_marks_add,
+.gks_packings_declarations_add {
+  color: #35dc35;
+  cursor:pointer;
+  vertical-align: middle;
+}
+.coiitem_text, 
+.mcmitem_text,
+.pdeitem_text {
+  font-size: 0.8rem;
+}
+.gks_correlated_invoices_item,
+.gks_multiple_connected_marks_item,
+.gks_packings_declarations_item {
+  border-bottom: 0px solid lightgray;
+  margin-bottom: 4px;
+  padding-top: 8px;
+  padding-bottom: 8px;  
+  border-radius:12px;
+}
+.gks_correlated_invoices_even,
+.gks_multiple_connected_marks_even,
+.gks_packings_declarations_even {
+  background-color: #eeeeee;
+}
+.gks_correlated_invoices_odd,
+.gks_multiple_connected_marks_odd,
+.gks_packings_declarations_odd {
+  background-color: #dddddd;
+}
+div.pde_packaging_quantity {
+  text-align:center;  
+}
+input.pde_packaging_quantity {
+  text-align:right;  
+}
+
+#aade_skopos_19_descr {
+  margin-top:10px;  
+}
+.gks_aade_qrurl_list {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;  
+  justify-content: start;
+}
+.gks_aade_qrurl > img {
+  width:100px;
+  max-width:100%;
+}
+.gks_aade_paroxos_qrurl > img {
+  width:100px;
+  max-width:100%;
+}
+.gks_aade_paroxos_tf1_qrurl > img {
+  width:200px;
+  max-width:100%;
+}
+
+#dialog_add_product_variables {
+  display:none; 
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1020;
+}
+#dialog_add_product_variables_inner {
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 20px;
+  box-shadow: 0 0px 20px 0 rgb(22 20 20 / 70%);
+
+  padding:10px;
+}
+#dialog_add_product_variables_close {
+  color: blue;
+  font-size: 30px;
+  position: absolute;
+  right: 8px;
+  cursor: pointer;
+}
+#dialog_add_product_variables_header {
+  position: absolute;
+  top: 10px;
+  text-align: center;
+  width: calc(100% - 20px);
+  font-weight: bold;
+  font-size: 20px;
+}
+  
+#dialog_add_product_variables_data {
+  position: absolute;
+  top: 50px;
+  bottom: 20px;
+  left: 0px;
+  right: 0px; 
+  
+  overflow: auto;
+  overflow-x: hidden;
+
+}
+
+
+#dialog_add_product_variables_data::-webkit-scrollbar {width: 5px;}
+#dialog_add_product_variables_data::-webkit-scrollbar-track {background: #c0dac4; }
+#dialog_add_product_variables_data::-webkit-scrollbar-thumb {background: #458c50;}
+#dialog_add_product_variables_data::-webkit-scrollbar-thumb:hover {background: #23aa38;} 
+
+.dialog_add_product_variables_footer {
+  margin-top:20px;
+  margin-bottom:20px;
+  text-align:center;  
+}
+.dialog_add_product_variables_data2 {
+  margin-top: 10px;
+}
+#dialog_add_product_variables_product_id {
+  max-width11:300px;  
+}
+.dialog_add_product_variables_input {
+  max-width:80px; 
+  min-width:30px;
+  font-size: 0.8rem;
+  text-align: right; 
+}
+#dialog_add_product_variables_tabledata {
+  width:100%;  
+}
+#dialog_add_product_variables_tabledata th {
+  text-align: center; 
+}
+.dialog_add_product_other_div {
+  display: inline-block;
+}
+.dialog_add_product_other {
+  display: inline-block;
+  width: unset;
+  min-width: 150px;
+  margin-right: 5px;  
+}
+.dialog_add_product_other_terms {
+  display: inline-block;
+  width: unset;
+  min-width: 150px;
+  margin-left: 5px;
+}
+.dialog_add_product_split {
+  display: inline-block;
+  margin: 0px 10px;
+}
+.dialog_add_product_split i {
+  font-size: 24px;
+  vertical-align: bottom;
+  color: olive;
+}
+
+.ui-front {
+    z-index: 1021;
+}
+
+
+#reverse_delivery_purpose,
+#reverse_delivery_purpose_span {
+  animation: 2s ease 0s infinite reverse_delivery_purpose_pulse;
+}
+@-webkit-keyframes reverse_delivery_purpose_pulse {
+  0% {
+      -webkit-box-shadow: 0 0 0 0 rgb(255,0,0)
+  }
+
+  100% {
+      -webkit-box-shadow: 0 0 0 8px rgba(255,0,0,0);
+  }
+}
+
