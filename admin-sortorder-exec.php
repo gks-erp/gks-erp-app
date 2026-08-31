@@ -172,6 +172,11 @@ switch ($obj) {
     $field_id='id_favorites'; $field_sortorder='fav_sortorder'; $filter=' and user_id='.$my_wp_user_id; break;
   case 'gks_voip_favorites':
     $field_id='id_voip_favorite'; $field_sortorder='mysortorder'; $filter=' and user_id='.$my_wp_user_id; break;
+  case 'gks_hr_program_status':
+    $field_id='id_hr_program_status'; $field_sortorder='hr_program_status_sortorder'; break;
+  case 'gks_hr_program_vardia':
+    $field_id='id_hr_program_vardia'; $field_sortorder='hr_program_vardia_sortorder'; break;
+
     
   default:
     debug_mail(false,'obj not found:'.$obj,'');

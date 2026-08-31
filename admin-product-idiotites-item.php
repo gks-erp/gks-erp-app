@@ -147,7 +147,9 @@ include_once('_my_header_admin.php');
 
               
               <button type="button" class="btn btn-primary" id="submit_button_ok"><?php echo gks_lang('Αποθήκευση');?></button>
+              <?php if ($id>0) {?>
               <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_product_idiotita'];?>" data-model="gks_product_idiotites" data-backurl="admin-product-idiotites.php"><?php echo gks_lang('Διαγραφή');?></button>
+              <?php } ?>
     </div>            
   </div>            
 </div>            

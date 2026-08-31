@@ -16,13 +16,12 @@ var dialog_event;
 
 var obj_calendar;
 
+var my_slotMinTime;
+var my_slotMaxTime;
+
 //import { req } from 'superagent'; // ajax library
 
 jQuery(document).ready(function($) {
-
-
-
-    
 
   var control_enter_active=false;
   $(document).on('keypress', function(event) {
@@ -40,9 +39,100 @@ jQuery(document).ready(function($) {
       setTimeout(function(){control_enter_active=false; }, 300);
     }  
   });
+
+  $('#business_days_hours_div').appendTo(document.body);
+  $('#business_days_hours_div_panel').appendTo(document.body);
   
+
   $('#submit_button_ok_custom').click(function(event) {mysubmit(); return false;});
 
+
+
+  var calendar_posta_operator=$('#posta_allhr_program_operator').val();
+  
+  $('#posta_allhr_program_operator').change(function() {
+    calendar_posta_operator=$(this).val();
+    cal_xxxxx_hr_program_change();
+    //console.log(calendar_posta_operator);
+    datasend='&o=' + encodeURIComponent($.base64.encode('calendar'));
+    datasend+='&s=' + encodeURIComponent($.base64.encode('posta_operator'));
+    datasend+='&v=' + encodeURIComponent($.base64.encode(calendar_posta_operator));
+    $.ajax({
+      url: '/my/admin-users-settings-item-exec.php',type: 'POST',cache: false,dataType: 'json',	data: datasend,
+      error : function(jqXHR ,textStatus,  errorThrown) {console.log(jqXHR.responseText);},				
+      success: function(data) {if (!data) {console.log('error:'+gks_lang('Παρακαλώ δοκιμάστε αργότερα'));} 
+        else {if (data.success == false) {console.log('error:' + $.base64.decode(data.message));}}
+      },
+    });
+    
+  });
+
+  
+  function calc_slotMinMaxTime() {
+    my_slotMinTime='08:00:00';
+    my_slotMaxTime='18:00:00';
+    temp=from_php_businessHours_startTime.split(':');
+    if (from_php_businessHours_startTime.length == 5 && temp.length==2) {
+      vvv=parseInt(temp[0]);
+      if (isNaN(vvv)==false) {
+        vvv=vvv-1;
+        if (vvv<0) vvv=0;
+        vvv=(vvv<=9 ? '0':'')+vvv;
+        my_slotMinTime=vvv+':'+temp[1]+':00';
+      }
+    }
+    temp=from_php_businessHours_endTime.split(':');
+    if (from_php_businessHours_endTime.length == 5 && temp.length==2) {
+      vvv=parseInt(temp[0]);
+      if (isNaN(vvv)==false) {
+        vvv=vvv+1;
+        if (vvv>24) vvv=24;
+        if (vvv==24) temp[1]='00';
+        vvv=(vvv<=9 ? '0':'')+vvv;
+        my_slotMaxTime=vvv+':'+temp[1]+':00';
+      }
+    }
+    //console.log(my_slotMinTime,my_slotMaxTime);
+  }
+  calc_slotMinMaxTime();
+  
+  
+
+  
+  var gks_slot_duration_contextMenu={
+		event: 'click',
+    items: function(e) {
+  		var arr = [];
+      gks_slot_durations=['00:05','00:10','00:15','00:30','01:00','01:30','02:00','03:00','04:00'];
+  		for (i=0; i<gks_slot_durations.length; i++) {
+  		  temptext=gks_slot_durations[i];
+  		  if (from_php_slotDuration==(gks_slot_durations[i]+':00')) temptext='<b>' + temptext + '</b>';
+    		arr.push({type: 'item', text: temptext, icon1: '', disabled: false, gks_slot_duration_value: gks_slot_durations[i], click: function(e){	
+    		  e.preventDefault();
+  				gks_slot_duration_contextMenu_select(this.gks_slot_duration_value+':00');
+    		}});
+    	}
+      return arr;
+    }
+	};
+  function gks_slot_duration_contextMenu_select(slot_duration_value) {
+    //console.log(slot_duration_value);
+    from_php_slotDuration=slot_duration_value;
+    obj_calendar.setOption('slotDuration',from_php_slotDuration);
+    datasend='&o=' + encodeURIComponent($.base64.encode('calendar'));
+    datasend+='&s=' + encodeURIComponent($.base64.encode('slotDuration'));
+    datasend+='&v=' + encodeURIComponent($.base64.encode(from_php_slotDuration));
+    $.ajax({
+      url: '/my/admin-users-settings-item-exec.php',type: 'POST',cache: false,dataType: 'json',	data: datasend,
+      error : function(jqXHR ,textStatus,  errorThrown) {console.log(jqXHR.responseText);},				
+      success: function(data) {if (!data) {console.log('error:'+gks_lang('Παρακαλώ δοκιμάστε αργότερα'));} 
+        else {if (data.success == false) {console.log('error:' + $.base64.decode(data.message));}}
+      },
+    });
+
+    
+  }
+  
   var gks_tooltipster_isset=false;
   function gks_calendar_buttons(viewname) {
     $('.fc-prevYear-button').addClass('btn-sm');
@@ -59,6 +149,8 @@ jQuery(document).ready(function($) {
     $('.fc-listMonth-button').addClass('btn-sm');
     $('.fc-listYear-button').addClass('btn-sm');
     $('.fc-gks_full24-button').addClass('btn-sm');
+    $('.fc-gks_slot_duration-button').addClass('btn-sm');
+    $('.fc-gks_business_days_hours-button').addClass('btn-sm');
     
     if (gks_tooltipster_isset==false) {
       $('.fc-dayGridMonth-button').attr('title',gks_lang('Μήνας')).tooltipster({theme: 'tooltipster-noir'});
@@ -68,14 +160,20 @@ jQuery(document).ready(function($) {
       $('.fc-listWeek-button').attr('title',gks_lang('Λίστα Εβδομάδας')).tooltipster({theme: 'tooltipster-noir'});
       $('.fc-listMonth-button').attr('title',gks_lang('Λίστα Μήνα')).tooltipster({theme: 'tooltipster-noir'});
       $('.fc-listYear-button').attr('title',gks_lang('Λίστα Έτους')).tooltipster({theme: 'tooltipster-noir'});
-      $('.fc-gks_full24-button').attr('title',(from_php_full24 == '1' ? '08:00-18:00' : '00:00-24:00')).tooltipster({theme: 'tooltipster-noir'});
+      $('.fc-gks_full24-button').attr('title',(from_php_full24 == '1' ? my_slotMinTime.substring(0,5)+'-'+my_slotMaxTime.substring(0,5) : '00:00-24:00')).tooltipster({theme: 'tooltipster-noir'});
+      $('.fc-gks_slot_duration-button').attr('title',gks_lang('Διάρκεια γραμμής')).tooltipster({theme: 'tooltipster-noir'});  
+      $('.fc-gks_slot_duration-button').contextMenu(gks_slot_duration_contextMenu);
+      $('.fc-gks_business_days_hours-button').attr('title',gks_lang('Εργάσιμες ημέρες και ώρες')).tooltipster({theme: 'tooltipster-noir'});  
+      
       gks_tooltipster_isset=true;
     }
     
     if (viewname=='timeGridWeek' || viewname=='timeGridDay') {//dayGridMonth timeGridWeek timeGridDay listMonth
       $('.fc-gks_full24-button').prop('disabled', false);
+      $('.fc-gks_slot_duration-button').prop('disabled', false);
     } else {
       $('.fc-gks_full24-button').prop('disabled', true);
+      $('.fc-gks_slot_duration-button').prop('disabled', true);
     }
     
     if (gks_page_loading) return;
@@ -138,11 +236,11 @@ jQuery(document).ready(function($) {
             myelem.removeClass('fa-expand').addClass('fa-compress');
             obj_calendar.setOption('slotMinTime','00:00:00');
             obj_calendar.setOption('slotMaxTime','24:00:00');
-            $('.fc-gks_full24-button').tooltipster('content', '08:00-18:00');
+            $('.fc-gks_full24-button').tooltipster('content', my_slotMinTime.substring(0,5)+'-'+my_slotMaxTime.substring(0,5));
             vvv='1';
           } else {
-            obj_calendar.setOption('slotMinTime','08:00:00');
-            obj_calendar.setOption('slotMaxTime','18:00:00');
+            obj_calendar.setOption('slotMinTime',my_slotMinTime);
+            obj_calendar.setOption('slotMaxTime',my_slotMaxTime);
             myelem.addClass('fa-expand').removeClass('fa-compress');
             $('.fc-gks_full24-button').tooltipster('content', '00:00-24:00');
             vvv='0';
@@ -161,10 +259,34 @@ jQuery(document).ready(function($) {
       		});            
           set_hash();
         }
+      },
+      gks_slot_duration : {
+        bootstrapFontAwesome: 'fa-th-list',
+        click: function() {
+          //console.log('ssss'); 
+          
+        }
+      },
+      gks_business_days_hours : {
+        bootstrapFontAwesome: 'fa-calendar-day',
+        click: function() {
+          $('#business_days_hours_center1 input').prop('checked',false);
+          for(iii=0;iii<from_php_businessHours_daysOfWeek.length;iii++) {
+            $('#business_days_hours_center1 #days_to_work'+from_php_businessHours_daysOfWeek[iii]).prop('checked',true);
+          }
+          $('#business_days_hours_center2 #hours_to_work_from').val(from_php_businessHours_startTime);
+          $('#business_days_hours_center2 #hours_to_work_to').val(from_php_businessHours_endTime);
+
+          $('body').css('overflow','hidden');
+          $('#business_days_hours_div').show();
+          offset = $('.fc-gks_business_days_hours-button').offset();
+          
+          $('#business_days_hours_div_panel').css('top',offset.top).css('left',offset.left).show();
+        }
       }
     },
     headerToolbar: {
-      left: 'prevYear,prev,next,nextYear today',
+      left: 'prevYear,prev,next,nextYear today gks_slot_duration gks_business_days_hours',
       center: 'title',
       right: 'listYear listMonth listWeek listDay dayGridMonth timeGridWeek timeGridDay gks_full24' //,listMonth
     },
@@ -195,22 +317,21 @@ jQuery(document).ready(function($) {
       hourCycle: 'h23',
       //omitZeroMinute: false,
     },  
-    slotDuration:'00:15:00',
+    slotDuration:from_php_slotDuration, //'00:15:00',
     slotEventOverlap:false, //https://fullcalendar.io/docs/slotEventOverlap
     height: 'auto', //1150, // $(window).height() * 0.96 - $('#calendartable').position().top,
     
     //locale: 'el',
     locale: from_php_gks_fullcalendar_locale,
-    slotMinTime: (from_php_full24 == '1' ? '00:00:00' : '08:00:00'),
-    slotMaxTime: (from_php_full24 == '1' ? '24:00:00' : '18:00:00'),
+    slotMinTime: (from_php_full24 == '1' ? '00:00:00' : my_slotMinTime),
+    slotMaxTime: (from_php_full24 == '1' ? '24:00:00' : my_slotMaxTime),
     businessHours: {
       // days of week. an array of zero-based day of week integers (0=Sunday)
-      daysOfWeek: [ 1, 2, 3, 4 , 5], // Monday - Thursday
-      startTime: '09:00', // a start time (10am in this example)
-      endTime: '17:00', // an end time (6pm in this example)
+      daysOfWeek: from_php_businessHours_daysOfWeek,
+      startTime: from_php_businessHours_startTime, 
+      endTime: from_php_businessHours_endTime, 
     },
-    businessHours: true, // display business hours
-    
+
     initialDate: from_php_initialdate,
     navLinks: true, // can click day/week names to navigate views
     weekNumbers: true,
@@ -228,7 +349,18 @@ jQuery(document).ready(function($) {
     
     eventDidMount: function(info) {
       
-      tooltiptext=nl2br(info.event.extendedProps.c_message);
+      
+      if (info.event.extendedProps.c_table=='gks_calendar') {
+        tooltiptext='<div class="gks_event_item_tooltip">'+
+                    '<b>'+info.event.title+'</b><br>'+
+                    nl2br(info.event.extendedProps.c_message)+
+                    '</div>';
+        
+      } else {
+        tooltiptext='<div class="gks_event_item_tooltip">'+
+                    nl2br(info.event.extendedProps.c_message)+
+                    '</div>';
+      }
       
       c_objects='';
       for(var list_i7=0; list_i7 < info.event.extendedProps.c_objects.length; list_i7++) {
@@ -306,62 +438,94 @@ jQuery(document).ready(function($) {
   				if (!data) {
   					myalert('error:' + gks_lang('Παρακαλώ δοκιμάστε αργότερα'));
   				} else {
-
-            var cal_user_array=[];
-            $('input[name=cal_user]:checked').each(function() {
-              uid=parseInt($(this).attr('data-id'));
-              if (isNaN(uid)) uid=-1;
-              if (uid==0) uid=from_php_my_wp_user_id;
-              cal_user_array.push(uid);
-            });
-            var cal_user_array_task=[];
-            $('input[name=cal_user_task]:checked').each(function() {
-              uid=parseInt($(this).attr('data-id'));
-              if (isNaN(uid)) uid=-1;
-              if (uid==0) uid=from_php_my_wp_user_id;
-              cal_user_array_task.push(uid);
-            });
-            var cal_user_array_activ=[];
-            $('input[name=cal_user_activ]:checked').each(function() {
-              uid=parseInt($(this).attr('data-id'));
-              if (isNaN(uid)) uid=-1;
-              if (uid==0) uid=from_php_my_wp_user_id;
-              cal_user_array_activ.push(uid);
-            });            
-              				  
-  				  for(var list_i8=0; list_i8<data.length; list_i8++) {
-  				    //console.log(data[list_i8]);
-  				    if (data[list_i8].c_table=='gks_calendar') {
-  				      if (cal_user_array.includes(data[list_i8].c_user_id)==false) {
-  				        data[list_i8].display='none';
-  				      }
-  				    } else if (data[list_i8].c_table=='gks_crm_tasks') {
-                found_user=false;
-                for(uu=0; uu<data[list_i8].c_user_id_multi.length;uu++) {
-                  if (cal_user_array_task.includes(data[list_i8].c_user_id_multi[uu])) {
-                    found_user=true;break;
+  					if (data.success == true) {
+              mylist=data.mylist;
+              var cal_user_array=[];
+              $('input[name=cal_user]:checked').each(function() {
+                uid=parseInt($(this).attr('data-id'));
+                if (isNaN(uid)) uid=-1;
+                if (uid==0) uid=from_php_my_wp_user_id;
+                cal_user_array.push(uid);
+              });
+              var cal_user_array_task=[];
+              $('input[name=cal_user_task]:checked').each(function() {
+                uid=parseInt($(this).attr('data-id'));
+                if (isNaN(uid)) uid=-1;
+                if (uid==0) uid=from_php_my_wp_user_id;
+                cal_user_array_task.push(uid);
+              });
+              var cal_user_array_activ=[];
+              $('input[name=cal_user_activ]:checked').each(function() {
+                uid=parseInt($(this).attr('data-id'));
+                if (isNaN(uid)) uid=-1;
+                if (uid==0) uid=from_php_my_wp_user_id;
+                cal_user_array_activ.push(uid);
+              });            
+              var cal_user_array_hr_program=[];
+              $('input[name=cal_user_hr_program]:checked').each(function() {
+                uid=parseInt($(this).attr('data-id'));
+                if (isNaN(uid)) uid=-1;
+                if (uid==0) uid=from_php_my_wp_user_id;
+                cal_user_array_hr_program.push(uid);
+              });
+              var cal_posta_array_hr_program=[];
+              $('input[name=cal_posta_hr_program]:checked').each(function() {
+                uid=parseInt($(this).attr('data-id'));
+                if (isNaN(uid)) uid=-1;
+                cal_posta_array_hr_program.push(uid);
+              });
+              
+              for(var list_i8=0; list_i8<mylist.length; list_i8++) {
+                //console.log(mylist[list_i8]);
+                if (mylist[list_i8].c_table=='gks_calendar') {
+                  if (cal_user_array.includes(mylist[list_i8].c_user_id)==false) {
+                    mylist[list_i8].display='none';
                   }
-                }  				      
-  				      if (found_user==false) {
-  				        data[list_i8].display='none';
-  				      }
-  				    } else if (data[list_i8].c_table=='gks_crm_activity') {
-                if (cal_user_array_activ.includes(data[list_i8].c_user_id)==false) {
-  				        data[list_i8].display='none';
-  				      }
-  				    }
-  				  }
+                } else if (mylist[list_i8].c_table=='gks_crm_tasks') {
+                  found_user=false;
+                  for(uu=0; uu<mylist[list_i8].c_user_id_multi.length;uu++) {
+                    if (cal_user_array_task.includes(mylist[list_i8].c_user_id_multi[uu])) {
+                      found_user=true;break;
+                    }
+                  }  				      
+                  if (found_user==false) {
+                    mylist[list_i8].display='none';
+                  }
+                } else if (mylist[list_i8].c_table=='gks_crm_activity') {
+                  if (cal_user_array_activ.includes(mylist[list_i8].c_user_id)==false) {
+                    mylist[list_i8].display='none';
+                  }
+                } else if (mylist[list_i8].c_table=='gks_hr_program') {
+                  if (calendar_posta_operator=='or') {
+                    if (!(cal_user_array_hr_program.includes(mylist[list_i8].c_user_id) ||
+                          cal_posta_array_hr_program.includes(mylist[list_i8].c_posta_id))) {
+                      mylist[list_i8].display='none';
+                    }
+                  } else if (calendar_posta_operator=='and') {
+                    if (!(cal_user_array_hr_program.includes(mylist[list_i8].c_user_id) &&
+                          cal_posta_array_hr_program.includes(mylist[list_i8].c_posta_id))) {
+                      mylist[list_i8].display='none';
+                    }                    
+                  }
+                }
+              }
 
-  				 
-  				  this.thissuccessCallback(data);
-  				  //console.log(data);
+             
+              this.thissuccessCallback(mylist);
+              //console.log(data);
 
-  				}
+  					} else {
+  					  //this.myrevertFunc();
+  						myalert('error:' + $.base64.decode(data.message));
+  					}
+          }
   			}
   		});
   		
+  		setTimeout(function() {
+        set_hash();
+      }, 500);
   		
-  		set_hash();
   		      
 //      req.get('admin-crm-calendar-events.php')
 //        .type('json')
@@ -414,10 +578,36 @@ jQuery(document).ready(function($) {
       a='';
       a+='<div class="gks_calendar_time">' + arg.timeText + '</div>';
       a+='<div class="gks_calendar_container">';
-      a+='  <div class="gks_calendar_title">' + arg.event.title + '</div>';
       //a+='  <div class="gks_calendar_message">' + arg.event.extendedProps.c_message + '</div>';
-      if (mycustomer!='') a+='  <div class="gks_calendar_customer">' + mycustomer + '</div>';
-      if (mylocation!='') a+='  <div class="gks_calendar_location">' + mylocation + '</div>';
+      
+      if (arg.event.extendedProps.c_table=='') {
+        a+='  <div class="gks_calendar_title">' + arg.event.title + '</div>';
+        if (mycustomer!='') a+='  <div class="gks_calendar_customer">' + mycustomer + '</div>';
+        if (mylocation!='') a+='  <div class="gks_calendar_location">' + mylocation + '</div>';
+      } else if (arg.event.extendedProps.c_table=='gks_crm_tasks') {
+        a+='  <div class="gks_calendar_title">' + arg.event.title + '</div>';
+        if (mycustomer!='') a+='  <div class="gks_calendar_customer">' + mycustomer + '</div>';
+        if (mylocation!='') a+='  <div class="gks_calendar_location">' + mylocation + '</div>';
+      } else if (arg.event.extendedProps.c_table=='gks_crm_activity') {
+        a+='  <div class="gks_calendar_title">' + arg.event.title + '</div>';
+        if (mycustomer!='') a+='  <div class="gks_calendar_customer">' + mycustomer + '</div>';
+        if (mylocation!='') a+='  <div class="gks_calendar_location">' + mylocation + '</div>';
+      } else if (arg.event.extendedProps.c_table=='gks_hr_program') {
+        //if (mylocation!='') a+='  <div class="gks_calendar_location">' + mylocation + '</div>';
+        if (mycustomer!='') a+='  <div class="gks_calendar_customer">' + mycustomer + '</div>';
+        if (arg.event.extendedProps.c_production_posto_descr) {
+            a+='  <div class="gks_calendar_production_posto_descr">' + arg.event.extendedProps.c_production_posto_descr + '</div>';
+        }
+        if (arg.event.extendedProps.c_hr_program_vardia_descr) {
+            a+='  <div class="gks_calendar_hr_program_vardia_descr">' + arg.event.extendedProps.c_hr_program_vardia_descr + '</div>';
+        }
+        if (arg.event.title!='') a+='  <div class="gks_calendar_title">' + arg.event.title + '</div>';
+        
+      } else  {
+        
+      }
+
+      
       a+='</div>';
       
       mydiv = document.createElement('div');
@@ -445,9 +635,11 @@ jQuery(document).ready(function($) {
       if (eventResizeInfo.event.extendedProps.c_table=='gks_crm_activity') {
         console.log('fix me');
         return;
-        url_send='/my/admin-crm-task-item-calendar-exec.php';
+        url_send='/my/admin-xxxxx-xxxxxxxxxxxxxxx-item-calendar-exec.php';
       }
-      
+      if (eventResizeInfo.event.extendedProps.c_table=='gks_hr_program') {
+        url_send='/my/admin-hr-program-item-calendar-exec.php';
+      }
       
       $('#calc_hourglass').show();
       $.ajax({
@@ -505,6 +697,9 @@ jQuery(document).ready(function($) {
       if (eventDropInfo.event.extendedProps.c_table=='gks_crm_activity') {
         url_send='/my/admin-crm-activity-item-calendar-exec.php';
       }
+      if (eventDropInfo.event.extendedProps.c_table=='gks_hr_program') {
+        url_send='/my/admin-hr-program-item-calendar-exec.php';
+      }      
 
       $('#calc_hourglass').show();
       $.ajax({
@@ -589,7 +784,7 @@ jQuery(document).ready(function($) {
 
   $('#c_color').spectrum({
     type: "component",
-    locale:'el',
+    locale:from_php_gks_spectrum_locale,
     togglePaletteOnly: true,
     hideAfterPaletteSelect: true,
     showInput: true,
@@ -604,9 +799,9 @@ jQuery(document).ready(function($) {
     noColorSelectedText: gks_lang('Διάφανο'),
   });
   
-  var cal_user_color_settings = {
+  var cal_spectrum_color_settings = {
     type: "color",
-    locale:'el',
+    locale:from_php_gks_spectrum_locale,
     togglePaletteOnly: true,
     hideAfterPaletteSelect: true,
     showInput: true,
@@ -621,9 +816,11 @@ jQuery(document).ready(function($) {
     noColorSelectedText: gks_lang('Διάφανο'),
   };
   
-  $('.cal_user_color').spectrum(cal_user_color_settings);
-  $('.cal_user_color_task').spectrum(cal_user_color_settings);
-  $('.cal_user_color_activ').spectrum(cal_user_color_settings);
+  $('.cal_user_color').spectrum(cal_spectrum_color_settings);
+  $('.cal_user_color_task').spectrum(cal_spectrum_color_settings);
+  $('.cal_user_color_activ').spectrum(cal_spectrum_color_settings);
+  $('.cal_user_color_hr_program').spectrum(cal_spectrum_color_settings);
+  $('.cal_posta_color_hr_program').spectrum(cal_spectrum_color_settings);
 
 
 	var gks_scrollTop=0;
@@ -649,7 +846,17 @@ jQuery(document).ready(function($) {
         
       }
       return;
-    }    
+    }  
+    if (myevent!= null && myevent.extendedProps !== undefined && myevent.extendedProps.c_table=='gks_hr_program') {
+      if (obj_info.jsEvent.ctrlKey) {
+        window.open('/my/admin-hr-program-item.php?id=' + event_id, '_blank');
+      } else {
+        window.location.href = '/my/admin-hr-program-item.php?id=' + event_id;
+      }
+      return;
+    }
+ 
+    
     gks_event_edit_is_open=true;
     
     c_allday=false;
@@ -693,12 +900,12 @@ jQuery(document).ready(function($) {
       myLatLng = {lat:0, lng:0};
       $('#c_is_exclusive1').prop('checked',true);
       $('#c_is_private0').prop('checked',true);
-      $('#c_color').spectrum('set','#000000');
+      $('#c_color').spectrum('set',''); //#000000
       $('#set_def_color').css('background-color','#000000').attr('data-mycolor','#000000');
       for(var list_i9=0; list_i9 < cal_user_color_array.length; list_i9++) {
         if (cal_user_color_array[list_i9].user_id==0) {
           
-          $('#c_color').spectrum('set',cal_user_color_array[list_i9].color);
+          //$('#c_color').spectrum('set',cal_user_color_array[list_i9].color);
           $('#set_def_color').css('background-color',cal_user_color_array[list_i9].color).attr('data-mycolor',cal_user_color_array[list_i9].color);
           break;
         }
@@ -760,11 +967,12 @@ jQuery(document).ready(function($) {
       $('#c_is_exclusive' + myevent.extendedProps.c_is_exclusive).prop('checked', true);
       $('#c_is_private' + myevent.extendedProps.c_is_private).prop('checked', true);
       
+      $('#c_color').spectrum('set','');
 
       for(var list_i10=0; list_i10 < cal_user_color_array.length; list_i10++) {
         if ((cal_user_color_array[list_i10].user_id==0 && myevent.extendedProps.c_user_id == from_php_my_wp_user_id) || 
             (cal_user_color_array[list_i10].user_id == myevent.extendedProps.c_user_id)) {
-          $('#c_color').spectrum('set',cal_user_color_array[list_i10].color);
+          //$('#c_color').spectrum('set',cal_user_color_array[list_i10].color);
           $('#set_def_color').css('background-color',cal_user_color_array[list_i10].color).attr('data-mycolor',cal_user_color_array[list_i10].color);
           break;
         }
@@ -914,7 +1122,7 @@ jQuery(document).ready(function($) {
       $('#div_c_user_id_other').hide();
       for(var list_i14=0; list_i14 < cal_user_color_array.length; list_i14++) {
         if (cal_user_color_array[list_i14].user_id==0) {
-          $('#c_color').spectrum('set',cal_user_color_array[list_i14].color);
+          //$('#c_color').spectrum('set',cal_user_color_array[list_i14].color);
           $('#set_def_color').css('background-color',cal_user_color_array[list_i14].color).attr('data-mycolor',cal_user_color_array[list_i14].color);
           break;
         }
@@ -926,7 +1134,7 @@ jQuery(document).ready(function($) {
       if (isNaN(data_user_id)) data_user_id=0;
       for(var list_i15=0; list_i15 < cal_user_color_array.length; list_i15++) {
         if (cal_user_color_array[list_i15].user_id==data_user_id) {
-          $('#c_color').spectrum('set',cal_user_color_array[list_i15].color);
+          //$('#c_color').spectrum('set',cal_user_color_array[list_i15].color);
           $('#set_def_color').css('background-color',cal_user_color_array[list_i15].color).attr('data-mycolor',cal_user_color_array[list_i15].color);
           break;
         }
@@ -970,7 +1178,7 @@ jQuery(document).ready(function($) {
       if (isNaN(data_user_id)) data_user_id=0;
       for(var list_i16=0; list_i16 < cal_user_color_array.length; list_i16++) {
         if (cal_user_color_array[list_i16].user_id==data_user_id) {
-          $('#c_color').spectrum('set',cal_user_color_array[list_i16].color);
+          //$('#c_color').spectrum('set',cal_user_color_array[list_i16].color);
           $('#set_def_color').css('background-color',cal_user_color_array[list_i16].color).attr('data-mycolor',cal_user_color_array[list_i16].color);
           break;
         }
@@ -987,7 +1195,7 @@ jQuery(document).ready(function($) {
         for(var list_i17=0; list_i17 < cal_user_color_array.length; list_i17++) {
           if (cal_user_color_array[list_i17].user_id==0) {
             
-            $('#c_color').spectrum('set',cal_user_color_array[list_i17].color);
+            //$('#c_color').spectrum('set',cal_user_color_array[list_i17].color);
             $('#set_def_color').css('background-color',cal_user_color_array[list_i17].color).attr('data-mycolor',cal_user_color_array[list_i17].color);
             break;
           }
@@ -1621,7 +1829,6 @@ jQuery(document).ready(function($) {
   $('#cal_user_add').click(function() {
     if ($('#cal_user_add_user').css('display')=='none') {
       $('#cal_user_add_user').css('display','inline-block').focus();
-      
     } else {
       $('#cal_user_add_user').css('display','none');
     }
@@ -1629,7 +1836,6 @@ jQuery(document).ready(function($) {
   $('#cal_user_add_task').click(function() {
     if ($('#cal_user_add_user_task').css('display')=='none') {
       $('#cal_user_add_user_task').css('display','inline-block').focus();
-      
     } else {
       $('#cal_user_add_user_task').css('display','none');
     }
@@ -1637,12 +1843,26 @@ jQuery(document).ready(function($) {
   $('#cal_user_add_activ').click(function() {
     if ($('#cal_user_add_user_activ').css('display')=='none') {
       $('#cal_user_add_user_activ').css('display','inline-block').focus();
-      
     } else {
       $('#cal_user_add_user_activ').css('display','none');
     }
   });
-    
+  $('#cal_user_add_hr_program').click(function() {
+    if ($('#cal_user_add_user_hr_program').css('display')=='none') {
+      $('#cal_user_add_user_hr_program').css('display','inline-block').focus();
+    } else {
+      $('#cal_user_add_user_hr_program').css('display','none');
+    }
+  });
+
+  $('#cal_posta_add_hr_program').click(function() {
+    if ($('#cal_posta_add_posta_hr_program').css('display')=='none') {
+      $('#cal_posta_add_posta_hr_program').css('display','inline-block').focus();
+    } else {
+      $('#cal_posta_add_posta_hr_program').css('display','none');
+    }
+  });
+  
   $('#cal_user_add_user').autocomplete({
     source: function(request, response) {
       mydata={
@@ -1702,9 +1922,7 @@ jQuery(document).ready(function($) {
   					if (data.success == true) {
     					myhtml ='<div class="cal_user_row" data-id="' + data.other_user_id + '">' +
                       '<input type="checkbox" name="cal_user" data-id="' + data.other_user_id + '" id="cal_user_' + data.other_user_id + '" checked>' +
-                      //' <div class="cal_user_color_con"><div class="cal_user_color_wra" data-id="' + data.other_user_id + '" style="background-color: #3788d8;">' +
                       ' <input type="text" class="cal_user_color" data-id="' + data.other_user_id + '" value="#3788d8">' +
-                      //'</div></div>' +
                       ' <label for="cal_user_' + data.other_user_id + '" class="cal_user_label">' + $.base64.decode(data.gks_nickname) + '</label>' +
                       ' <i class="fas fa-trash-alt cal_user_remove" data-aa="' + data.other_user_id + '"></i>' +
                       '</div>';
@@ -1712,8 +1930,8 @@ jQuery(document).ready(function($) {
     					$('#cal_user_add_user').hide().val('');
     					$('.cal_user_remove[data-aa=' + data.other_user_id + ']').click(function() {cal_user_remove_click($(this),'cal');});
     					$('#cal_user_' + data.other_user_id).change(function() {cal_user_change($(this));});
-    					$('.cal_user_color[data-id=' + data.other_user_id + ']').change(function() {cal_user_color($(this),'cal');});
-    					$('.cal_user_color[data-id=' + data.other_user_id + ']').spectrum(cal_user_color_settings);
+    					$('.cal_user_color[data-id=' + data.other_user_id + ']').change(function() {cal_user_color_change($(this),'cal');});
+    					$('.cal_user_color[data-id=' + data.other_user_id + ']').spectrum(cal_spectrum_color_settings);
     					obj_calendar.refetchEvents();
     					set_hash();
   					} else {
@@ -1798,8 +2016,8 @@ jQuery(document).ready(function($) {
     					$('#cal_user_add_user_task').hide().val('');
     					$('.cal_user_remove_task[data-aa=' + data.other_user_id + ']').click(function() {cal_user_remove_click($(this),'task');});
     					$('#cal_user_task_' + data.other_user_id).change(function() {cal_user_task_change($(this));});
-    					$('.cal_user_color_task[data-id=' + data.other_user_id + ']').change(function() {cal_user_color($(this),'task');});
-    					$('.cal_user_color_task[data-id=' + data.other_user_id + ']').spectrum(cal_user_color_settings);
+    					$('.cal_user_color_task[data-id=' + data.other_user_id + ']').change(function() {cal_user_color_change($(this),'task');});
+    					$('.cal_user_color_task[data-id=' + data.other_user_id + ']').spectrum(cal_spectrum_color_settings);
     					obj_calendar.refetchEvents();
     					set_hash();
   					} else {
@@ -1884,8 +2102,8 @@ jQuery(document).ready(function($) {
     					$('#cal_user_add_user_activ').hide().val('');
     					$('.cal_user_remove_activ[data-aa=' + data.other_user_id + ']').click(function() {cal_user_remove_click($(this),'activ');});
     					$('#cal_user_activ_' + data.other_user_id).change(function() {cal_user_activ_change($(this));});
-    					$('.cal_user_color_activ[data-id=' + data.other_user_id + ']').change(function() {cal_user_color($(this),'activ');});
-    					$('.cal_user_color_activ[data-id=' + data.other_user_id + ']').spectrum(cal_user_color_settings);
+    					$('.cal_user_color_activ[data-id=' + data.other_user_id + ']').change(function() {cal_user_color_change($(this),'activ');});
+    					$('.cal_user_color_activ[data-id=' + data.other_user_id + ']').spectrum(cal_spectrum_color_settings);
     					obj_calendar.refetchEvents();
     					set_hash();
   					} else {
@@ -1902,6 +2120,178 @@ jQuery(document).ready(function($) {
       }
     }
   });  
+
+
+  
+  
+  $('#cal_user_add_user_hr_program').autocomplete({
+    source: function(request, response) {
+      mydata={
+        term: request.term,
+        eml:1,
+        notme:1,
+        notids: function() {
+          var existusers=[];
+          $('input[name=cal_user_hr_program]').each(function() {
+            uid=parseInt($(this).attr('data-id'));
+            if (isNaN(uid)) uid=-1;
+            if (uid==0) uid=from_php_my_wp_user_id;
+            existusers.push(uid);
+          });
+          return encodeURIComponent($.base64.encode(JSON.stringify(existusers)))
+        },
+        test:1,
+      };
+      $.ajax({
+        url: 'admin-autocomplete-user.php',
+        dataType: "json",
+        cache: false,
+        data: mydata,
+        error : function(jqXHR ,textStatus,  errorThrown) {
+  				myalert('error:' + jqXHR.responseText);
+  			},
+        success: function( data ) {
+          if (data.success == true) {
+            response( data.list);
+          } else {
+            myalert('error:' + $.base64.decode(data.message));
+          }
+        }
+      });
+    },
+    minLength: 3,
+    autoFocus: true,
+    delay: 300, //default
+    select: function( event, ui ) {
+      $('#calc_hourglass').show();
+      datasend='cmd=add&myobj=hr_program&other_user_id=' + ui.item.id;
+      $.ajax({
+  			url: '/my/admin-crm-calendar-item-other-exec.php',
+  			type: 'POST',
+  			cache: false,
+  			dataType: 'json',
+  			data: datasend,			
+  			error : function(jqXHR ,textStatus,  errorThrown) {
+  			  $('#calc_hourglass').hide();
+  				myalert('error:' + jqXHR.responseText);
+  			},				
+  			success: function(data) {
+  				$('#calc_hourglass').hide();
+  				if (!data) {
+  					myalert('error:' + gks_lang('Παρακαλώ δοκιμάστε αργότερα'));
+  				} else {
+  					if (data.success == true) {
+    					myhtml ='<div class="cal_user_row_hr_program" data-id="' + data.other_user_id + '">' +
+                      '<input type="checkbox" name="cal_user_hr_program" data-id="' + data.other_user_id + '" id="cal_user_hr_program_' + data.other_user_id + '" checked>' +
+                      ' <input type="text" class="cal_user_color_hr_program" data-id="' + data.other_user_id + '" value="#3788d8">' +
+                      ' <label for="cal_user_hr_program_' + data.other_user_id + '" class="cal_user_label_hr_program">' + $.base64.decode(data.gks_nickname) + '</label>' +
+                      ' <i class="fas fa-trash-alt cal_user_remove_hr_program" data-aa="' + data.other_user_id + '"></i>' +
+                      '</div>';
+    					$('#div_cal_user_add_hr_program').before(myhtml);
+    					$('#cal_user_add_user_hr_program').hide().val('');
+    					$('.cal_user_remove_hr_program[data-aa=' + data.other_user_id + ']').click(function() {cal_user_remove_click($(this),'hr_program');});
+    					$('#cal_user_hr_program_' + data.other_user_id).change(function() {cal_user_hr_program_change($(this));});
+    					$('.cal_user_color_hr_program[data-id=' + data.other_user_id + ']').change(function() {cal_user_color_change($(this),'hr_program');});
+    					$('.cal_user_color_hr_program[data-id=' + data.other_user_id + ']').spectrum(cal_spectrum_color_settings);
+    					obj_calendar.refetchEvents();
+    					set_hash();
+  					} else {
+  						myalert('error:' + $.base64.decode(data.message));
+  					}
+  				}
+  			}
+  		});
+  		      
+    },
+    change: function (event, ui) {
+      if(!ui.item){
+        $('#cal_user_add_user_hr_program').val('');
+      }
+    }
+  });  
+
+
+  $('#cal_posta_add_posta_hr_program').autocomplete({
+    source: function(request, response) {
+      mydata={
+        term: request.term,
+        notids: function() {
+          var existposta=[];
+          $('input[name=cal_posta_hr_program]').each(function() {
+            uid=parseInt($(this).attr('data-id'));
+            if (isNaN(uid)) uid=-1;
+            existposta.push(uid);
+          });
+          return encodeURIComponent($.base64.encode(JSON.stringify(existposta)))
+        },
+      };
+      $.ajax({
+        url: 'admin-autocomplete-posto.php',
+        dataType: "json",
+        cache: false,
+        data: mydata,
+        error : function(jqXHR ,textStatus,  errorThrown) {
+  				myalert('error:' + jqXHR.responseText);
+  			},
+        success: function( data ) {
+          if (data.success == true) {
+            response( data.list);
+          } else {
+            myalert('error:' + $.base64.decode(data.message));
+          }
+        }
+      });
+    },
+    minLength: 3,
+    autoFocus: true,
+    delay: 300, //default
+    select: function( event, ui ) {
+      $('#calc_hourglass').show();
+      datasend='cmd=add&myobj=hr_program&other_posta_id=' + ui.item.id;
+      $.ajax({
+  			url: '/my/admin-crm-calendar-item-other-posta-exec.php',
+  			type: 'POST',
+  			cache: false,
+  			dataType: 'json',
+  			data: datasend,			
+  			error : function(jqXHR ,textStatus,  errorThrown) {
+  			  $('#calc_hourglass').hide();
+  				myalert('error:' + jqXHR.responseText);
+  			},				
+  			success: function(data) {
+  				$('#calc_hourglass').hide();
+  				if (!data) {
+  					myalert('error:' + gks_lang('Παρακαλώ δοκιμάστε αργότερα'));
+  				} else {
+  					if (data.success == true) {
+    					myhtml ='<div class="cal_posta_row_hr_program" data-id="' + data.other_posta_id + '">' +
+                      '<input type="checkbox" name="cal_posta_hr_program" data-id="' + data.other_posta_id + '" id="cal_posta_hr_program_' + data.other_posta_id + '" checked>' +
+                      ' <input type="text" class="cal_posta_color_hr_program" data-id="' + data.other_posta_id + '" value="">' +
+                      ' <label for="cal_posta_hr_program_' + data.other_posta_id + '" class="cal_posta_label_hr_program">' + $.base64.decode(data.production_posto_descr) + '</label>' +
+                      ' <i class="fas fa-trash-alt cal_posta_remove_hr_program" data-aa="' + data.other_posta_id + '"></i>' +
+                      '</div>';
+    					$('#div_cal_posta_add_hr_program').before(myhtml);
+    					$('#cal_posta_add_posta_hr_program').hide().val('');
+    					$('.cal_posta_remove_hr_program[data-aa=' + data.other_posta_id + ']').click(function() {cal_posta_remove_click($(this),'hr_program');});
+    					$('#cal_posta_hr_program_' + data.other_posta_id).change(function() {cal_posta_hr_program_change($(this));});
+    					$('.cal_posta_color_hr_program[data-id=' + data.other_posta_id + ']').change(function() {cal_posta_color_change($(this),'hr_program');});
+    					$('.cal_posta_color_hr_program[data-id=' + data.other_posta_id + ']').spectrum(cal_spectrum_color_settings);
+    					obj_calendar.refetchEvents();
+    					set_hash();
+  					} else {
+  						myalert('error:' + $.base64.decode(data.message));
+  					}
+  				}
+  			}
+  		});
+  		      
+    },
+    change: function (event, ui) {
+      if(!ui.item){
+        $('#cal_posta_add_user_hr_program').val('');
+      }
+    }
+  });
   
   var calendar_remove_other_user=0;  
   var cal_user_remove_click_myobj='';
@@ -1914,10 +2304,24 @@ jQuery(document).ready(function($) {
     myconfirm(gks_lang('Σίγουρα θέλετε να αφαιρέσετε το συγκεκριμένο ημερολόγιο;'),'calendar_remove_other_user');
     
   }
+
+  var calendar_remove_other_posta=0;  
+  var cal_posta_remove_click_myobj='';
+  function cal_posta_remove_click(myelem, myobj) {
+    cal_posta_remove_click_myobj=myobj;
+    val=parseInt(myelem.attr('data-aa'));
+    if (isNaN(val)) val=0;
+    if (val<=0) return;
+    calendar_remove_other_posta=val;
+    myconfirm(gks_lang('Σίγουρα θέλετε να αφαιρέσετε το συγκεκριμένο ημερολόγιο;'),'calendar_remove_other_posta');
+    
+  }
   
   $('.cal_user_remove').click(function() {cal_user_remove_click($(this),'cal');});
   $('.cal_user_remove_task').click(function() {cal_user_remove_click($(this),'task');});
   $('.cal_user_remove_activ').click(function() {cal_user_remove_click($(this),'activ');});
+  $('.cal_user_remove_hr_program').click(function() {cal_user_remove_click($(this),'hr_program');});
+  $('.cal_posta_remove_hr_program').click(function() {cal_posta_remove_click($(this),'hr_program');});
   
   
   
@@ -1944,12 +2348,13 @@ jQuery(document).ready(function($) {
 					  c_table='gks_calendar';extra='';
 					  if (this.gks_myobj=='task') {c_table='gks_crm_tasks'; extra='_task';}
 					  if (this.gks_myobj=='activ') {c_table='gks_crm_activity'; extra='_activ';}
+					  if (this.gks_myobj=='hr_program') {c_table='gks_hr_program'; extra='_hr_program';}
 					  
   					$('.cal_user_row' + extra + '[data-id=' + data.other_user_id + ']').remove();
   					
   					if (extra=='_task') {
               var cal_user_array_task=[];
-              $('input[name=cal_user_task]:checked').each(function() {
+              $('input[name=cal_user_task]').each(function() {
                 uid=parseInt($(this).attr('data-id'));
                 if (isNaN(uid)) uid=-1;
                 if (uid==0) uid=from_php_my_wp_user_id;
@@ -1957,15 +2362,13 @@ jQuery(document).ready(function($) {
               });
               //console.log('cal_user_array_task',cal_user_array_task);
             }
-  					if (extra=='_activ') {
-              var cal_user_array_activ=[];
-              $('input[name=cal_user_activ]:checked').each(function() {
+  					if (extra=='_hr_program') {
+              var cal_posta_array_hr_program=[];
+              $('input[name=cal_posta_hr_program]').each(function() {
                 uid=parseInt($(this).attr('data-id'));
                 if (isNaN(uid)) uid=-1;
-                if (uid==0) uid=from_php_my_wp_user_id;
-                cal_user_array_activ.push(uid);
+                cal_posta_array_hr_program.push(uid);
               });
-              //console.log('cal_user_array_activ',cal_user_array_activ);
             }
   					
   					mylist=obj_calendar.getEvents();
@@ -1994,6 +2397,71 @@ jQuery(document).ready(function($) {
                 }
               } else if (mylist[list_i18].extendedProps.c_table=='gks_crm_activity' && extra=='_activ') {
                 if (mylist[list_i18].extendedProps.c_user_id==data.other_user_id) {
+                  obj_calendar.getEventById(mylist[list_i18].id).remove();
+                }
+              } else if (mylist[list_i18].extendedProps.c_table=='gks_hr_program' && extra=='_hr_program') {
+                if (mylist[list_i18].extendedProps.c_user_id==data.other_user_id &&
+                    cal_posta_array_hr_program.includes(mylist[list_i18].extendedProps.c_posta_id)==false) {
+                  obj_calendar.getEventById(mylist[list_i18].id).remove();
+                }                  
+
+              }
+            }
+  					set_hash();
+
+					} else {
+						myalert('error:' + $.base64.decode(data.message));
+					}
+				}
+			}
+		});
+    
+    return;
+  }  
+
+  window.calendar_remove_other_posta = function() {
+    $('#calc_hourglass').show();
+    datasend='cmd=remove&myobj=' + cal_posta_remove_click_myobj + '&other_posta_id=' + calendar_remove_other_posta;
+    $.ajax({
+			url: '/my/admin-crm-calendar-item-other-posta-exec.php',
+			type: 'POST',
+			cache: false,
+			dataType: 'json',
+			data: datasend,
+			gks_myobj:cal_posta_remove_click_myobj,
+			error : function(jqXHR ,textStatus,  errorThrown) {
+			  $('#calc_hourglass').hide();
+				myalert('error:' + jqXHR.responseText);
+			},				
+			success: function(data) {
+				$('#calc_hourglass').hide();
+				if (!data) {
+					myalert('error:' + gks_lang('Παρακαλώ δοκιμάστε αργότερα'));
+				} else {
+					if (data.success == true) {
+					  c_table='';extra='';
+					  if (this.gks_myobj=='hr_program') {c_table='gks_hr_program'; extra='_hr_program';}
+					  
+  					$('.cal_posta_row' + extra + '[data-id=' + data.other_posta_id + ']').remove();
+  					
+  					
+  					if (extra=='_hr_program') {
+              var cal_user_array_hr_program=[];
+              $('input[name=cal_user_hr_program]').each(function() {
+                uid=parseInt($(this).attr('data-id'));
+                if (isNaN(uid)) uid=-1;
+                if (uid==0) uid=from_php_my_wp_user_id;
+                cal_user_array_hr_program.push(uid);
+              });
+              //console.log('cal_posta_array_task',cal_posta_array_task);
+            }
+  					
+  					mylist=obj_calendar.getEvents();
+  					
+            for (var list_i18=0; list_i18<mylist.length; list_i18++) {
+    					if (mylist[list_i18].extendedProps.c_table=='gks_hr_program' && extra=='_hr_program') {
+                if (mylist[list_i18].extendedProps.c_posta_id==data.other_posta_id && 
+                    cal_user_array_hr_program.includes(mylist[list_i18].extendedProps.c_user_id)==false) {
                   obj_calendar.getEventById(mylist[list_i18].id).remove();
                 }
               }
@@ -2033,7 +2501,7 @@ jQuery(document).ready(function($) {
     } else {
       myuser_id=parseInt(checkelem.attr('data-id'));if (isNaN(myuser_id)) myuser_id=-1;
     }
-    update_cal_user_or_task_change(myuser_id,'cal',(checkelem.is(':checked')?1:0));
+    update_cal_user_task_hrprogramm_change(myuser_id,'cal',(checkelem.is(':checked')?1:0));
   }
   function cal_user_task_change(checkelem) {
     var cal_user_array_task=[];
@@ -2065,9 +2533,10 @@ jQuery(document).ready(function($) {
     } else {
       myuser_id=parseInt(checkelem.attr('data-id'));if (isNaN(myuser_id)) myuser_id=-1;
     }
-    update_cal_user_or_task_change(myuser_id,'task',(checkelem.is(':checked')?1:0));
+    update_cal_user_task_hrprogramm_change(myuser_id,'task',(checkelem.is(':checked')?1:0));
   }
 
+  
   function cal_user_activ_change(checkelem) {
     var cal_user_array_activ=[];
     $('input[name=cal_user_activ]:checked').each(function() {
@@ -2092,11 +2561,74 @@ jQuery(document).ready(function($) {
     } else {
       myuser_id=parseInt(checkelem.attr('data-id'));if (isNaN(myuser_id)) myuser_id=-1;
     }
-    update_cal_user_or_task_change(myuser_id,'activ',(checkelem.is(':checked')?1:0));
+    update_cal_user_task_hrprogramm_change(myuser_id,'activ',(checkelem.is(':checked')?1:0));
+  }
+
+  function cal_xxxxx_hr_program_change() {
+    var cal_user_array_hr_program=[];
+    $('input[name=cal_user_hr_program]:checked').each(function() {
+      uid=parseInt($(this).attr('data-id'));
+      if (isNaN(uid)) uid=-1;
+      if (uid==0) uid=from_php_my_wp_user_id;
+      cal_user_array_hr_program.push(uid);
+    });
+    
+    var cal_posta_array_hr_program=[];
+    $('input[name=cal_posta_hr_program]:checked').each(function() {
+      uid=parseInt($(this).attr('data-id'));
+      if (isNaN(uid)) uid=-1;
+      cal_posta_array_hr_program.push(uid);
+    });
+
+    mylist=obj_calendar.getEvents();
+    if (calendar_posta_operator=='or') {
+      for (var list_i1=0; list_i1<mylist.length; list_i1++) {
+        if (mylist[list_i1].extendedProps.c_table=='gks_hr_program') {
+          if (cal_user_array_hr_program.includes(mylist[list_i1].extendedProps.c_user_id) || 
+              cal_posta_array_hr_program.includes(mylist[list_i1].extendedProps.c_posta_id)) {
+            obj_calendar.getEventById(mylist[list_i1].id).setProp('display','auto');
+          } else {
+            obj_calendar.getEventById(mylist[list_i1].id).setProp('display','none');
+          }
+        }
+      }
+    } else if (calendar_posta_operator=='and') {
+      for (var list_i1=0; list_i1<mylist.length; list_i1++) {
+        if (mylist[list_i1].extendedProps.c_table=='gks_hr_program') {
+          if (cal_user_array_hr_program.includes(mylist[list_i1].extendedProps.c_user_id) && 
+              cal_posta_array_hr_program.includes(mylist[list_i1].extendedProps.c_posta_id)) {
+            obj_calendar.getEventById(mylist[list_i1].id).setProp('display','auto');
+          } else {
+            obj_calendar.getEventById(mylist[list_i1].id).setProp('display','none');
+          }
+        }
+      }      
+    }
   }
   
+  function cal_user_hr_program_change(checkelem) {
+    cal_xxxxx_hr_program_change();
+    if (checkelem.attr('id')=='cal_allhr_program_toggle') {
+      myuser_id=-1;
+    } else {
+      myuser_id=parseInt(checkelem.attr('data-id'));if (isNaN(myuser_id)) myuser_id=-1;
+    }
+    update_cal_user_task_hrprogramm_change(myuser_id,'hr_program',(checkelem.is(':checked')?1:0));
+  }
+
+  function cal_posta_hr_program_change(checkelem) {
+    cal_xxxxx_hr_program_change();
+    if (checkelem.attr('id')=='posta_allhr_program_toggle') {
+      myposta_id=-1;
+    } else {
+      myposta_id=parseInt(checkelem.attr('data-id'));if (isNaN(myposta_id)) myposta_id=-1;
+    }
+    update_cal_posta_task_hrprogramm_change(myposta_id,'hr_program',(checkelem.is(':checked')?1:0));
+  }
   
-  function update_cal_user_or_task_change(myuser_id,myobj,is_visible) {
+
+  
+  function update_cal_user_task_hrprogramm_change(myuser_id,myobj,is_visible) {
     if (myuser_id<-1) return;
     if (from_hash_analyze) return;
     $('#calc_hourglass').show();
@@ -2128,13 +2660,48 @@ jQuery(document).ready(function($) {
 			}
 		});
 	}
+
+  function update_cal_posta_task_hrprogramm_change(myposta_id,myobj,is_visible) {
+    if (myposta_id<-1) return;
+    if (from_hash_analyze) return;
+    $('#calc_hourglass').show();
+    datasend='cmd=visible&myobj=' + myobj + '&other_posta_id=' + myposta_id + '&visible=' + is_visible;
+    //console.log(datasend);
+    
+    $.ajax({
+			url: '/my/admin-crm-calendar-item-other-posta-exec.php',
+			type: 'POST',
+			cache: false,
+			dataType: 'json',
+			data: datasend,	
+			error : function(jqXHR ,textStatus,  errorThrown) {
+			  $('#calc_hourglass').hide();
+				myalert('error:' + jqXHR.responseText);
+			},				
+			success: function(data) {
+				$('#calc_hourglass').hide();
+				if (!data) {
+					myalert('error:' + gks_lang('Παρακαλώ δοκιμάστε αργότερα'));
+				} else {
+					if (data.success == true) {
+            //console.log('OK');
+            set_hash();
+					} else {
+						myalert('error:' + $.base64.decode(data.message));
+					}
+				}
+			}
+		});
+	}
   
   $('input[name=cal_user]').change(function() {cal_user_change($(this));});
   $('input[name=cal_user_task]').change(function() {cal_user_task_change($(this));});
   $('input[name=cal_user_activ]').change(function() {cal_user_activ_change($(this));});
+  $('input[name=cal_user_hr_program]').change(function() {cal_user_hr_program_change($(this));});
+  $('input[name=cal_posta_hr_program]').change(function() {cal_posta_hr_program_change($(this));});
   
   
-  function cal_user_color(myelem,myobj) {
+  function cal_user_color_change(myelem,myobj) {
     myuser_id=parseInt(myelem.attr('data-id'));
     if (isNaN(myuser_id)) myuser_id=-1;
     if (myuser_id<0) return;
@@ -2177,10 +2744,56 @@ jQuery(document).ready(function($) {
 		});
 		    
   }
+
+  function cal_posta_color_change(myelem,myobj) {
+    myposta_id=parseInt(myelem.attr('data-id'));
+    if (isNaN(myposta_id)) myposta_id=-1;
+    if (myposta_id<0) return;
+    //$('.cal_user_color_wra[data-id=' + myposta_id + ']').css('background-color',$(this).val());
+
+    mycolor=myelem.val().trim();
+    $('#calc_hourglass').show();
+    datasend='cmd=color&myobj=' + myobj + '&other_posta_id=' + myposta_id + '&color=' + encodeURIComponent($.base64.encode(mycolor));
+    
+    
+    $.ajax({
+			url: '/my/admin-crm-calendar-item-other-posta-exec.php',
+			type: 'POST',
+			cache: false,
+			dataType: 'json',
+			data: datasend,	
+			thismyposta_id:myposta_id,
+			thismycolor:mycolor,
+			error : function(jqXHR ,textStatus,  errorThrown) {
+			  $('#calc_hourglass').hide();
+				myalert('error:' + jqXHR.responseText);
+			},				
+			success: function(data) {
+				$('#calc_hourglass').hide();
+				if (!data) {
+					myalert('error:' + gks_lang('Παρακαλώ δοκιμάστε αργότερα'));
+				} else {
+					if (data.success == true) {
+            mylist=obj_calendar.getEvents();
+            for (var list_i2=0; list_i2<mylist.length; list_i2++) {
+              if (mylist[list_i2].extendedProps.c_posta_id == this.thismyposta_id && mylist[list_i2].extendedProps.c_custom_color==0) {
+                obj_calendar.getEventById(mylist[list_i2].id).setProp('backgroundColor',this.thismycolor);
+              }
+            }
+					} else {
+						myalert('error:' + $.base64.decode(data.message));
+					}
+				}
+			}
+		});
+		    
+  }
   
-  $('.cal_user_color').change(function() {cal_user_color($(this),'cal');});
-  $('.cal_user_color_task').change(function() {cal_user_color($(this),'task');});
-  $('.cal_user_color_activ').change(function() {cal_user_color($(this),'activ');});
+  $('.cal_user_color').change(function() {cal_user_color_change($(this),'cal');});
+  $('.cal_user_color_task').change(function() {cal_user_color_change($(this),'task');});
+  $('.cal_user_color_activ').change(function() {cal_user_color_change($(this),'activ');});
+  $('.cal_user_color_hr_program').change(function() {cal_user_color_change($(this),'hr_program');});
+  $('.cal_posta_color_hr_program').change(function() {cal_posta_color_change($(this),'hr_program');});
   
   
   $('#set_def_color').click(function() {
@@ -2379,7 +2992,15 @@ jQuery(document).ready(function($) {
         } 
       }
     }
-    
+    if (hashmydata.cal_user_hr_program !== undefined) {
+      //console.log(hashmydata.cal_user_hr_program); 
+      for(var list_i6=0; list_i6< hashmydata.cal_user_hr_program.length; list_i6++) {
+        elem=$('#cal_user_hr_program_'+hashmydata.cal_user_hr_program[list_i6][0]);
+        if (elem.length==1) {
+          if (hashmydata.cal_user_hr_program[list_i6][1]!==(elem.is(':checked') ? 1 : 0)) elem.click();
+        } 
+      }
+    }    
     from_hash_analyze=false;
     
     //console.log('hash_analyze');
@@ -2393,7 +3014,8 @@ jQuery(document).ready(function($) {
     if (from_hash_analyze) return;
     
     hashmydata={};
-    hashmydata.startdate = obj_calendar.getDate(); //obj_calendar.gotoDate(dp);obj_calendar.gotoDate(dp);
+    //hashmydata.startdate = obj_calendar.getDate(); //obj_calendar.gotoDate(dp);obj_calendar.gotoDate(dp);
+    hashmydata.startdate = $('#c_cal_small').datetimepicker('getValue');
     hashmydata.leftpanel=($("#cal_submenu_static").css('display')=='none' ? 0 : 1);
     hashmydata.full24= ($('.fc-gks_full24-button span').hasClass('fa-compress') ? 1 : 0);
     hashmydata.view= obj_calendar.view.type;
@@ -2424,6 +3046,15 @@ jQuery(document).ready(function($) {
       cal_user_array_activ.push([uid,vv]);
     });
     hashmydata.cal_user_activ=cal_user_array_activ;
+
+    var cal_user_array_hr_program=[];
+    $('input[name=cal_user_hr_program]').each(function() {
+      uid=parseInt($(this).attr('data-id'));
+      if (isNaN(uid)) uid=-1;
+      if ($(this).is(':checked')) vv=1; else vv=0;
+      cal_user_array_hr_program.push([uid,vv]);
+    });
+    hashmydata.cal_user_hr_program=cal_user_array_hr_program;
 
     
     //console.log('set_hash');
@@ -2462,6 +3093,97 @@ jQuery(document).ready(function($) {
     }
     cal_user_activ_change($('#cal_allactivs_toggle'));    
   });  
+  $('#cal_allhr_program_toggle').click(function() {
+    if ($(this).is(':checked')) {
+      $('input[name="cal_user_hr_program"]').prop('checked',true);
+    } else {
+      $('input[name="cal_user_hr_program"]').prop('checked',false);
+    }
+    cal_user_hr_program_change($('#cal_allhr_program_toggle'));    
+  });
+  $('#posta_allhr_program_toggle').click(function() {
+    if ($(this).is(':checked')) {
+      $('input[name="cal_posta_hr_program"]').prop('checked',true);
+    } else {
+      $('input[name="cal_posta_hr_program"]').prop('checked',false);
+    }
+    cal_posta_hr_program_change($('#posta_allhr_program_toggle'));    
+  });
+  
+  $('#business_days_hours_footer_button_save').click(function() {
+    from_php_businessHours_daysOfWeek=[];
+    $('#business_days_hours_center1 input:checked').each(function() {
+      vvv=parseInt($(this).attr('id').replace('days_to_work',''));
+      from_php_businessHours_daysOfWeek.push(vvv);
+    });
+    from_php_businessHours_startTime=$('#business_days_hours_center2 #hours_to_work_from').val();
+    from_php_businessHours_endTime=$('#business_days_hours_center2 #hours_to_work_to').val();
+
+    obj_calendar.setOption('businessHours', {
+      daysOfWeek: from_php_businessHours_daysOfWeek,
+      startTime: from_php_businessHours_startTime,
+      endTime: from_php_businessHours_endTime
+    });
+    //console.log(from_php_businessHours_daysOfWeek);
+    //console.log(from_php_businessHours_startTime);
+    //console.log(from_php_businessHours_endTime);
+    calc_slotMinMaxTime();
+    
+    elem=$('.fc-gks_full24-button');
+    if (elem.find('span').hasClass('fa-expand')==false) {
+      $('.fc-gks_full24-button').tooltipster('content', my_slotMinTime.substring(0,5)+'-'+my_slotMaxTime.substring(0,5));
+    } else {
+      obj_calendar.setOption('slotMinTime',my_slotMinTime);
+      obj_calendar.setOption('slotMaxTime',my_slotMaxTime);
+    }
+          
+    $('body').css('overflow','');
+    $('#business_days_hours_div').hide();
+    $('#business_days_hours_div_panel').hide();    
+
+    datasend='&o=' + encodeURIComponent($.base64.encode('calendar'));
+    datasend+='&s=' + encodeURIComponent($.base64.encode('businessDays'));
+    datasend+='&v=' + encodeURIComponent($.base64.encode(JSON.stringify(from_php_businessHours_daysOfWeek)));
+    $.ajax({
+      url: '/my/admin-users-settings-item-exec.php',type: 'POST',cache: false,dataType: 'json',	data: datasend,
+      error : function(jqXHR ,textStatus,  errorThrown) {console.log(jqXHR.responseText);},				
+      success: function(data) {if (!data) {console.log('error:'+gks_lang('Παρακαλώ δοκιμάστε αργότερα'));} 
+        else {if (data.success == false) {console.log('error:' + $.base64.decode(data.message));}}
+      },
+    });
+
+
+    datasend='&o=' + encodeURIComponent($.base64.encode('calendar'));
+    datasend+='&s=' + encodeURIComponent($.base64.encode('businessStartT'));
+    datasend+='&v=' + encodeURIComponent($.base64.encode(from_php_businessHours_startTime));
+    $.ajax({
+      url: '/my/admin-users-settings-item-exec.php',type: 'POST',cache: false,dataType: 'json',	data: datasend,
+      error : function(jqXHR ,textStatus,  errorThrown) {console.log(jqXHR.responseText);},				
+      success: function(data) {if (!data) {console.log('error:'+gks_lang('Παρακαλώ δοκιμάστε αργότερα'));} 
+        else {if (data.success == false) {console.log('error:' + $.base64.decode(data.message));}}
+      },
+    });
+
+    datasend='&o=' + encodeURIComponent($.base64.encode('calendar'));
+    datasend+='&s=' + encodeURIComponent($.base64.encode('businessEndT'));
+    datasend+='&v=' + encodeURIComponent($.base64.encode(from_php_businessHours_endTime));
+    $.ajax({
+      url: '/my/admin-users-settings-item-exec.php',type: 'POST',cache: false,dataType: 'json',	data: datasend,
+      error : function(jqXHR ,textStatus,  errorThrown) {console.log(jqXHR.responseText);},				
+      success: function(data) {if (!data) {console.log('error:'+gks_lang('Παρακαλώ δοκιμάστε αργότερα'));} 
+        else {if (data.success == false) {console.log('error:' + $.base64.decode(data.message));}}
+      },
+    });
+    
+    
+  });
+  $('#business_days_hours_footer_button_cancel').click(function() {
+    $('body').css('overflow','');
+    $('#business_days_hours_div').hide();
+    $('#business_days_hours_div_panel').hide();    
+  });
+  
+  
 });
 
 

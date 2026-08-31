@@ -63,6 +63,7 @@ gks_eshop_products.id_product,
 gks_eshop_products.product_class,
 gks_eshop_products.product_parent_id,
 gks_eshop_products.product_code,
+gks_eshop_products.product_type,
 CASE
   WHEN gks_eshop_products.product_class='variable_item' THEN
     CASE
@@ -215,6 +216,7 @@ if ($result->num_rows!=1) {
 $row_product = $result->fetch_assoc();
 $product_class=$row_product['product_class'];
 $product_parent_id=intval($row_product['product_parent_id']);
+$product_type=intval($row_product['product_type']);
 
 $row_product['product_price']=floatval($row_product['product_price']);
 $row_product['product_price_retail']=floatval($row_product['product_price_retail']);
@@ -335,6 +337,16 @@ while ($row_income = $result_income->fetch_assoc()) {
   );
 }
 
+/* if (count($out_xarakt_esoda)==0) {
+  //$id_acc_eidos_parastatikou
+  if ($product_type==0) {//emporeuma
+  
+  } else if ($product_type==1) {//proion
+  
+  } else if ($product_type==1) {//ipiresia
+  
+  }
+} */
 
           
 $sql_expenses="select 

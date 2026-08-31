@@ -831,6 +831,7 @@ function gks_orders_create_acc_inv($old_id) {
   global $gkIP;
   global $my_wp_user_id;
   global $GKS_NUMBER_FORMAT_CURRENCY_DECIMAL;
+  global $GKS_ORDERS_CREATE_ACC_INV_MODE;
   
   if ($old_id<=0) {
     debug_mail(false,'id is zero',$old_id);
@@ -911,7 +912,14 @@ function gks_orders_create_acc_inv($old_id) {
     debug_mail(false,'total_eidi is zero',$total_eidi);
     $return = array('success' => false, 'message' => base64_encode(gks_lang('Δεν βρέθηκαν είδη στην παραγγελία')));
     echo json_encode($return); die(); } 
+
+  if ($GKS_ORDERS_CREATE_ACC_INV_MODE==1) {
+    if ($pbasetypes[0]['cc']>0 and $pbasetypes[2]['cc']>0) { //se timologio, oxi ipiresia
+      $pbasetypes[0]['cc']+=$pbasetypes[2]['cc'];
+      $pbasetypes[2]['cc']=0;      
+    } 
     
+  }
   //print '<pre>';print_r($pbasetypes);die();
   
   //print '<pre>';print $parastatiko.'|'.$fiscal_position_id;die();
@@ -1067,9 +1075,74 @@ function gks_orders_create_acc_inv($old_id) {
   
   //echo $new_inv_acc_journal_id.'|'.$new_inv_acc_seira_id.'|'.$new_inv_acc_seira_code."\n"; die();
   //foreach ($pbasetypes as $i => $pb) {
+ 
+  $sindiasmoi_esodon=[];
   foreach ($pbasetypes as $i => $pb) {
     if ($pb['cc']>0) {
       if ($pb['id_acc_eidos_parastatikou']!=0) {
+        $sindiasmoi_esodon[$pb['id_acc_eidos_parastatikou']]=[];
+        
+        $sql="SELECT id_aade_typos_xarakt_esodon, id_aade_katigoria_xarakt_esodon
+        FROM (gks_aade_xarakt_sindiasmoi_esodon 
+        LEFT JOIN gks_aade_katigoria_xarakt_esodon ON gks_aade_xarakt_sindiasmoi_esodon.aade_katigoria_xarakt_esodon_code = gks_aade_katigoria_xarakt_esodon.aade_katigoria_xarakt_esodon_code) 
+        LEFT JOIN gks_aade_typos_xarakt_esodon ON gks_aade_xarakt_sindiasmoi_esodon.aade_typos_xarakt_esodon_code = gks_aade_typos_xarakt_esodon.aade_typos_xarakt_esodon_code
+        WHERE sind_acc_eidos_parastatikou_id=".$pb['id_acc_eidos_parastatikou']."
+        AND (yearprevnext='' Or yearprevnext Is Null) 
+        AND id_aade_typos_xarakt_esodon Is Not Null
+        AND id_aade_katigoria_xarakt_esodon Is Not Null";
+        $result = $db_link->query($sql);  
+        if (!$result) {
+          debug_mail(false,'error sql',$sql);
+          $return = array('success' => false, 'message' => base64_encode('sql error'));
+          echo json_encode($return); die(); }  
+        while ($row = $result->fetch_assoc()) {
+          $sindiasmoi_esodon[$pb['id_acc_eidos_parastatikou']][]=array(
+            'typos'=>intval($row['id_aade_typos_xarakt_esodon']),
+            'katigoria'=>intval($row['id_aade_katigoria_xarakt_esodon']),
+          );
+        }
+      }
+    }
+  }    
+  //print '<pre>';print_r($sindiasmoi_esodon);die();
+  
+  $sindiasmoi_eksodon=[];
+  foreach ($pbasetypes as $i => $pb) {
+    if ($pb['cc']>0) {
+      if ($pb['id_acc_eidos_parastatikou']!=0) {
+        $sindiasmoi_eksodon[$pb['id_acc_eidos_parastatikou']]=[];
+        
+        $sql="SELECT id_aade_typos_xarakt_eksodon, id_aade_katigoria_xarakt_eksodon
+        FROM (gks_aade_xarakt_sindiasmoi_eksodon 
+        LEFT JOIN gks_aade_katigoria_xarakt_eksodon ON gks_aade_xarakt_sindiasmoi_eksodon.aade_katigoria_xarakt_eksodon_code = gks_aade_katigoria_xarakt_eksodon.aade_katigoria_xarakt_eksodon_code) 
+        LEFT JOIN gks_aade_typos_xarakt_eksodon ON gks_aade_xarakt_sindiasmoi_eksodon.aade_typos_xarakt_eksodon_code = gks_aade_typos_xarakt_eksodon.aade_typos_xarakt_eksodon_code
+        WHERE sind_acc_eidos_parastatikou_id=".$pb['id_acc_eidos_parastatikou']."
+        AND (yearprevnext='' Or yearprevnext Is Null) 
+        AND id_aade_typos_xarakt_eksodon Is Not Null
+        AND id_aade_katigoria_xarakt_eksodon Is Not Null";
+
+        $result = $db_link->query($sql);  
+        if (!$result) {
+          debug_mail(false,'error sql',$sql);
+          $return = array('success' => false, 'message' => base64_encode('sql error'));
+          echo json_encode($return); die(); }  
+        while ($row = $result->fetch_assoc()) {
+          $sindiasmoi_eksodon[$pb['id_acc_eidos_parastatikou']][]=array(
+            'typos'=>intval($row['id_aade_typos_xarakt_eksodon']),
+            'katigoria'=>intval($row['id_aade_katigoria_xarakt_eksodon']),
+          );
+        }
+      }
+    }
+  }    
+  //print '<pre>';print_r($sindiasmoi_eksodon);die();
+  
+  
+  
+  foreach ($pbasetypes as $i => $pb) {
+    if ($pb['cc']>0) {
+      if ($pb['id_acc_eidos_parastatikou']!=0) {
+            
             
         $new_inv_guid=guid_for_acc_inv();
         //echo $new_inv_guid."\n"; die();
@@ -1253,8 +1326,9 @@ function gks_orders_create_acc_inv($old_id) {
         
         $map_products=array();
         foreach ($old_product_ids as $vid) {
-          if ( (($vid['type']==0 or $vid['type']==1) and ($i==0 or $i==1)) or 
-               ($vid['type']==2 and $i==2)    ) {
+          if ($GKS_ORDERS_CREATE_ACC_INV_MODE==1 or (
+              (($vid['type']==0 or $vid['type']==1) and ($i==0 or $i==1)) or 
+               ($vid['type']==2 and $i==2)    )) {
           
             $sql="INSERT INTO gks_acc_inv_products ( 
             mydate_add, mydate_edit, user_id_add, user_id_edit, myip, 
@@ -1396,6 +1470,8 @@ function gks_orders_create_acc_inv($old_id) {
         
 
 
+        // $pb['id_acc_eidos_parastatikou']
+        //print '<pre>';print_r($map_products);die();
         
         
         foreach ($map_products as $map_product) {
@@ -1415,8 +1491,9 @@ function gks_orders_create_acc_inv($old_id) {
             $xarakt_product_id=$map_product['id_product'];
             if ($map_product['product_class']=='variable_item') {
               $xarakt_product_id=$map_product['product_parent_id'];
-            }
-            $sql="SELECT aade_typos_xarakt_esodon_id AS typos_id, 
+            } 
+            $sql="SELECT acc_eidos_parastatikou_id,
+            aade_typos_xarakt_esodon_id AS typos_id, 
             aade_katigoria_xarakt_esodon_id AS cat_id, 
             acc_inv_product_income_pososto AS pososto
             FROM gks_eshop_products_income
@@ -1437,30 +1514,117 @@ function gks_orders_create_acc_inv($old_id) {
                 $poso=round(floatval($row['pososto'])/100 * $final_all_net,$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL);
                 $poso_sum+=$poso;
                 $out_xarakt_esoda[]=array(
+                  'acc_eidos_parastatikou_id'=>intval($row['acc_eidos_parastatikou_id']),
                   'typos_id'=> intval($row['typos_id']),
                   'cat_id'=> intval($row['cat_id']),
                   'pososto'=> floatval($row['pososto']),
                   'poso' => $poso,
+                  'enable'=>true,
                 );
               }
             }
-            $diafora=$final_all_net-$poso_sum;
-            if ($diafora!=0 and count($out_xarakt_esoda)>0) $out_xarakt_esoda[count($out_xarakt_esoda)-1]['poso']+=round($diafora,$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL);
+           
+            if (count($out_xarakt_esoda)==0) {
+              if ($map_product['type']==0) 
+                $out_xarakt_esoda[]=array(
+                  'acc_eidos_parastatikou_id'=>0,
+                  'typos_id'=> 7,  //xondriki
+                  'cat_id'=> 1,    //polisi emporeumatos
+                  'pososto'=> 100,
+                  'poso' => $product_price_final_all_net,
+                  'enable'=>true,
+                );
+              if ($map_product['type']==1) 
+                $out_xarakt_esoda[]=array(
+                  'acc_eidos_parastatikou_id'=>0,
+                  'typos_id'=> 7,  //xondriki
+                  'cat_id'=> 2,    //polisi proionton
+                  'pososto'=> 100,
+                  'poso' => $product_price_final_all_net,
+                  'enable'=>true,
+                );
+              if ($map_product['type']==2) 
+                $out_xarakt_esoda[]=array(
+                  'acc_eidos_parastatikou_id'=>0,
+                  'typos_id'=> 7,  //xondriki
+                  'cat_id'=> 3,    //paroxi iperiovn
+                  'pososto'=> 100,
+                  'poso' => $product_price_final_all_net,
+                  'enable'=>true,
+                );
+              if ($map_product['type']==0) 
+                $out_xarakt_esoda[]=array(
+                  'acc_eidos_parastatikou_id'=>0,
+                  'typos_id'=> 9,  //lianiki 
+                  'cat_id'=> 1,    //polisi emporeumatos
+                  'pososto'=> 100,
+                  'poso' => $product_price_final_all_net,
+                  'enable'=>true,
+                );
+              if ($map_product['type']==1) 
+                $out_xarakt_esoda[]=array(
+                  'acc_eidos_parastatikou_id'=>0,
+                  'typos_id'=> 9,  //lianiki 
+                  'cat_id'=> 2,    //polisi proionton
+                  'pososto'=> 100,
+                  'poso' => $product_price_final_all_net,
+                  'enable'=>true,
+                );
+              if ($map_product['type']==2)
+                $out_xarakt_esoda[]=array(
+                  'acc_eidos_parastatikou_id'=>0,
+                  'typos_id'=> 9,  //lianiki 
+                  'cat_id'=> 3,    //paroxi iperiovn
+                  'pososto'=> 100,
+                  'poso' => $product_price_final_all_net,
+                  'enable'=>true,
+                );
+              
+            }
+            
+            foreach($out_xarakt_esoda as &$val) {
+              if ($val['acc_eidos_parastatikou_id']==0 or 
+                  $val['acc_eidos_parastatikou_id']==$pb['id_acc_eidos_parastatikou']) {
+                if (isset($sindiasmoi_esodon[$pb['id_acc_eidos_parastatikou']])==false) {
+                  $val['enable']=false;
+                } else {
+                  $found_sindiasmos=false;
+                  foreach ($sindiasmoi_esodon[$pb['id_acc_eidos_parastatikou']] as $sss) {
+                    if ($sss['typos']==$val['typos_id'] and $sss['katigoria']==$val['cat_id']) {
+                      $found_sindiasmos=true;break;
+                    }
+                  }
+                  if ($found_sindiasmos==false) $val['enable']=false;
+                }
+              } else {
+                $val['enable']=false;
+              }
+            }
+            unset($val);
+            
+            
+            
+            //print '<pre>';print_r($out_xarakt_esoda);die();
+            
+            //$diafora=$final_all_net-$poso_sum;
+            //if ($diafora!=0 and count($out_xarakt_esoda)>0) $out_xarakt_esoda[count($out_xarakt_esoda)-1]['poso']+=round($diafora,$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL);
             
             foreach ($out_xarakt_esoda as $val) {
-              $sql="insert into gks_acc_inv_products_income (
-              acc_inv_product_id,aade_typos_xarakt_esodon_id,aade_katigoria_xarakt_esodon_id,acc_inv_product_income_ammount
-              ) values (
-              ".$map_product['new'].",
-              ".$val['typos_id'].",
-              ".$val['cat_id'].",
-              ".number_format($val['poso'],$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL,'.','')."
-              )";
-              $result = $db_link->query($sql);  
-              if (!$result) {
-                debug_mail(false,'error sql',$sql);
-                $return = array('success' => false, 'message' => base64_encode('sql error'));
-                echo json_encode($return); die(); }  
+              if ($val['enable']) {
+                $sql="insert into gks_acc_inv_products_income (
+                acc_inv_product_id,aade_typos_xarakt_esodon_id,aade_katigoria_xarakt_esodon_id,acc_inv_product_income_ammount
+                ) values (
+                ".$map_product['new'].",
+                ".$val['typos_id'].",
+                ".$val['cat_id'].",
+                ".number_format($val['poso'],$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL,'.','')."
+                )";
+                $result = $db_link->query($sql);  
+                if (!$result) {
+                  debug_mail(false,'error sql',$sql);
+                  $return = array('success' => false, 'message' => base64_encode('sql error'));
+                  echo json_encode($return); die(); }  
+              }
             }
             //print '<pre>';print_r($map_products);print_r($out_xarakt_esoda);print $final_all_net.'|'.$diafora;die();          
           }
@@ -1481,7 +1645,8 @@ function gks_orders_create_acc_inv($old_id) {
             if ($map_product['product_class']=='variable_item') {
               $xarakt_product_id=$map_product['product_parent_id'];
             }
-            $sql="SELECT aade_typos_xarakt_eksodon_id AS typos_id, 
+            $sql="SELECT acc_eidos_parastatikou_id,
+            aade_typos_xarakt_eksodon_id AS typos_id, 
             aade_katigoria_xarakt_eksodon_id AS cat_id, 
             acc_inv_product_expenses_pososto AS pososto
             FROM gks_eshop_products_expenses
@@ -1502,30 +1667,55 @@ function gks_orders_create_acc_inv($old_id) {
                 $poso=round(floatval($row['pososto'])/100 * $final_all_net,$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL);
                 $poso_sum+=$poso;
                 $out_xarakt_eksoda[]=array(
+                  'acc_eidos_parastatikou_id'=>intval($row['acc_eidos_parastatikou_id']),
                   'typos_id'=> intval($row['typos_id']),
                   'cat_id'=> intval($row['cat_id']),
                   'pososto'=> floatval($row['pososto']),
                   'poso' => $poso,
+                  'enable'=>true,
                 );
               }
             }
-            $diafora=$final_all_net-$poso_sum;
-            if ($diafora!=0 and count($out_xarakt_eksoda)>0) $out_xarakt_eksoda[count($out_xarakt_eksoda)-1]['poso']+=round($diafora,$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL);
+            
+            foreach($out_xarakt_eksoda as &$val) {
+              if ($val['acc_eidos_parastatikou_id']==0 or 
+                  $val['acc_eidos_parastatikou_id']==$pb['id_acc_eidos_parastatikou']) {
+                if (isset($sindiasmoi_eksodon[$pb['id_acc_eidos_parastatikou']])==false) {
+                  $val['enable']=false;
+                } else {
+                  $found_sindiasmos=false;
+                  foreach ($sindiasmoi_eksodon[$pb['id_acc_eidos_parastatikou']] as $sss) {
+                    if ($sss['typos']==$val['typos_id'] and $sss['katigoria']==$val['cat_id']) {
+                      $found_sindiasmos=true;break;
+                    }
+                  }
+                  if ($found_sindiasmos==false) $val['enable']=false;
+                }
+              } else {
+                $val['enable']=false;
+              }
+            }
+            unset($val);
+            
+            //$diafora=$final_all_net-$poso_sum;
+            //if ($diafora!=0 and count($out_xarakt_eksoda)>0) $out_xarakt_eksoda[count($out_xarakt_eksoda)-1]['poso']+=round($diafora,$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL);
             
             foreach ($out_xarakt_eksoda as $val) {
-              $sql="insert into gks_acc_inv_products_expenses (
-              acc_inv_product_id,aade_typos_xarakt_eksodon_id,aade_katigoria_xarakt_eksodon_id,acc_inv_product_expenses_ammount
-              ) values (
-              ".$map_product['new'].",
-              ".$val['typos_id'].",
-              ".$val['cat_id'].",
-              ".number_format($val['poso'],$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL,'.','')."
-              )";
-              $result = $db_link->query($sql);  
-              if (!$result) {
-                debug_mail(false,'error sql',$sql);
-                $return = array('success' => false, 'message' => base64_encode('sql error'));
-                echo json_encode($return); die(); }  
+              if ($val['enable']) {
+                $sql="insert into gks_acc_inv_products_expenses (
+                acc_inv_product_id,aade_typos_xarakt_eksodon_id,aade_katigoria_xarakt_eksodon_id,acc_inv_product_expenses_ammount
+                ) values (
+                ".$map_product['new'].",
+                ".$val['typos_id'].",
+                ".$val['cat_id'].",
+                ".number_format($val['poso'],$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL,'.','')."
+                )";
+                $result = $db_link->query($sql);  
+                if (!$result) {
+                  debug_mail(false,'error sql',$sql);
+                  $return = array('success' => false, 'message' => base64_encode('sql error'));
+                  echo json_encode($return); die(); } 
+              }
             }
             //print '<pre>';print_r($map_products);print_r($out_xarakt_eksoda);print $final_all_net.'|'.$diafora;die();          
 
@@ -1573,6 +1763,7 @@ function gks_orders_create_acc_inv($old_id) {
   return $ret;
   
 }
+
 function gks_orders_create_acc_pay($old_id) {
   global $db_link;
   global $gkIP;

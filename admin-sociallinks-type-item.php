@@ -145,7 +145,9 @@ include_once('_my_header_admin.php');
   <div class="form-group1 row">
     <div class="col-md-12 text-center mt-2">
       <button type="button" class="btn btn-primary" id="submit_button_ok_custom"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_sociallinks_type'];?>" data-model="gks_sociallinks_type" data-backurl="admin-sociallinks-type.php"><?php echo gks_lang('Διαγραφή');?></button>
+      <?php } ?>
     </div>
   </div>
 </div>

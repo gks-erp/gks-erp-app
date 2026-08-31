@@ -772,6 +772,9 @@ if ($inv_acc_seira_id<=0) {
   $return = array('success' => false, 'message' => base64_encode(gks_lang('Ορίστε την Σειρά')));
   echo json_encode($return); die();}  
 
+
+
+
 $inv_acc_number_int_user=0;if (isset($_POST['inv_acc_number_int'])) $inv_acc_number_int_user=intval($_POST['inv_acc_number_int']);
 
 
@@ -813,6 +816,13 @@ if ($result->num_rows!=1) {
 $row_seira = $result->fetch_assoc();
 $is_xeirografi=intval($row_seira['is_xeirografi']);
 $seira_isdeliverynote=intval($row_seira['seira_isdeliverynote']);
+
+$nonObligatedRecipient=0;if (isset($_POST['nonObligatedRecipient'])) $nonObligatedRecipient=intval($_POST['nonObligatedRecipient']);
+$withoutDigitalTransportTracking=0;if (isset($_POST['withoutDigitalTransportTracking'])) $withoutDigitalTransportTracking=intval($_POST['withoutDigitalTransportTracking']);
+if ($seira_isdeliverynote==0)  {
+  $nonObligatedRecipient=0;
+  $withoutDigitalTransportTracking=0;
+}
 
 
 if ($inv_state=='010draft' and $inv_state_old!='010draft' and $is_xeirografi_old==0 and $inv_acc_number_int_old>0) {
@@ -2747,6 +2757,8 @@ $sql.="
 company_id=".$company_id.",
 inv_acc_journal_id=".$inv_acc_journal_id.",
 inv_acc_seira_id=".$inv_acc_seira_id.",
+nonObligatedRecipient=".$nonObligatedRecipient.",
+withoutDigitalTransportTracking=".$withoutDigitalTransportTracking.",
 company_sub_id=".$company_sub_id.",
 inv_date=".($inv_date == '' ? 'null' : "'".$db_link->escape_string($inv_date)."'") .", 
 user_id=".$user_id.",

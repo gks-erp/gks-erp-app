@@ -18,7 +18,7 @@ $nav_active_array=array('accounting','accounting_paroxos_overview','accounting_p
 db_open();
 stat_record();
 
-$perm_ret=gks_permission_user_can_action($my_wp_user_id, 'gks__paroxos_overview_ilyda','view',0);
+$perm_ret=gks_permission_user_can_action($my_wp_user_id, 'gks__paroxos_overview','view',0);
 if ($perm_ret['success']==false) {header('Location: /my/admin-deny.php?message='.rawurlencode($perm_ret['message'])); die();}
 
 
@@ -358,9 +358,9 @@ include_once('_my_header_admin.php');
 <script type="text/javascript">
 <?php echo from_php_global_vars_echo();?>
 
-var from_php_perm_ret_edit  =<?php echo gks_permission_user_can_action_javascript($my_wp_user_id, 'gks__paroxos_overview_ilyda','edit',  0);?>;
-var from_php_perm_ret_add   =<?php echo gks_permission_user_can_action_javascript($my_wp_user_id, 'gks__paroxos_overview_ilyda','add',   0);?>;
-var from_php_perm_ret_delete=<?php echo gks_permission_user_can_action_javascript($my_wp_user_id, 'gks__paroxos_overview_ilyda','delete',0);?>;
+var from_php_perm_ret_edit  =<?php echo gks_permission_user_can_action_javascript($my_wp_user_id, 'gks__paroxos_overview','edit',  0);?>;
+var from_php_perm_ret_add   =<?php echo gks_permission_user_can_action_javascript($my_wp_user_id, 'gks__paroxos_overview','add',   0);?>;
+var from_php_perm_ret_delete=<?php echo gks_permission_user_can_action_javascript($my_wp_user_id, 'gks__paroxos_overview','delete',0);?>;
 
 var gks_customtableview_data=JSON.parse($.base64.decode('<?php echo base64_encode(json_encode($gks_customtableview_user_settings['data']))?>'));
 

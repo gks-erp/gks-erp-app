@@ -92,7 +92,9 @@ include_once('_my_header_admin.php');
         <div class="form-group row">
           <div class="offset-sm-4 col-sm-8 mb-2">
             <button type="button" class="btn btn-primary" id="submit_button_ok"><?php echo gks_lang('Αποθήκευση');?></button>
+            <?php if ($id>0) {?>
             <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_lic'];?>" data-model="gks_efs_license" data-backurl="admin-efs-license.php"><?php echo gks_lang('Διαγραφή');?></button>
+            <?php } ?>
           </div>
         </div>
       </form>

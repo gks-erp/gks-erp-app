@@ -216,8 +216,9 @@ echo $gks_custom_row['html'];
     <div class="col-md-12 text-center mt-2">
 
       <button type="button" class="btn btn-primary" id="submit_button_ok_custom"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_bank_account'];?>" data-model="gks_bank_accounts" data-backurl="admin-bank_accounts.php" <?php if ($id<=0) echo 'disabled';?>><?php echo gks_lang('Διαγραφή');?></button>
-
+      <?php } ?>
     </div>
   </div>
 </div>

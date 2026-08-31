@@ -443,7 +443,9 @@ echo $gks_custom_row['html'];
   <div class="form-group1 row">
     <div class="col-md-12 text-center mt-2">
       <button type="button" class="btn btn-primary" id="submit_button_ok_custom"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_warehouse'];?>" data-model="gks_warehouses" data-backurl="admin-warehouses.php"><?php echo gks_lang('Διαγραφή');?></button>
+      <?php } ?>
     </div>
   </div>
 </div>
@@ -586,7 +588,7 @@ jQuery(document).ready(function($) {
   
   $('#warehouse_color').spectrum({
     type: "component",
-    locale:'el',
+    locale:from_php_gks_spectrum_locale,
     togglePaletteOnly: true,
     hideAfterPaletteSelect: true,
     showInput: true,
@@ -599,6 +601,7 @@ jQuery(document).ready(function($) {
     togglePaletteLessText: gks_lang('Παλέτα'),
     clearText : gks_lang('Καθαρισμός'),
     noColorSelectedText: gks_lang('Διάφανο'),
+    change: function(color) {need_save=true;}
   });
    
   $('#warehouse_country_id').change(function() {

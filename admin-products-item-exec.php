@@ -108,6 +108,7 @@ $product_upc=''; if (isset($_POST['product_upc'])) $product_upc=trim_gks(base64_
 $product_ean=''; if (isset($_POST['product_ean'])) $product_ean=trim_gks(base64_decode($_POST['product_ean']));
 $product_isbn=''; if (isset($_POST['product_isbn'])) $product_isbn=trim_gks(base64_decode($_POST['product_isbn']));
 $product_taric=''; if (isset($_POST['product_taric'])) $product_taric=trim_gks(base64_decode($_POST['product_taric']));
+$product_cpv=''; if (isset($_POST['product_cpv'])) $product_cpv=trim_gks(base64_decode($_POST['product_cpv']));
 
 
 $product_lot_serial='';
@@ -484,6 +485,7 @@ if ($product_class=='variable') {
     $value['item']['product_ean']=trim_gks($value['item']['product_ean']);
     $value['item']['product_isbn']=trim_gks($value['item']['product_isbn']);
     $value['item']['product_taric']=trim_gks($value['item']['product_taric']);
+    $value['item']['product_cpv']=trim_gks($value['item']['product_cpv']);
 
     //print '<pre>';print_r($value['item']);die();
     
@@ -748,6 +750,7 @@ product_upc='".$db_link->escape_string($product_upc)."',
 product_ean='".$db_link->escape_string($product_ean)."',
 product_isbn='".$db_link->escape_string($product_isbn)."',
 product_taric='".$db_link->escape_string($product_taric)."',
+product_cpv='".$db_link->escape_string($product_cpv)."',
 ".($GKS_PRODUCT_LOTS_SERIALS ? "product_lot_serial=".($product_lot_serial=='' ? 'null' : "'".$db_link->escape_string($product_lot_serial)."'")."," : '')."
 product_need_apostoli=".$product_need_apostoli.",
 product_need_multi_files=".$product_need_multi_files.",
@@ -1516,6 +1519,7 @@ if ($product_class!='variable') {
     product_ean='".$db_link->escape_string($value['item']['product_ean'])."',
     product_isbn='".$db_link->escape_string($value['item']['product_isbn'])."',
     product_taric='".$db_link->escape_string($value['item']['product_taric'])."',
+    product_cpv='".$db_link->escape_string($value['item']['product_cpv'])."',
 
     product_price_yperx=".number_format($value['item']['product_price_yperx'],8,'.','').",
     product_price_yperx_include_vat=".$value['item']['product_price_yperx_include_vat'].",

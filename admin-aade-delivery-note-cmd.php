@@ -33,7 +33,7 @@ if ($cid!='') {
   gks_set_user_settings($my_wp_user_id, $temp);
 }
 
-if (in_array($cmd,['history','get_records','get_qrUrl','get_mark','status','register','confirm','reject'])==false) {
+if (in_array($cmd,['history','get_records','get_qrUrl','get_mark','status','cancel','register','confirm','confirm_return','reject'])==false) {
   debug_mail(false,'cmd not OK','cmd not OK');
   $return = array('success' => false, 'message' => base64_encode(gks_lang('Η εντολή είναι λάθος').' ('.$cmd.')'));
   echo json_encode($return); die();}
@@ -96,16 +96,22 @@ if ($cmd=='get_records') {
 } else if ($cmd=='get_mark') {
   $mark='';
 } else if ($cmd=='status') {
-  $qrUrl='';
+  //$qrUrl='';
+} else if ($cmd=='cancel') {
+  //$mark='';
 } else if ($cmd=='register') {
   $mark='';
 } else if ($cmd=='confirm') {
+  $mark='';
+} else if ($cmd=='confirm_return') {
   $mark='';
 } else if ($cmd=='reject') {
   //$mark='';
 }
 
 $ret=gks_aade_delivery_note_get_record(['mark'=>$mark,'qrUrl'=>$qrUrl,'cid'=>$cid,'cmd'=>$cmd]);
+//print '<pre>';print_r($ret);die();
+
 $id_aade_delivery_note=$ret['rec_id'];
 if ($ret['success']==false) {
   $return = array(
@@ -115,7 +121,7 @@ if ($ret['success']==false) {
   ); 
   echo json_encode($return); die();   
 }
-
+$obj_data=$ret;
 
 //print '<pre>ssssssssssq ';print_r($ret);die();
 
@@ -298,17 +304,24 @@ if ($cmd=='get_records') {
 
 switch ($cmd) {
   case 'status':
-    if ($mark=='') {
-      debug_mail(false,'mark is not set','');
-      $return['message']=base64_encode(gks_lang('Δεν έχει ορισθεί το').' ΜΑΡΚ');
+    
+    if ($qrUrl=='' and $mark=='') {
+      debug_mail(false,'qrUrl or mark is not set','');
+      $return['message']=base64_encode(gks_lang('Δεν έχει ορισθεί το').' QRCode URL'.' '.gks_lang('ή').' '.gks_lang('ΜΑΡΚ'));
       echo json_encode($return); die();}      
-      
+    
+    
     $issuerVatNumber='';if (isset($_POST['issuerVatNumber'])) $issuerVatNumber=trim_gks(base64_decode($_POST['issuerVatNumber']));
     
-  
-    $aade_url=($mydata_live==0 ? GKS_AADE_MYDATA_URL_TEST : GKS_AADE_MYDATA_URL_LIVE).
-      'GetDeliveryNoteStatus?mark='.$mark;
-    if ($issuerVatNumber!='') $aade_url.='&issuerVatNumber='.$issuerVatNumber; 
+    $aade_url='https://null/';
+    if ($mark!='') {
+      $aade_url=($mydata_live==0 ? GKS_AADE_MYDATA_URL_TEST : GKS_AADE_MYDATA_URL_LIVE).
+        'GetDeliveryNoteStatus?mark='.$mark;
+      if ($issuerVatNumber!='') $aade_url.='&issuerVatNumber='.$issuerVatNumber; 
+    } else if ($qrUrl!='') {
+      $aade_url=($mydata_live==0 ? GKS_AADE_MYDATA_URL_TEST : GKS_AADE_MYDATA_URL_LIVE).
+        'GetDeliveryNoteStatus?qrUrl='.$qrUrl;
+    }
     
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL,$aade_url);
@@ -479,6 +492,10 @@ switch ($cmd) {
     $longitude=floatval($longitude);  
     $latitude=floatval($latitude);  
 
+
+    
+
+
     $xml_string='<Transport>'."\n";
       $xml_string.='<transferMark>0</transferMark>'."\n";
       $xml_string.='<qrUrl>'.$qrUrl.'</qrUrl>'."\n";
@@ -495,6 +512,35 @@ switch ($cmd) {
             $xml_string.='<latitude>'.$latitude.'</latitude>'."\n";
           $xml_string.='</location>'."\n";
         }
+
+        $dpitems_str=''; if (isset($_POST['dpitems_str'])) $dpitems_str=trim_gks(base64_decode($_POST['dpitems_str']));
+        $dpitems_array = json_decode($dpitems_str, true);
+        if ($dpitems_array === null && json_last_error() !== JSON_ERROR_NONE) {
+          debug_mail(false,'json_decode',$_POST['dpitems_str']);
+          $return['message']=base64_encode(gks_lang('Σφάλμα αποστολής δεδομένων').' (dpitems)<br>'.gks_lang('Ξαναδοκιμάστε'));
+          echo json_encode($return); die();}
+        
+        //print '<pre>';print_r($dpitems_array);die();
+        
+        //$xml_string.='<packingsDeclaration>'."\n";
+        
+        foreach ($dpitems_array as $dpitem) {
+          $dpitem['packagingType']=intval($dpitem['packagingType']);
+          $dpitem['quantity']=intval($dpitem['quantity']);
+          $dpitem['othertitle']=trim_gks($dpitem['othertitle']);
+          if ($dpitem['packagingType']>=1 and $dpitem['packagingType']<=6 and $dpitem['quantity']>0) {
+            $xml_string.='<packingsDeclaration>';
+              $xml_string.='<packagingType>'.$dpitem['packagingType'].'</packagingType>';
+              $xml_string.='<quantity>'.$dpitem['quantity'].'</quantity>';
+              if ($dpitem['packagingType']==6 and $dpitem['othertitle']!='') {
+                $xml_string.='<otherPackagingTypeTitle>'.$dpitem['othertitle'].'</otherPackagingTypeTitle>';
+              }
+            $xml_string.='</packingsDeclaration>';
+          }
+        }
+        
+        //$xml_string.='</packingsDeclaration>'."\n";
+        
       $xml_string.='</transportDetail>'."\n";
     $xml_string.='</Transport>';
       
@@ -530,7 +576,7 @@ switch ($cmd) {
       $return['message']=base64_encode($return['message']);
       echo json_encode($return); die();
     } else if ($gks_curl_http_code==404) { //HTTP 404 REQUEST not found
-      $return['message']=base64_encode(gks_lang('Δεν βρέθηκε'));
+      $return['message']=gks_lang('Δεν βρέθηκε');
       if ($result!='') {
         $ff=json_decode($result,true);  
         if (isset($ff['message'])) $return['message'].='<br>'.$ff['message'];
@@ -650,6 +696,7 @@ switch ($cmd) {
       $xml_string.='<outcome>'.$outcome.'</outcome>'."\n";
       if ($deliveredWithoutRecipient==1) $xml_string.='<deliveredWithoutRecipient>true</deliveredWithoutRecipient>'."\n";
       if ($outcome=='PARTIAL') {
+        
         $dpitems_str=''; if (isset($_POST['dpitems_str'])) $dpitems_str=trim_gks(base64_decode($_POST['dpitems_str']));
         $dpitems_array = json_decode($dpitems_str, true);
         if ($dpitems_array === null && json_last_error() !== JSON_ERROR_NONE) {
@@ -705,7 +752,7 @@ switch ($cmd) {
       $return['message']=base64_encode($return['message']);
       echo json_encode($return); die();
     } else if ($gks_curl_http_code==404) { //HTTP 404 REQUEST not found
-      $return['message']=base64_encode(gks_lang('Δεν βρέθηκε'));
+      $return['message']=gks_lang('Δεν βρέθηκε');
       if ($result!='') {
         $ff=json_decode($result,true);  
         if (isset($ff['message'])) $return['message'].='<br>'.$ff['message'];
@@ -803,6 +850,145 @@ switch ($cmd) {
     }
     $return['html']= base64_encode(implode('<br>',$html));  
     break;  
+    
+  case 'confirm_return':
+    if ($qrUrl=='') {
+      debug_mail(false,'qrUrl is not set','');
+      $return['message']=base64_encode(gks_lang('Δεν έχει ορισθεί το').' QRCode URL');
+      echo json_encode($return); die();}      
+      
+    $xml_string='<ConfirmDeliveryReturnRequest>'."\n";
+      $xml_string.='<qrUrl>'.$qrUrl.'</qrUrl>'."\n";
+    $xml_string.='</ConfirmDeliveryReturnRequest>';
+
+  
+    $aade_url=($mydata_live==0 ? GKS_AADE_MYDATA_URL_TEST : GKS_AADE_MYDATA_URL_LIVE).
+      'ConfirmDeliveryReturn';
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL,$aade_url);
+    curl_setopt($ch, CURLOPT_POST,1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS,$xml_string);    
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch, CURLOPT_HTTPHEADER,array(
+      'Content-Type: text/xml',
+      'aade-user-id: '.$mydata_user_id,
+      'Ocp-Apim-Subscription-Key: '.$mydata_subscription_key,
+    )); 
+    
+    $result=curl_exec($ch);
+    $gks_curl_errno=curl_errno($ch);
+    $gks_curl_info = curl_getinfo($ch);
+    curl_close ($ch); 
+
+    $return['raw_data_send']=base64_encode('POST '.$xml_string);
+
+    $gks_curl_http_code=(isset($gks_curl_info['http_code']) ? intval($gks_curl_info['http_code']) : 0);
+    if ($gks_curl_http_code==0) { //HTTP Host not found
+      $return['message']=gks_lang('Δεν βρέθηκε ο διακομιστής της ΑΑΔΕ');
+      debug_mail(false,$return['message'],$result); 
+      $return['message']=base64_encode($return['message']);
+      echo json_encode($return); die();
+    } else if ($gks_curl_http_code==404) { //HTTP 404 REQUEST not found
+      $return['message']=gks_lang('Δεν βρέθηκε');
+      if ($result!='') {
+        $ff=json_decode($result,true);  
+        if (isset($ff['message'])) $return['message'].='<br>'.$ff['message'];
+      }
+      debug_mail(false,$return['message'],$result); 
+      $return['message']=base64_encode($return['message']);
+      $return['raw_data_response']=base64_encode($result);
+      echo json_encode($return); die();
+    } else if ($gks_curl_http_code==400) { //HTTP 400 BAD_REQUEST
+      $return['message']=gks_lang('ΑΑΔΕ mydata: Γενικό σφάλμα ή λείπει το QRCode URL ή δεν μπορεί να βρεθεί στην ΑΑΔΕ.<br>Ίσως έχει ολοκληθωθεί/απορριθφεί');
+      if ($result!='') {
+        $ff=json_decode($result,true);  
+        if (isset($ff['message'])) $return['message'].='<br>'.$ff['message'];
+      }
+      debug_mail(false,$return['message'],$result); 
+      $return['message']=base64_encode($return['message']);
+      $return['raw_data_response']=base64_encode($result);
+      echo json_encode($return); die();
+    } else if ($gks_curl_http_code==401) { //HTTP 401 UNAUTHORIZED
+      $return['message']=gks_lang('ΑΑΔΕ mydata: Το Όνομα Χρήστη ή/και ο Κωδικός API είναι λάθος');
+      if ($result!='') {
+        $ff=json_decode($result,true);  
+        if (isset($ff['message'])) $return['message'].='<br>'.$ff['message'];
+      }
+      debug_mail(false,$return['message'],$result); 
+      $return['message']=base64_encode($return['message']);
+      $return['raw_data_response']=base64_encode($result);
+      echo json_encode($return); die();
+    } else if ($gks_curl_http_code!=200) { //not ok, HTTP 200 OK
+      $return['message']=gks_lang('ΑΑΔΕ mydata: HTTP Response Error').': '.$gks_curl_http_code;
+      if ($result!='') {
+        $ff=json_decode($result,true);  
+        if (isset($ff['message'])) $return['message'].='<br>'.$ff['message'];
+      }
+      debug_mail(false,$return['message'],$result); 
+      $return['message']=base64_encode($return['message']);
+      $return['raw_data_response']=base64_encode($result);
+      echo json_encode($return); die();
+    } 
+    
+    $return['raw_data_response']=base64_encode($result);
+
+    $html=[];
+    try {
+      $xml = new SimpleXMLElement($result, LIBXML_NOERROR);
+      $rootnode = $xml->xpath('/ResponseDoc');
+      if (count($rootnode)!=1) {
+        $return['message']= gks_lang('Σφάλμα κατά την αναγνώριση του XML (ResponseDoc)');
+        debug_mail(false,$return['message'],$result);
+        $return['message']=base64_encode($return['message']);
+        echo json_encode($return); die();          
+      }
+      
+      $nodes_errors=$xml->xpath('/ResponseDoc/response/errors/error');
+      if (count($nodes_errors)>0) {
+        $error_list=[];
+        foreach ($nodes_errors as $myerror) {
+          $error_list[]=gks_lang('Κωδικός σφάλματος').': '.$myerror->code.'<br>'.'Περιγραφή: '.$myerror->message;
+        }
+        $return['message']= gks_lang('Σφάλμα κατά την διαδικασία').':<br>'.implode('<br>',$error_list);
+        
+        $sxolio=getAADE_DeliveryEventType('ConfirmOutcome').'<br>'.$return['message'];
+        gks_admin_aade_delivery_note_cmd_log($sxolio);
+        debug_mail(false,$return['message'],$result);
+        $return['message']=base64_encode($return['message']);
+        echo json_encode($return); die(); 
+ 
+      }
+      
+      //$nodes_mark=$xml->xpath('/ResponseDoc/response/invoiceMark');
+      $nodes_mark=$xml->xpath('/ResponseDoc/response/deliveryReturnMark');
+      $xml_mark='';if (count($nodes_mark)==1) $xml_mark=((string)$nodes_mark[0]);
+      
+      $nodes_status=$xml->xpath('/ResponseDoc/response/statusCode');
+      $xml_status='';if (count($nodes_status)==1) $xml_status=((string)$nodes_status[0]);
+      
+      if ($xml_mark!='' and $xml_status=='Success') {
+        $html[]=gks_lang('Η διαδικασία έγινε επιτυχώς<br>Ο Μοναδικός Αριθμός Καταχώρησης του παραστατικού είναι ο').':<br><b>'.$xml_mark.'</b>';
+      } else {
+        $return['message']= gks_lang('Γενικό σφάλμα κατά την διαδικασία');
+        debug_mail(false,$return['message'],$result);
+        $return['message']=base64_encode($return['message']);
+        echo json_encode($return); die();
+      }
+      
+
+      $sxolio=getAADE_DeliveryEventType('RegisterTransferReturn').'<br>'.implode('<br>',$html);
+      gks_admin_aade_delivery_note_cmd_log($sxolio);
+              
+    } catch (Exception $e) { 
+      $return['message']= gks_lang('Σφάλμα κατά την αναγνώριση ως XML τα δεδομένα που επέστρεψε ο διακομιστής της ΑΑΔΕ (xml parse error)');
+      debug_mail(false,$return['message'],$result);
+      $return['message']=base64_encode($return['message']);
+      echo json_encode($return); die();
+    }
+    $return['html']= base64_encode(implode('<br>',$html));  
+    break;
+    
   case 'reject':
     //echo '<pre>'.$mark;die();
     if ($qrUrl=='' and $mark=='') {
@@ -852,7 +1038,7 @@ switch ($cmd) {
       
       echo json_encode($return); die();
     } else if ($gks_curl_http_code==404) { //HTTP 404 REQUEST not found
-      $return['message']=base64_encode(gks_lang('Δεν βρέθηκε'));
+      $return['message']=gks_lang('Δεν βρέθηκε');
       if ($result!='') {
         $ff=json_decode($result,true);  
         if (isset($ff['message'])) $return['message'].='<br>'.$ff['message'];
@@ -949,8 +1135,191 @@ switch ($cmd) {
       echo json_encode($return); die();
     }
     $return['html']= base64_encode(implode('<br>',$html));  
+    break;
+
+  case 'cancel':
+    
+    $sql_mov="select id_whi_mov 
+    from gks_whi_mov 
+    where aade_invoicemark='".$db_link->escape_string($mark)."'
+    and mov_state<>'040cancelled'";
+    $result_mov = $db_link->query($sql_mov);     
+    if (!$result_mov) {
+      debug_mail(false,'error sql',$sql_log);
+      $return = array('success' => false, 'message' => base64_encode('sql error'));
+      echo json_encode($return); die();}
+    $id_whi_mov=0;
+    if ($result_mov->num_rows==1) {
+      $row_mov = $result_mov->fetch_assoc();
+      $id_whi_mov=intval($row_mov['id_whi_mov']);
+    }
+    //echo '<pre>'.$id_whi_mov;die();
+    
+    if ($id_whi_mov>0) {
+      $sql_mov="update gks_whi_mov set mov_state='040cancelled' where id_whi_mov=".$id_whi_mov;
+      $result_mov = $db_link->query($sql_mov);     
+      if (!$result_mov) {
+        debug_mail(false,'error sql',$sql_mov);
+        $return = array('success' => false, 'message' => base64_encode('sql error'));
+        echo json_encode($return); die();}
+      
+      $sxolio='<span class="whi_mov_state_040cancelled">'.getWhiMovStateDescr('040cancelled').'</span><br>'.
+      gks_lang('Ακυρώθηκε μέσω της διαδικασίας').': <b>'.gks_lang('ΑΑΔΕ Ψηφιακό δελτίο αποστολής').'</b>'; 
+      $sql_mov="insert into gks_whi_mov_log (whi_mov_id, add_date,user_id,sxolio) values (
+      ".$id_whi_mov.",now(),".$my_wp_user_id.",'".$db_link->escape_string($sxolio)."')";
+      $result_mov = $db_link->query($sql_mov);     
+      if (!$result_mov) {
+        debug_mail(false,'error sql',$sql_mov);
+        $return = array('success' => false, 'message' => base64_encode('sql error'));
+        echo json_encode($return); die();}
+
+
+      
+    }
+    
+    if ($mark=='') {
+      debug_mail(false,'mark is not set','');
+      $return['message']=base64_encode(gks_lang('Δεν έχει ορισθεί το').' '.gks_lang('ΜΑΡΚ'));
+      echo json_encode($return); die();}      
+
+
+
+    $aade_url=($mydata_live==0 ? GKS_AADE_MYDATA_URL_TEST : GKS_AADE_MYDATA_URL_LIVE).'CancelInvoice?mark='.$mark;
+    //echo '<pre>'.$aade_url;die();
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL,$aade_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch, CURLOPT_POST,1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS,'');
+    curl_setopt($ch, CURLOPT_HTTPHEADER,array(
+      'Content-Type: text/xml',
+      'aade-user-id: '.$mydata_user_id,
+      'Ocp-Apim-Subscription-Key: '.$mydata_subscription_key,
+    )); 
+
+    $result=curl_exec($ch);
+    $gks_curl_errno=curl_errno($ch);
+    $gks_curl_info = curl_getinfo($ch);
+    curl_close ($ch);
+    
+
+    $return['raw_data_send']=base64_encode('GET CancelInvoice?mark='.$mark);
+
+    
+    $gks_curl_http_code=(isset($gks_curl_info['http_code']) ? intval($gks_curl_info['http_code']) : 0);
+    if ($gks_curl_http_code==0) { //HTTP Host not found
+      $return['message']=gks_lang('Δεν βρέθηκε ο διακομιστής της ΑΑΔΕ');
+      debug_mail(false,$return['message'],$result); 
+      $return['message']=base64_encode($return['message']);
+      echo json_encode($return); die();
+    } else if ($gks_curl_http_code==404) { //HTTP 404 REQUEST not found
+      $return['message']=gks_lang('Δεν βρέθηκε');
+      if ($result!='') {
+        $ff=json_decode($result,true);  
+        if (isset($ff['message'])) $return['message'].='<br>'.$ff['message'];
+      }
+      debug_mail(false,$return['message'],$result); 
+      $return['message']=base64_encode($return['message']);
+      $return['raw_data_response']=base64_encode($result);
+      echo json_encode($return); die();
+    } else if ($gks_curl_http_code==400) { //HTTP 400 BAD_REQUEST
+      $return['message']=gks_lang('ΑΑΔΕ mydata: Γενικό σφάλμα ή λείπει το QRCode URL ή δεν μπορεί να βρεθεί στην ΑΑΔΕ.<br>Ίσως έχει ολοκληθωθεί/απορριθφεί');
+      if ($result!='') {
+        $ff=json_decode($result,true);  
+        if (isset($ff['message'])) $return['message'].='<br>'.$ff['message'];
+      }
+      $sxolio=getAADE_DeliveryEventType('Rejection').'<br>'.$return['message'];
+      gks_admin_aade_delivery_note_cmd_log($sxolio);
+      debug_mail(false,$return['message'],$result); 
+      $return['message']=base64_encode($return['message']);
+      $return['raw_data_response']=base64_encode($result);
+      echo json_encode($return); die();
+    } else if ($gks_curl_http_code==401) { //HTTP 401 UNAUTHORIZED
+      $return['message']=gks_lang('ΑΑΔΕ mydata: Το Όνομα Χρήστη ή/και ο Κωδικός API είναι λάθος');
+      if ($result!='') {
+        $ff=json_decode($result,true);  
+        if (isset($ff['message'])) $return['message'].='<br>'.$ff['message'];
+      }
+      debug_mail(false,$return['message'],$result); 
+      $return['message']=base64_encode($return['message']);
+      $return['raw_data_response']=base64_encode($result);
+      echo json_encode($return); die();
+    } else if ($gks_curl_http_code!=200) { //not ok, HTTP 200 OK
+      $return['message']=gks_lang('ΑΑΔΕ mydata: HTTP Response Error').': '.$gks_curl_http_code;
+      if ($result!='') {
+        $ff=json_decode($result,true);  
+        if (isset($ff['message'])) $return['message'].='<br>'.$ff['message'];
+      }
+      debug_mail(false,$return['message'],$result); 
+      $return['message']=base64_encode($return['message']);
+      $return['raw_data_response']=base64_encode($result);
+      echo json_encode($return); die();
+    } 
+    
+    $return['raw_data_response']=base64_encode($result);
+    
+    //echo '<pre>'.$result;die();
+    
+    $html=[];
+    try {
+      $xml = new SimpleXMLElement($result, LIBXML_NOERROR);
+      $rootnode = $xml->xpath('/ResponseDoc');
+      if (count($rootnode)!=1) {
+        $return['message']= gks_lang('Σφάλμα κατά την αναγνώριση του XML (ResponseDoc)');
+        debug_mail(false,$return['message'],$result);
+        $return['message']=base64_encode($return['message']);
+        echo json_encode($return); die();          
+      }
+      
+      $nodes_errors=$xml->xpath('/ResponseDoc/response/errors/error');
+      if (count($nodes_errors)>0) {
+        $error_list=[];
+        foreach ($nodes_errors as $myerror) {
+          $error_list[]=gks_lang('Κωδικός σφάλματος').': '.$myerror->code.'<br>'.gks_lang('Περιγραφή').': '.$myerror->message;
+        }
+        $return['message']= gks_lang('Σφάλμα κατά την διαδικασία').':<br>'.implode('<br>',$error_list);
+
+        $sxolio=getAADE_DeliveryEventType('Rejection').'<br>'.$return['message'];
+        gks_admin_aade_delivery_note_cmd_log($sxolio);
+        debug_mail(false,$return['message'],$result);
+        $return['message']=base64_encode($return['message']);
+        echo json_encode($return); die(); 
+ 
+      }
+      
+      $nodes_mark=$xml->xpath('/ResponseDoc/response/cancellationMark');
+      $xml_mark='';if (count($nodes_mark)==1) $xml_mark=((string)$nodes_mark[0]);
+      
+      $nodes_status=$xml->xpath('/ResponseDoc/response/statusCode');
+      $xml_status='';if (count($nodes_status)==1) $xml_status=((string)$nodes_status[0]);
+      
+      if ($xml_mark!='' and $xml_status=='Success') {
+        $html[]=gks_lang('Η διαδικασία έγινε επιτυχώς<br>Ο Μοναδικός Αριθμός Καταχώρησης του γεγονότος απόρριψης είναι ο').':<br><b>'.$xml_mark.'</b>';
+      } else {
+        $return['message']= gks_lang('Γενικό σφάλμα κατά την διαδικασία');
+        debug_mail(false,$return['message'],$result);
+        $return['message']=base64_encode($return['message']);
+        echo json_encode($return); die();
+      }
+
+      $sxolio=getAADE_DeliveryEventType('CancelDeliveryNote').'<br>'.implode('<br>',$html);
+      gks_admin_aade_delivery_note_cmd_log($sxolio);
+      
+    } catch (Exception $e) {
+      $return['message']= gks_lang('Σφάλμα κατά την αναγνώριση ως XML τα δεδομένα που επέστρεψε ο διακομιστής της ΑΑΔΕ (xml parse error)');
+      debug_mail(false,$return['message'],$result);
+      $return['message']=base64_encode($return['message']);
+      echo json_encode($return); die();
+    }
+    $return['html']= base64_encode(implode('<br>',$html));  
     break;  
+  
   default:
+    $return['message']= gks_lang('Λάθος εντολή').': '.$cmd;
+    debug_mail(false,$return['message'],'');
+    $return['message']=base64_encode($return['message']);
+    echo json_encode($return); die();
     break;  
   
 }

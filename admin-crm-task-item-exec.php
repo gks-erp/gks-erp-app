@@ -585,7 +585,7 @@ if ($is_new_rec == false) {
   $sxolio_log='';
   
   if (trim_gks($row_old['task_date']) != trim_gks($row_new['task_date'])) 
-    $sxolio_log.=gks_lang('Ημερομηνία').': <b>'.(isset($row_old['task_date']) ? showDate(strtotime($row_old['task_date']), 'd/m/Y H:i', 1) : '').'</b> [[-r]] '.
+    $sxolio_log.=gks_lang('Καταχώρηση').': <b>'.(isset($row_old['task_date']) ? showDate(strtotime($row_old['task_date']), 'd/m/Y H:i', 1) : '').'</b> [[-r]] '.
     '<b>'.(isset($row_new['task_date']) ? showDate(strtotime($row_new['task_date']), 'd/m/Y H:i', 1) : '').'</b>'.'<br>';
 
   
@@ -605,11 +605,11 @@ if ($is_new_rec == false) {
     '<b>'.(isset($row_new['message']) ? nl2br_gks($row_new['message']) : '').'</b>'.'<br>';
 
   if (trim_gks($row_old['task_planned_date_from']) != trim_gks($row_new['task_planned_date_from'])) 
-    $sxolio_log.=gks_lang('Προγραμματισμός').' '.gks_lang('Από').': <b>'.(isset($row_old['task_planned_date_from']) ? showDate(strtotime($row_old['task_planned_date_from']), 'd/m/Y H:i', 1) : '').'</b> [[-r]] '.
+    $sxolio_log.=gks_lang('Ημερομηνία').' '.gks_lang('Από').': <b>'.(isset($row_old['task_planned_date_from']) ? showDate(strtotime($row_old['task_planned_date_from']), 'd/m/Y H:i', 1) : '').'</b> [[-r]] '.
     '<b>'.(isset($row_new['task_planned_date_from']) ? showDate(strtotime($row_new['task_planned_date_from']), 'd/m/Y H:i', 1) : '').'</b>'.'<br>';
 
   if (trim_gks($row_old['task_planned_date_to']) != trim_gks($row_new['task_planned_date_to'])) 
-    $sxolio_log.=gks_lang('Προγραμματισμός').' '.gks_lang('Έως').': <b>'.(isset($row_old['task_planned_date_to']) ? showDate(strtotime($row_old['task_planned_date_to']), 'd/m/Y H:i', 1) : '').'</b> [[-r]] '.
+    $sxolio_log.=gks_lang('Ημερομηνία').' '.gks_lang('Έως').': <b>'.(isset($row_old['task_planned_date_to']) ? showDate(strtotime($row_old['task_planned_date_to']), 'd/m/Y H:i', 1) : '').'</b> [[-r]] '.
     '<b>'.(isset($row_new['task_planned_date_to']) ? showDate(strtotime($row_new['task_planned_date_to']), 'd/m/Y H:i', 1) : '').'</b>'.'<br>';
 
 

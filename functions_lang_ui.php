@@ -99,6 +99,19 @@ function gks_pivottable_locale($lang) {
 
   else return 'en';  
 }
+function gks_spectrum_locale($lang) {
+  if ($lang=='el-GR') return 'el';
+  else if ($lang=='en-US') return 'en';  
+  else if ($lang=='fr-FR') return 'fr';  
+  else if ($lang=='de-DE') return 'de';  
+  else if ($lang=='it-IT') return 'it';  
+  else if ($lang=='sr-RS') return 'sr-YU';  
+  else if ($lang=='bg-BG') return 'bg';  
+  else if ($lang=='sq-AL') return 'sq';  
+  else if ($lang=='tr-TR') return 'tr';  
+
+  else return 'en';  
+}
 
 function gks_jquery_multiselect_local() {
   global $gks_user_settings;

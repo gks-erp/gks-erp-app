@@ -138,7 +138,7 @@ include_once('_my_header_admin.php');
   <tr >	
     <th class="table-dark" scope="col" style="text-align: center !important;" width="0%"  ><a href="?">#</a></th>
     <th class="table-dark" scope="col" style="text-align: center !important;" width="0%" ><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'soid', gks_lang('ID')); ?></th> 
-    <th nowrap class="table-dark" scope="col" style="text-align: center !important;" width="0%" ><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'sodate', gks_lang('Ημερομηνία')); ?></th>        
+    <th class="table-dark" scope="col" style="text-align: center !important;" width="0%" nowrap><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'sodate', gks_lang('Ημερομηνία')); ?></th>        
     <th class="table-dark" scope="col" style="text-align: left   !important;" width="0%"  nowrap><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'sostatus', gks_lang('Κατάσταση')); ?></th>        
     <th class="table-dark" scope="col" style="text-align: left   !important;" width="20%"  nowrap><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'sosubject', gks_lang('Θέμα')); ?></th>        
     <th class="table-dark" scope="col" style="text-align: left   !important;" width="0%"  nowrap><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'soesoda', '<span title="'.gks_lang('Αναμενόμενα έσοδα').'">'.gks_lang('Α.Έσοδα').'</span>'); ?></th>        

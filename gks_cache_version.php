@@ -1,2 +1,2 @@
 <?php
-$gks_cache_version=603;
+$gks_cache_version=606;

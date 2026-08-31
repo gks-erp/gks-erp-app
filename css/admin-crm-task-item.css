@@ -29,3 +29,15 @@ www.gks.gr
   margin-left: -25px;
   cursor: pointer;
 }
+#task_planned_date_from {
+  max-width:200px;display: inline-block;margin-bottom: 6px;  
+}
+#task_planned_date_duration_days {
+  max-width:50px;display: inline-block;margin-bottom: 6px;padding-right: 0px;text-align: right;
+}
+#task_planned_date_duration {
+  max-width:115px;display: inline-block;margin-bottom: 6px; 
+}
+#task_planned_date_to {
+  max-width:200px;display: inline-block;  
+}

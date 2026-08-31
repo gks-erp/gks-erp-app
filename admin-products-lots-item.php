@@ -229,7 +229,9 @@ echo $gks_custom_row['html'];
   <div class="form-group1 row">
     <div class="col-md-12 text-center mt-2">
       <button type="button" class="btn btn-primary" id="submit_button_ok"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_lot_product'];?>" data-model="gks_eshop_product_lots" data-backurl="admin-products-lots.php"><?php echo gks_lang('Διαγραφή');?></button>
+      <?php } ?>
     </div>
   </div>
 </div>

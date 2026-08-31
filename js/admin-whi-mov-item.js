@@ -261,6 +261,10 @@ jQuery(document).ready(function($) {
       if ($("#mov_whi_seira_id").length > 0) datasend+='&mov_whi_seira_id=' + encodeURIComponent($("#mov_whi_seira_id").val().trim());
       if ($("#reverse_delivery_purpose").length > 0) datasend+='&reverse_delivery_purpose=' + encodeURIComponent($("#reverse_delivery_purpose").val().trim());
       if ($("#mov_whi_number_int").length > 0) datasend+='&mov_whi_number_int=' + encodeURIComponent($("#mov_whi_number_int").val().trim());
+      datasend+='&receivingNotePurpose=' + encodeURIComponent($("#receivingNotePurpose").val().trim());
+      datasend+='&otherReceivingNotePurposeTitle='  + encodeURIComponent($.base64.encode($("#otherReceivingNotePurposeTitle").val().trim()));
+      datasend+='&nonObligatedRecipient=' + ($('#nonObligatedRecipient').is(':checked') ? '1' : '0');
+      datasend+='&withoutDigitalTransportTracking=' + ($('#withoutDigitalTransportTracking').is(':checked') ? '1' : '0');
       datasend+='&aade_skopos_diakinisis_id=' +      encodeURIComponent($('#aade_skopos_diakinisis_id').val().trim());
       datasend+='&aade_skopos_19_descr='  + encodeURIComponent($.base64.encode($("#aade_skopos_19_descr").val().trim()));
       datasend+='&mov_date=' + encodeURIComponent($("#mov_date").val().trim());
@@ -2803,8 +2807,8 @@ jQuery(document).ready(function($) {
     datasend+='&pricelist_id=' +      encodeURIComponent($('#pricelist_id').val().trim());
     
     datasend+='&whi_mov_id=' + from_php_id;
-    datasend+='&journal_id=' + $('#inv_acc_journal_id').val();
-    datasend+='&seira_id=' + $('#inv_acc_seira_id').val();
+    datasend+='&journal_id=' + $('#mov_whi_journal_id').val();
+    datasend+='&seira_id=' + $('#mov_whi_seira_id').val();
     
         
     //console.log('user_save');
@@ -2971,8 +2975,8 @@ jQuery(document).ready(function($) {
     from_php_eidos_parastatikou_stock_pros=parseInt($('#mov_whi_journal_id option:selected').attr('data-stock_pros'));
     from_php_acc_eidos_parastatikou_other_entity=parseInt($('#mov_whi_journal_id option:selected').attr('data-other_entity'));
     from_php_journal_has_correlated_invoices=parseInt($('#mov_whi_journal_id option:selected').attr('data-correlated_invoices'));
-    from_php_journal_has_multiple_connected_marks=parseInt($('#inv_acc_journal_id option:selected').attr('data-multiple_connected_marks'));
-    from_php_journal_has_packings_declarations=parseInt($('#inv_acc_journal_id option:selected').attr('data-packings_declarations'));
+    from_php_journal_has_multiple_connected_marks=parseInt($('#mov_whi_journal_id option:selected').attr('data-multiple_connected_marks'));
+    from_php_journal_has_packings_declarations=parseInt($('#mov_whi_journal_id option:selected').attr('data-packings_declarations'));
     
     if (isNaN(from_php_acc_eidos_parastatikou_id)) from_php_acc_eidos_parastatikou_id=0;
     if (isNaN(from_php_eidos_parastatikou_type_id)) from_php_eidos_parastatikou_type_id=0;
@@ -3021,7 +3025,13 @@ jQuery(document).ready(function($) {
     } else {
       $('#div_packings_declarations').show();
     }
-        
+    
+    if ([971,972].includes(from_php_acc_eidos_parastatikou_id)) {
+      $('#receivingNotePurpose_div').show();
+    } else {
+      $('#receivingNotePurpose_div').hide();
+    }
+    
     set_warehouses_addrs();
     set_def_warehouses();
     gks_myscroll();
@@ -3218,6 +3228,13 @@ jQuery(document).ready(function($) {
     } else {
       $('#reverse_delivery_purpose_div').hide();
     }
+    if (from_php_seira_isdeliverynote!=0) {
+      $('#nonObligatedRecipient_div').show();
+      $('#withoutDigitalTransportTracking_div').show();
+    } else {
+      $('#nonObligatedRecipient_div').hide();
+      $('#withoutDigitalTransportTracking_div').hide();
+    }     
     set_warehouses_addrs();
     gks_myscroll();
     //calc_pliroteo();
@@ -4460,7 +4477,11 @@ jQuery(document).ready(function($) {
   					    myalert('error:' + $.base64.decode(data.save_but_message), '' ,true);
   					  }
   					} else {
-    					myalert('ok:' + $.base64.decode(data.message), '', true);
+    					if (this.gks_mycmd=='paroxos_get_status') {
+                myalert('ok:' + $.base64.decode(data.message),'',false, false, '', true);
+              } else {
+                myalert('ok:' + $.base64.decode(data.message), '', true);
+              }
     				}
 					} else {
 						myalert('error:' + $.base64.decode(data.message));
@@ -4485,6 +4506,9 @@ jQuery(document).ready(function($) {
   $('#paroxos_get_docstate').click(function() {
     gks_paroxos_ajax('paroxos_get_docstate');
   });  
+  $('#paroxos_get_status').click(function() {
+    gks_paroxos_ajax('paroxos_get_status');
+  }); 
   
   if ($('#gks_paroxos_send_pdf').length==1) {
     var gks_paroxos_send_pdf_sw = new Switchery(document.querySelector('#gks_paroxos_send_pdf'),gks_switchery_defaults());
@@ -5754,7 +5778,7 @@ jQuery(document).ready(function($) {
 
 
   $('#aade_skopos_diakinisis_id').change(function() {
-    val_sk19=parseInt($(this).val());
+    var val_sk19=parseInt($(this).val());
     if (isNaN(val_sk19)) val_sk19=0;
     if (val_sk19==22) {
       $('#aade_skopos_19_descr').show();
@@ -5763,7 +5787,38 @@ jQuery(document).ready(function($) {
     }
   });
 
-
+  $('#receivingNotePurpose').change(function() {
+    var val_rnp7=parseInt($('#receivingNotePurpose option:selected').attr('data-code'));
+    if (isNaN(val_rnp7)) val_rnp7=0;
+    if (val_rnp7==7) {
+      $('#otherReceivingNotePurposeTitle').show();
+    } else {
+      $('#otherReceivingNotePurposeTitle').hide();
+    }
+  });
+  
+  $('#nonObligatedRecipient_info').click(function() {
+    event.preventDefault();
+    event.stopPropagation();
+    ss=$('#div_nonObligatedRecipient_info').attr('data-show'); 
+    if (ss=='0') {
+      $('#div_nonObligatedRecipient_info').attr('data-show','1').show().html(gks_big_text_nonObligatedRecipient_info_text);
+    } else {
+      $('#div_nonObligatedRecipient_info').attr('data-show','0').hide().html('');
+    }
+    gks_myscroll(); 
+  });
+  $('#withoutDigitalTransportTracking_info').click(function() {
+    event.preventDefault();
+    event.stopPropagation();
+    ss=$('#div_withoutDigitalTransportTracking_info').attr('data-show'); 
+    if (ss=='0') {
+      $('#div_withoutDigitalTransportTracking_info').attr('data-show','1').show().html(gks_big_text_withoutDigitalTransportTracking_info_text);
+    } else {
+      $('#div_withoutDigitalTransportTracking_info').attr('data-show','0').hide().html('');
+    }
+    gks_myscroll(); 
+  });
   ///////////////////////////////////////////////////////// pre end
 
 

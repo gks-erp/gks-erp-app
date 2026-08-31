@@ -12,7 +12,7 @@ gks_permission_user_must_login_page();
 
 
 $my_page_title=gks_lang('Πόστα');
-$nav_active_array=array('production','production_posta');
+$nav_active_array=array('production','production_posta','hr');
 
 
 db_open();

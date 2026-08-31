@@ -2622,7 +2622,11 @@ jQuery(document).ready(function($) {
   					    myalert('error:' + $.base64.decode(data.save_but_message), '' ,true);
   					  }
   					} else {
-    					myalert('ok:' + $.base64.decode(data.message), '', true);
+    					if (this.gks_mycmd=='paroxos_get_status') {
+                myalert('ok:' + $.base64.decode(data.message),'',false, false, '', true);
+              } else {
+                myalert('ok:' + $.base64.decode(data.message), '', true);
+              }
     				}
 					} else {
 						myalert('error:' + $.base64.decode(data.message));
@@ -2647,6 +2651,9 @@ jQuery(document).ready(function($) {
   $('#paroxos_get_docstate').click(function() {
     gks_paroxos_ajax('paroxos_get_docstate');
   });  
+  $('#paroxos_get_status').click(function() {
+    gks_paroxos_ajax('paroxos_get_status');
+  });
   
   if ($('#gks_paroxos_send_pdf').length==1) {
     var gks_paroxos_send_pdf_sw = new Switchery(document.querySelector('#gks_paroxos_send_pdf'),gks_switchery_defaults());

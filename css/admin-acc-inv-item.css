@@ -404,7 +404,7 @@ www.gks.gr
 }
 
 
-#paxoros_check_processing, #paxoros_check_files, #paxoros_send_pdf, #paroxos_get_docstate {
+#paxoros_check_processing, #paxoros_check_files, #paxoros_send_pdf, #paroxos_get_docstate, #paroxos_get_status {
   margin-top:6px;
   color: #fff;
   background-color: #007bff;
@@ -424,11 +424,22 @@ www.gks.gr
   cursor:pointer;
   vertical-align: bottom;
 }
+#nonObligatedRecipient_info,
+#withoutDigitalTransportTracking_info {
+  font-size:125%;
+  color:#007bff;
+  cursor:pointer;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
 #div_b2g_inv_aaht_name_info, 
 #div_contract_reference_info, 
 #div_project_reference_info,
 #div_b2g_inv_buyer_name_info,
-#div_b2g_inv_aaht_code_info {
+#div_b2g_inv_aaht_code_info,
+#div_nonObligatedRecipient_info,
+#div_withoutDigitalTransportTracking_info {
   color: #6c757d;
   font-size: 80%;
   font-weight: 400;

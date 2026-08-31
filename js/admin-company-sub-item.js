@@ -61,7 +61,7 @@ jQuery(document).ready(function($) {
 
   $('#company_sub_color').spectrum({
     type: "component",
-    locale:'el',
+    locale:from_php_gks_spectrum_locale,
     togglePaletteOnly: true,
     hideAfterPaletteSelect: true,
     showInput: true,
@@ -74,6 +74,7 @@ jQuery(document).ready(function($) {
     togglePaletteLessText: gks_lang('Παλέτα'),
     clearText : gks_lang('Καθαρισμός'),
     noColorSelectedText: gks_lang('Διάφανο'),
+    change: function(color) {need_save=true;}
   });
   
   dialog_exit_date = $( "#dialog_exit_date" ).dialog({

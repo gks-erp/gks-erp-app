@@ -68,7 +68,7 @@ if ($id==-1) {
 $gks_custom_row = gks_custom_table_item_view($gks_custom_prepare,$row);
 
 stat_record();
-$nav_active_array=array('production','production_posta');
+$nav_active_array=array('production','production_posta','hr');
 
 
 include_once('_my_header_admin.php');
@@ -144,7 +144,9 @@ echo $gks_custom_row['html'];
   <div class="form-group1 row">
     <div class="col-md-12 text-center mt-2">
       <button type="button" class="btn btn-primary" id="submit_button_ok"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_production_posto'];?>" data-model="gks_production_posta" data-backurl="admin-production-posta.php"><?php echo gks_lang('Διαγραφή');?></button>
+      <?php } ?>
     </div>
   </div>
 </div>

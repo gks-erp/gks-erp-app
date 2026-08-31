@@ -289,8 +289,9 @@ echo $gks_custom_row['html'];
   <div class="form-group1 row">
     <div class="col-md-12 text-center mt-2">
       <button type="button" class="btn btn-primary" id="submit_button_ok_custom"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_product_category'];?>" data-model="gks_eshop_products_categories" data-backurl="admin-product-categories.php" <?php if ($id<=0) echo 'disabled';?>><?php echo gks_lang('Διαγραφή');?></button>
-
+      <?php } ?>
     </div>
   </div>
 </div>

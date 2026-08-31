@@ -32,6 +32,8 @@ if ($id==-1) {
 
   $row['lead_status_descr']='';
   $row['lead_status_color']='';
+  $row['lead_status_colorf']='';
+  $row['lead_status_colorcss']='border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;';
   $row['lead_status_sortorder']=1000;
   $row['lead_status_disabled']=0;
   
@@ -90,16 +92,30 @@ include_once('_my_header_admin.php');
           <div class="form-group row">
             <label for="lead_status_descr" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Περιγραφή');?>:</label>
             <div class="col-md-8">
-              <input id="lead_status_descr" type="text" class="form-control form-control-sm" value="<?php echo htmlspecialchars_gks($row['lead_status_descr']);?>">
+              <input id="lead_status_descr" type="text" class="form-control form-control-sm myneedsave" value="<?php echo htmlspecialchars_gks($row['lead_status_descr']);?>">
             </div>
           </div>
 
           <div class="form-group row">
-            <label for="company_color" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Χρώμα');?>:</label>
+            <label for="lead_status_color" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Χρώμα φόντου');?>:</label>
             <div class="col-md-8">
               <input id="lead_status_color" type="text" class="form-control form-control-sm myneedsave" value="<?php echo htmlspecialchars_gks($row['lead_status_color']);?>" style="max-width:200px;">
             </div>
-          </div> 
+          </div>
+          <div class="form-group row">
+            <label for="lead_status_colorf" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Χρώμα κειμένου');?>:</label>
+            <div class="col-md-8">
+              <input id="lead_status_colorf" type="text" class="form-control form-control-sm myneedsave" value="<?php echo htmlspecialchars_gks($row['lead_status_colorf']);?>" style="max-width:200px;">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="lead_status_colorcss" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('CSS');?>:</label>
+            <div class="col-md-8">
+              <input id="lead_status_colorcss" type="text" class="form-control form-control-sm myneedsave" value="<?php echo htmlspecialchars_gks($row['lead_status_colorcss']);?>">
+            </div>
+          </div>
+
+          
           <div class="form-group row">
             <label for="lead_status_sortorder" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Σειρά Ταξινόμησης');?>:</label>
             <div class="col-md-8">
@@ -110,7 +126,7 @@ include_once('_my_header_admin.php');
           <div class="form-group row">
             <label for="lead_status_disabled" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Ενεργή');?>:</label>
             <div class="col-md-8">
-              <input type="checkbox" id="lead_status_disabled" value="1" <?php if ($row['lead_status_disabled']==0) echo ' checked '; ?> class="switchery1_sel">
+              <input type="checkbox" id="lead_status_disabled" value="1" <?php if ($row['lead_status_disabled']==0) echo ' checked '; ?> class="switchery1_this">
             </div>
           </div>  
 
@@ -131,8 +147,9 @@ include_once('_my_header_admin.php');
   <div class="form-group1 row">
     <div class="col-md-12 text-center mt-2">
       <button type="button" class="btn btn-primary" id="submit_button_ok"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_crm_lead_status'];?>" data-model="gks_crm_leads_status" data-backurl="admin-crm-leads-status.php"><?php echo gks_lang('Διαγραφή');?></button>
-      
+      <?php } ?>
     </div>
   </div>
 </div>
@@ -209,8 +226,7 @@ include_once('_my_header_admin.php');
 <?php echo from_php_global_vars_echo();?>
 
 
-
-
+var gks_page_loading=true;
 var from_php_id=<?php echo $id;?>;
 
 var from_php_dialog_object_rel_curr='gks_crm_leads_status';
@@ -228,11 +244,23 @@ var from_php_perm_ret_delete=<?php echo gks_permission_user_can_action_javascrip
 jQuery(document).ready(function($) {
   <?php include_once('_dialogs.js.php'); ?>
   
-  
+  var control_enter_active=false;
+  $(document).on('keypress', function(event) {
+    if (event.which == 10 && event.ctrlKey) {
+      control_enter_active=true;
+      event.preventDefault();
+      event.stopPropagation();
+      elem=$('#submit_button_ok');
+      if (elem.is(":visible")) {
+        elem.click();  
+      }
+      setTimeout(function(){control_enter_active=false; }, 300);
+    }  
+  });    
 
-  $('#lead_status_color').spectrum({
+  $('#lead_status_color,#lead_status_colorf').spectrum({
     type: "component",
-    locale:'el',
+    locale:from_php_gks_spectrum_locale,
     togglePaletteOnly: true,
     hideAfterPaletteSelect: true,
     showInput: true,
@@ -245,6 +273,7 @@ jQuery(document).ready(function($) {
     togglePaletteLessText: gks_lang('Παλέτα'),
     clearText : gks_lang('Καθαρισμός'),
     noColorSelectedText: gks_lang('Διάφανο'),
+    change: function(color) {need_save=true;}
   });
  
     
@@ -252,6 +281,8 @@ jQuery(document).ready(function($) {
     datasend='';
     datasend+='&lead_status_descr='  + encodeURIComponent($.base64.encode($("#mypostform #lead_status_descr").val().trim()));
     datasend+='&lead_status_color='  + encodeURIComponent($.base64.encode($("#mypostform #lead_status_color").val().trim()));
+    datasend+='&lead_status_colorf='  + encodeURIComponent($.base64.encode($("#mypostform #lead_status_colorf").val().trim()));
+    datasend+='&lead_status_colorcss='  + encodeURIComponent($.base64.encode($("#mypostform #lead_status_colorcss").val().trim()));
     datasend+='&lead_status_sortorder='  + $("#mypostform #lead_status_sortorder").val().trim();
     datasend+='&lead_status_disabled=' + (($('#mypostform #lead_status_disabled').is(':checked')) ? '0':'1');
 
@@ -275,6 +306,7 @@ jQuery(document).ready(function($) {
 				} else {
 				  
 					if (data.success == true) {
+            need_save=false;
             if (data.redirect=='') {
   					  window.location.reload();
   					} else {
@@ -292,7 +324,26 @@ jQuery(document).ready(function($) {
   }  
   
 
+  var elems_switchery1_this = Array.prototype.slice.call(document.querySelectorAll('.switchery1_this'));
+  elems_switchery1_this.forEach(function(html) {
+    var switchery1_this = new Switchery(html,gks_switchery_defaults());
+    html.onchange = function() {need_save=true;};
+  });
+  
+  //generic
+  gks_page_loading=false;
+  
+  $('.myneedsave').on('input keyup paste', function() {
+    need_save=true; 
+  });
+  
+  window.onbeforeunload = function() {
 
+    if (need_save==false) return;
+    return gks_lang('Δεν έχουν αποθηκευτεί οι αλλαγές. Σίγουρα θέλετε να αφήσετε την σελίδα ;');
+  };
+
+  need_save=false;
   
 });
 </script>

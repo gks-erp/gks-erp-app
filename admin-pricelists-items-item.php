@@ -735,7 +735,9 @@ echo $gks_custom_row['html'];
   <div class="form-group1 row">
     <div class="col-md-12 text-center mt-2">
       <button type="button" class="btn btn-primary" id="submit_button_ok_custom"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_pricelist_item'];?>" data-model="gks_eshop_pricelist_items" data-backurl="admin-pricelists-items.php" <?php if ($id<=0) echo 'disabled';?>><?php echo gks_lang('Διαγραφή');?></button>
+      <?php } ?>
     </div>
   </div>
 </div>

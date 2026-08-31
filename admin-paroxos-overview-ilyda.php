@@ -26,7 +26,7 @@ $nav_active_array=array('accounting','accounting_paroxos_overview','accounting_p
 
 db_open();
 stat_record();
-$perm_ret=gks_permission_user_can_action($my_wp_user_id, 'gks__paroxos_overview_ilyda','view',0);
+$perm_ret=gks_permission_user_can_action($my_wp_user_id, 'gks__paroxos_overview','view',0);
 if ($perm_ret['success']==false) {header('Location: /my/admin-deny.php?message='.rawurlencode($perm_ret['message'])); die();}
 
 
@@ -252,7 +252,7 @@ gks_acc_eidi_parastatikon.sortorder
 FROM (gks_acc_inv 
 LEFT JOIN gks_acc_journal ON gks_acc_inv.inv_acc_journal_id = gks_acc_journal.id_acc_journal) 
 LEFT JOIN gks_acc_eidi_parastatikon ON gks_acc_journal.acc_eidos_parastatikou_id = gks_acc_eidi_parastatikon.id_acc_eidos_parastatikou
-WHERE gks_acc_inv.aade_paroxos_id=0 and paroxos_tf1_url_has=1
+WHERE gks_acc_inv.aade_paroxos_id=0 and paroxos_tf1_url_has=".$curr_paroxos_id."
 AND gks_acc_inv.aade_send_date Is Null
 and (gks_acc_inv.aade_invoicemark Is Null or gks_acc_inv.aade_invoicemark='')
 GROUP BY gks_acc_inv.company_id, gks_acc_inv.company_sub_id, gks_acc_eidi_parastatikon.id_acc_eidos_parastatikou, gks_acc_eidi_parastatikon.eidos_parastatikou_descr, gks_acc_eidi_parastatikon.sortorder
@@ -265,7 +265,7 @@ gks_acc_eidi_parastatikon.sortorder
 FROM (gks_whi_mov 
 LEFT JOIN gks_acc_journal ON gks_whi_mov.mov_whi_journal_id = gks_acc_journal.id_acc_journal) 
 LEFT JOIN gks_acc_eidi_parastatikon ON gks_acc_journal.acc_eidos_parastatikou_id = gks_acc_eidi_parastatikon.id_acc_eidos_parastatikou
-WHERE gks_whi_mov.aade_paroxos_id=0 and paroxos_tf1_url_has=1
+WHERE gks_whi_mov.aade_paroxos_id=0 and paroxos_tf1_url_has=".$curr_paroxos_id."
 AND gks_whi_mov.aade_send_date Is Null
 and (gks_whi_mov.aade_invoicemark Is Null or gks_whi_mov.aade_invoicemark='')
 GROUP BY gks_whi_mov.company_id, gks_whi_mov.company_sub_id, gks_acc_eidi_parastatikon.id_acc_eidos_parastatikou, gks_acc_eidi_parastatikon.eidos_parastatikou_descr, gks_acc_eidi_parastatikon.sortorder
@@ -278,7 +278,7 @@ gks_acc_eidi_parastatikon.sortorder
 FROM (gks_acc_pay 
 LEFT JOIN gks_acc_journal ON gks_acc_pay.pay_acc_journal_id = gks_acc_journal.id_acc_journal) 
 LEFT JOIN gks_acc_eidi_parastatikon ON gks_acc_journal.acc_eidos_parastatikou_id = gks_acc_eidi_parastatikon.id_acc_eidos_parastatikou
-WHERE gks_acc_pay.aade_paroxos_id=0 and paroxos_tf1_url_has=1
+WHERE gks_acc_pay.aade_paroxos_id=0 and paroxos_tf1_url_has=".$curr_paroxos_id."
 AND gks_acc_pay.aade_send_date Is Null
 and (gks_acc_pay.aade_invoicemark Is Null or gks_acc_pay.aade_invoicemark='')
 GROUP BY gks_acc_pay.company_id, gks_acc_pay.company_sub_id, gks_acc_eidi_parastatikon.id_acc_eidos_parastatikou, gks_acc_eidi_parastatikon.eidos_parastatikou_descr, gks_acc_eidi_parastatikon.sortorder
@@ -536,9 +536,9 @@ include_once('_my_header_admin.php');
               <div class="form-group row">
                 <div class="col-md-12 text-center"><?php echo gks_lang('Προβολή');?></div>
                 <div class="col-md-12 text-center">
-                  <a href="admin-acc-inv.php?fdate_add=-1&faade_send_date=102&faade_mark=-100&fparoxos=0&paroxos_tf1_url_has=1" class="btn btn-primary btn-sm"><?php echo gks_lang('Παραστατικά');?></a>
-                  <a href="admin-acc-pay.php?fdate_add=-1&faade_send_date=102&faade_mark=-100&fparoxos=0&paroxos_tf1_url_has=1" class="btn btn-primary btn-sm"><?php echo gks_lang('Πληρωμές');?></a>
-                  <a href="admin-whi-mov.php?fdate_add=-1&faade_send_date=102&faade_mark=-100&fparoxos=0&paroxos_tf1_url_has=1" class="btn btn-primary btn-sm"><?php echo gks_lang('Δελτία');?></a>
+                  <a href="admin-acc-inv.php?fdate_add=-1&faade_send_date=102&faade_mark=-100&fparoxos=0&paroxos_tf1_url_has=<?php echo $curr_paroxos_id;?>" class="btn btn-primary btn-sm"><?php echo gks_lang('Παραστατικά');?></a>
+                  <a href="admin-acc-pay.php?fdate_add=-1&faade_send_date=102&faade_mark=-100&fparoxos=0&paroxos_tf1_url_has=<?php echo $curr_paroxos_id;?>" class="btn btn-primary btn-sm"><?php echo gks_lang('Πληρωμές');?></a>
+                  <a href="admin-whi-mov.php?fdate_add=-1&faade_send_date=102&faade_mark=-100&fparoxos=0&paroxos_tf1_url_has=<?php echo $curr_paroxos_id;?>" class="btn btn-primary btn-sm"><?php echo gks_lang('Δελτία');?></a>
                 </div>
               </div>                      
               <div style="height: 1px;width: 50%;background-color: lightgray;margin: 16px auto;"></div>

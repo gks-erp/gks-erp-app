@@ -196,27 +196,32 @@ gks_main_container.gks_menu_pos_left #cal_submenu_fixed {
 }
 
 
-.cal_user_label, .cal_user_label_task, .cal_user_label_activ {
+.cal_user_label, .cal_user_label_task, .cal_user_label_activ, .cal_user_label_hr_program,
+.cal_posta_label_hr_program {
   font-size: 0.875rem;
   margin-bottom: 0px;
 }
-.cal_user_remove, .cal_user_remove_task, .cal_user_remove_activ {
+.cal_user_remove, .cal_user_remove_task, .cal_user_remove_activ, .cal_user_remove_hr_program,
+.cal_posta_remove_hr_program {
   color: #dc3545;
   cursor: pointer;
   vertical-align: middle;
 }
-#cal_user_add, #cal_user_add_task, #cal_user_add_activ {
+#cal_user_add, #cal_user_add_task, #cal_user_add_activ, #cal_user_add_hr_program,
+#cal_posta_add_hr_program {
   color: #35dc35;
   cursor: pointer;
   vertical-align: top;
   position: relative;
   top: 6px;  
 }
-#cal_user_add_user, #cal_user_add_user_task, #cal_user_add_user_activ {
+#cal_user_add_user, #cal_user_add_user_task, #cal_user_add_user_activ, #cal_user_add_user_hr_program,
+#cal_posta_add_posta_hr_program {
   width: calc(100% - 24px);
   max-width:250px;
 }
-.cal_user_row, .cal_user_row_task, .cal_user_row_activ {
+.cal_user_row, .cal_user_row_task, .cal_user_row_activ, .cal_user_row_hr_program,
+.cal_posta_row_hr_program {
   min-height:26px;  
 }
 .cal_user_color1 {
@@ -252,3 +257,95 @@ gks_main_container.gks_menu_pos_left #cal_submenu_fixed {
 .calendar_activity_status {
   margin:10px 0px;
 }
+
+.fc-direction-ltr .fc-toolbar-chunk > * {
+  margin-bottom:4px;
+}
+.fc-header-toolbar > .fc-toolbar-chunk:nth-child(1) {
+  text-align:left;
+}
+.fc-header-toolbar > .fc-toolbar-chunk:nth-child(1) > * {
+  margin-left: 0px;
+  margin-right: .75em;
+}
+.fc-header-toolbar > .fc-toolbar-chunk:nth-child(2) {
+  text-align:center;
+}
+.fc-header-toolbar > .fc-toolbar-chunk:nth-child(3) {
+  text-align:right;
+}
+#business_days_hours_div, #business_days_hours_div_panel {
+  display:none;
+}
+#business_days_hours_div {
+  z-index: 10001;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #eee url(images/ui-bg_diagonals-thick_90_eeeeee_40x40.png) 50% 50% repeat;
+  opacity: .8;
+}
+
+#business_days_hours_div_panel {
+  z-index: 10002;
+  position:absolute;
+  left:100px;
+  top:100px;
+  width:300px;
+  height1:200px;
+  background-color:#fafcff;
+  opacity: 1;
+  border: 1px solid gray;
+  border-radius: 20px;
+  box-shadow: 0px 4px 24px 12px rgb(0 0 0 / 20%), 0px 6px 20px 0px rgb(0 0 0 / 19%)
+}
+#business_days_hours_div_panel label, #business_days_hours_div_panel select {
+  cursor:pointer; 
+}
+#business_days_hours_header {
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+#business_days_hours_center {
+  display: flex;
+  flex-direction: row; 
+  justify-content: space-around;
+  padding: 20px;  
+}
+#business_days_hours_center2 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: space-evenly;  
+}
+#business_days_hours_center2 > div {
+  text-align:center;
+}
+
+#business_days_hours_footer_buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  margin:10px;
+}
+
+.gks_event_item_tooltip {
+  line-height:1.4;
+}
+#posta_allhr_program_operator {
+  width: unset;
+  padding: 0px;
+  display: inline-block;
+  margin: 0px; 
+  text-align: center;  
+}
+#posta_allhr_program_operator_info {
+  font-size: 120%;
+  vertical-align: middle;  
+}
+

@@ -1197,7 +1197,6 @@ include_once('_my_header_admin.php');
 
       <button type="button" style="margin-bottom:10px;" class="btn btn-primary" id="mysave"><?php echo gks_lang('Αποθήκευση');?></button>
       <button type="button" style="margin-bottom:10px;" class="btn btn-danger deleterowbtn" id="back_to_home"><?php echo gks_lang('Άκυρο');?></button>
-      
     </div>
   </div>
 </div>

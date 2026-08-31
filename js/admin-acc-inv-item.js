@@ -321,6 +321,8 @@ jQuery(document).ready(function($) {
       if ($("#inv_acc_journal_id").length > 0) datasend+='&inv_acc_journal_id=' + encodeURIComponent($("#inv_acc_journal_id").val().trim());
       if ($("#inv_acc_seira_id").length > 0) datasend+='&inv_acc_seira_id=' + encodeURIComponent($("#inv_acc_seira_id").val().trim());
       if ($("#inv_acc_number_int").length > 0) datasend+='&inv_acc_number_int=' + encodeURIComponent($("#inv_acc_number_int").val().trim());
+      datasend+='&nonObligatedRecipient=' + ($('#nonObligatedRecipient').is(':checked') ? '1' : '0');
+      datasend+='&withoutDigitalTransportTracking=' + ($('#withoutDigitalTransportTracking').is(':checked') ? '1' : '0');
       datasend+='&aade_skopos_diakinisis_id=' +      encodeURIComponent($('#aade_skopos_diakinisis_id').val().trim());
       datasend+='&aade_skopos_19_descr='  + encodeURIComponent($.base64.encode($("#aade_skopos_19_descr").val().trim()));
       datasend+='&inv_date=' + encodeURIComponent($("#inv_date").val().trim());
@@ -5523,6 +5525,14 @@ if (from_php_GKS_ACC_INV_COL_FPA) {
     } else {
       $('#vat_payment_suspension_div').hide();
     }  
+    if (from_php_seira_isdeliverynote!=0) {
+      $('#nonObligatedRecipient_div').show();
+      $('#withoutDigitalTransportTracking_div').show();
+    } else {
+      $('#nonObligatedRecipient_div').hide();
+      $('#withoutDigitalTransportTracking_div').hide();
+    }
+
     set_warehouses_addrs();
     gks_myscroll();
     //calc_pliroteo();
@@ -7638,7 +7648,11 @@ if (from_php_GKS_ACC_INV_COL_FPA) {
   					    myalert('error:' + $.base64.decode(data.save_but_message), '' ,true);
   					  }
   					} else {
-    					myalert('ok:' + $.base64.decode(data.message), '', true);
+              if (this.gks_mycmd=='paroxos_get_status') {
+                myalert('ok:' + $.base64.decode(data.message),'',false, false, '', true);
+              } else {
+                myalert('ok:' + $.base64.decode(data.message), '', true);
+              }
     				}
 					} else {
 						myalert('error:' + $.base64.decode(data.message));
@@ -7663,7 +7677,9 @@ if (from_php_GKS_ACC_INV_COL_FPA) {
   $('#paroxos_get_docstate').click(function() {
     gks_paroxos_ajax('paroxos_get_docstate');
   });  
-  
+  $('#paroxos_get_status').click(function() {
+    gks_paroxos_ajax('paroxos_get_status');
+  });  
   
 
 
@@ -7735,7 +7751,29 @@ if (from_php_GKS_ACC_INV_COL_FPA) {
     gks_myscroll(); 
   });
   
-  
+
+  $('#nonObligatedRecipient_info').click(function() {
+    event.preventDefault();
+    event.stopPropagation();
+    ss=$('#div_nonObligatedRecipient_info').attr('data-show'); 
+    if (ss=='0') {
+      $('#div_nonObligatedRecipient_info').attr('data-show','1').show().html(gks_big_text_nonObligatedRecipient_info_text);
+    } else {
+      $('#div_nonObligatedRecipient_info').attr('data-show','0').hide().html('');
+    }
+    gks_myscroll(); 
+  });
+  $('#withoutDigitalTransportTracking_info').click(function() {
+    event.preventDefault();
+    event.stopPropagation();
+    ss=$('#div_withoutDigitalTransportTracking_info').attr('data-show'); 
+    if (ss=='0') {
+      $('#div_withoutDigitalTransportTracking_info').attr('data-show','1').show().html(gks_big_text_withoutDigitalTransportTracking_info_text);
+    } else {
+      $('#div_withoutDigitalTransportTracking_info').attr('data-show','0').hide().html('');
+    }
+    gks_myscroll(); 
+  });
   ///////////////////////////////////////////////////////// pre end
   
   

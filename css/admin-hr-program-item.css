@@ -1,0 +1,48 @@
+/* 
+Kostas Goutoudis
+gks ERP
+www.gks.gr
+*/
+
+.hr_program_status_this {
+  margin-right:6px;
+  cursor:pointer;
+  opacity: 0.2;
+  border-radius11: 0px 12px 12px 0px;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+.hr_program_status_selected {
+  font-weight:bold;
+  border: 2px solid black;
+  border-radius1: 0px;
+  opacity: 1;
+}
+.hr_program_vardia_this {
+  margin-right:6px;
+  cursor:pointer;
+  opacity: 0.2;
+  border-radius11: 0px 12px 12px 0px;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+.hr_program_vardia_selected {
+  font-weight:bold;
+  border: 2px solid black;
+  border-radius1: 0px;
+  opacity: 1;
+}
+#hr_program_date_from {
+  max-width:200px;display: inline-block;margin-bottom: 6px;
+}
+#hr_program_date_duration_days {
+  max-width:50px;display: inline-block;margin-bottom: 6px;padding-right: 0px;text-align: right;
+}
+#hr_program_date_duration {
+  max-width:115px;display: inline-block;margin-bottom: 6px;
+}
+#hr_program_date_to {
+  max-width:200px;display: inline-block;
+}
+
+

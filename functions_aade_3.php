@@ -1105,6 +1105,46 @@ function gks_aade_invoice_xml_create($id,$doc_table,$aade_params) {
     $invoiceHeader->addChild('reverseDeliveryNotePurpose', $reverseDeliveryNotePurpose);
   }
   
+  //echo '<pre>ddddddddddd11';print_r($row); die();
+
+  //$invoiceHeader->addChild('receivingNotePurpose', 1);
+  //$invoiceHeader->addChild('otherReceivingNotePurposeTitle', 'babababa');
+  
+  if (in_array($doc_table,['gks_whi_mov'])) {
+    if (intval($row['receivingNotePurpose'])>=1) {
+      $sql_select="SELECT aade_receiving_note_purpose_code FROM gks_aade_receiving_note_purpose 
+      where id_aade_receiving_note_purpose=".intval($row['receivingNotePurpose']);
+      $result_select = $db_link->query($sql_select);   
+      if (!$result_select) {debug_mail(false,'error sql',$sql_select);$ret['message']='sql error'; return $ret;}
+      if ($result_select->num_rows==1) {
+        $row_select = $result_select->fetch_assoc();
+        $aade_receiving_note_purpose_code=intval($row_select['aade_receiving_note_purpose_code']);
+        if ($aade_receiving_note_purpose_code>0) {
+          $invoiceHeader->addChild('receivingNotePurpose', $aade_receiving_note_purpose_code);
+        }
+        if ($aade_receiving_note_purpose_code==7) {
+          $otherReceivingNotePurposeTitle=trim_gks($row['otherReceivingNotePurposeTitle']);
+          if ($otherReceivingNotePurposeTitle!='') {
+            $invoiceHeader->addChild('otherReceivingNotePurposeTitle', $otherReceivingNotePurposeTitle);
+          }
+        }
+      }
+    }
+  }
+
+  //$invoiceHeader->addChild('nonObligatedRecipient', 1);
+  //$invoiceHeader->addChild('withoutDigitalTransportTracking', 1);
+  
+  if (in_array($doc_table,['gks_acc_inv','gks_whi_mov'])) {
+    if (intval($row['nonObligatedRecipient'])!=0) {
+      $invoiceHeader->addChild('nonObligatedRecipient', 1);
+    }
+    if (intval($row['withoutDigitalTransportTracking'])!=0) {
+      $invoiceHeader->addChild('withoutDigitalTransportTracking', 1);
+    }
+  }
+  
+  
 //  $aade_tropos_pliromis_code=intval($row['aade_tropos_pliromis_code']);
 //  if ($aade_tropos_pliromis_code>0 and $row['gks_price_total']>0) {
 //    $paymentMethods = $invoice->addChild('paymentMethods'); 
@@ -1370,7 +1410,9 @@ function gks_aade_invoice_xml_create($id,$doc_table,$aade_params) {
     gks_aade_katigoria_loipon_foron.aade_katigoria_loipon_foron_code,
     gks_aade_katigoria_fpa_ejeresi.aade_katigoria_fpa_ejeresi_code,
     gks_eshop_products.product_sku,
-    gks_eshop_products.product_taric,gks_eshop_products.product_code
+    gks_eshop_products.product_taric,
+    gks_eshop_products.product_cpv,
+    gks_eshop_products.product_code
     
     FROM (((((((((gks_acc_inv_products 
     LEFT JOIN gks_monades_metrisis ON gks_acc_inv_products.product_monada_id = gks_monades_metrisis.id_monada) 
@@ -1552,6 +1594,12 @@ function gks_aade_invoice_xml_create($id,$doc_table,$aade_params) {
   
   
         //lineComments
+        $product_comments=trim_gks($prow['product_comments']);
+        if ($product_comments!='') {
+          $invoiceDetails->addChild('lineComments',$product_comments);
+        }        
+        
+        
         $found_cc_income=0;
         if (isset($pirow_array[$prow['id_acc_inv_product']])) { //incomeClassification
           foreach ($pirow_array[$prow['id_acc_inv_product']] as $value) {
@@ -1653,7 +1701,9 @@ function gks_aade_invoice_xml_create($id,$doc_table,$aade_params) {
     $sql_products="SELECT gks_whi_mov_products.*, 
     gks_aade_eidos_posotitas.aade_eidos_posotitas_code,
     gks_eshop_products.product_sku,
-    gks_eshop_products.product_taric,gks_eshop_products.product_code
+    gks_eshop_products.product_taric,
+    gks_eshop_products.product_cpv,
+    gks_eshop_products.product_code
     
     FROM ((gks_whi_mov_products 
     LEFT JOIN gks_monades_metrisis ON gks_whi_mov_products.product_monada_id = gks_monades_metrisis.id_monada) 

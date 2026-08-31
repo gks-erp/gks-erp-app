@@ -69,7 +69,7 @@ include_once('_my_header_admin.php');
         <div class="card-body" <?php echo gks_card_body('scan');?>> 
           
           <div class="form-group row">
-            <label for="input_mark" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('ΜΑΡΚ');?>:<span id="needs_mark"> (<span><i class="fas fa-asterisk"></i></span>)</span></label>
+            <label for="input_mark" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('ΜΑΡΚ');?>:<span id="needs_mark" class="gks_f_optional"> (<span><i class="fas fa-asterisk"></i></span>)</span></label>
             <div class="col-md-8">
               <input id="input_mark" type="text" class="form-control form-control-sm myneedsave" value="<?php 
               $def_mark='';if (isset($_GET['mark'])) $def_mark=trim($_GET['mark']);
@@ -82,9 +82,9 @@ include_once('_my_header_admin.php');
             </div>
           </div>
           <div class="form-group row">
-            <label for="input_qrUrl" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('QRCode URL');?>:<span id="needs_qrUrl" style="display:none;">  (<span style="color:red;"><i class="fas fa-asterisk"></i></span>)</span></label>
+            <label for="input_qrUrl" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('QRCode URL');?>:<span id="needs_qrUrl" class="gks_f_optional" style="display1:none;">  (<span style="color:red;"><i class="fas fa-asterisk"></i></span>)</span></label>
             <div class="col-md-8">
-              <textarea id="input_qrUrl" type="text" class="form-control form-control-sm myneedsave" placeholder="<?php echo gks_lang('π.χ.');?> https://mydataapidev.aade.gr/TimologioQR/QRInfo?q=6BjD5..." style="margin-bottom:10px;min-height: 100px;" disabled><?php
+              <textarea id="input_qrUrl" type="text" class="form-control form-control-sm myneedsave" placeholder="<?php echo gks_lang('π.χ.');?> https://mydataapidev.aade.gr/TimologioQR/QRInfo?q=6BjD5..." style="margin-bottom:10px;min-height: 100px;"><?php
                 if (isset($_GET['qrurl'])) {
                   $temp=$_GET['qrurl'];
                   //$temp=str_replace('+', '%2b', $temp);
@@ -225,10 +225,12 @@ include_once('_my_header_admin.php');
               if (isset($_GET['cmd'])) $def_cmd=trim($_GET['cmd']);
               ?>
               <select id="gks_deltio_cmd" class="form-control form-control-sm myneedsave">
-                <option value="status"   <?php if ($def_cmd=='status')   echo 'selected';?>><?php echo gks_lang('Προβολή κατάστασης (GetDeliveryNoteStatus)');?></option>
-                <option value="register" <?php if ($def_cmd=='register') echo 'selected';?>><?php echo gks_lang('Έναρξη διακίνησης (RegisterTransfer)');?></option>
-                <option value="confirm"  <?php if ($def_cmd=='confirm')  echo 'selected';?>><?php echo gks_lang('Δηλώση του αποτέλεσματος της παράδοσης (ConfirmDeliveryOutcome)');?></option>
-                <option value="reject"   <?php if ($def_cmd=='reject')   echo 'selected';?>><?php echo gks_lang('Ολική απόρριψη του Δελτίου Αποστολής (RejectDeliveryNote)');?></option>
+                <option value="status"         <?php if ($def_cmd=='status')          echo 'selected';?>><?php echo gks_lang('Προβολή κατάστασης (GetDeliveryNoteStatus)');?></option>
+                <option value="cancel"         <?php if ($def_cmd=='cancel')          echo 'selected';?>><?php echo gks_lang('Ακύρωση του Δελτίου Αποστολής (CancelDeliveryNote)');?></option>
+                <option value="register"       <?php if ($def_cmd=='register')        echo 'selected';?>><?php echo gks_lang('Έναρξη διακίνησης ή μεταφόρτωση (RegisterTransfer)');?></option>
+                <option value="confirm"        <?php if ($def_cmd=='confirm')         echo 'selected';?>><?php echo gks_lang('Δήλωση αποτελέσματος παράδοσης / Επιβεβαίωση παραλαβής (ConfirmDeliveryOutcome)');?></option>
+                <option value="reject"         <?php if ($def_cmd=='reject')          echo 'selected';?>><?php echo gks_lang('Ολική απόρριψη από τον λήπτη του Δελτίου Αποστολής (RejectDeliveryNote)');?></option>
+                <option value="confirm_return" <?php if ($def_cmd=='confirm_return')  echo 'selected';?>><?php echo gks_lang('Επιβεβαίωση από εκδότη της επιστροφής (ConfirmDeliveryReturn)');?></option>
               </select>
             </div>
 	        </div>
@@ -241,6 +243,19 @@ include_once('_my_header_admin.php');
     	        <?php echo gks_lang('Επιτρέπεται στον εκδότη, τον λήπτη και σε οποιονδήποτε μεταφορέα συμμετείχε στη διακίνηση.');?>
             </div>
 	        </div>
+          <div class="form-group row gks_deltio_cmd_info" id="gks_deltio_cmd_info_cancel" style="display:none;">
+            <div class="col-md-12" >
+              <b><?php echo gks_lang('Διαδικασία ακύρωσης του Δελτίου Αποστολής, πριν από την έναρξη διακίνησης, από τον εκδότη.');?></b>
+              <br><br>
+    	        <?php echo gks_lang('Το δελτίο αποστολής θα πρέπει να είναι σε κατάσταση').' '.
+              '<span class="aade_delivery_status_REGISTERED">'.
+              getAADE_InvoiceDeliveryStatus('REGISTERED').
+              '</span>';?>
+              <br>
+              <?php echo gks_lang('Σε περίπτωση επιτυχίας, η απόκριση περιέχει το <b>transferMark</b>, το οποίο είναι ο Μοναδικός Αριθμός Καταχώρησης του γεγονότος μεταφοράς.');?>
+            </div>
+	        </div>          
+          
           <div class="form-group row gks_deltio_cmd_info" id="gks_deltio_cmd_info_register" style="display:none;">
             <div class="col-md-12">
               <b><?php echo gks_lang('Διαδικασία δήλωσης έναρξης ή μεταφόρτωσης διακίνησης από μεταφορέα');?></b>
@@ -267,6 +282,53 @@ include_once('_my_header_admin.php');
               <?php echo gks_lang('Η τιμή <b>NONE</b> για το πεδίο outcome θέτει το ΔΑ σε κατάσταση <b>FailedDelivery</b>.');?>
             </div>
 	        </div>  
+          
+          <div class="form-group row gks_deltio_cmd_info" id="gks_deltio_cmd_info_confirm_return" style="display:none;">
+            <div class="col-md-12">
+              <b><?php echo gks_lang('Διαδικασία δήλωσης επιστροφής από εκδότη');?>.</b>
+              <br><br>
+    	        <?php echo gks_lang('Η μέθοδος καλείται από τον Εκδότη του Δελτίου Διακίνησης για να δηλώσει την ολοκλήρωση της διακίνησης κατά την επιστροφή (ο μεταφορέας δεν παρέδωσε όλα τα αγαθά)');?>
+    	        <br>
+    	        <?php echo gks_lang('Η μέθοδος καλείται στις εξής περιπτώσεις:');?>
+              <br>
+              <table class="table table-sm table-responsive table-striped table-bordered gkstable100" border="0" cellspacing="0" cellpadding="5" align="center" style="width:100%"> 
+                <thead>
+                  <tr>
+                    <th class="table-dark" scope="col" width="66%" nowrap><?php echo gks_lang('Συνθήκη');?></th>
+                    <th class="table-dark" scope="col" width="33%" nowrap><?php echo gks_lang('Προηγούμενη Κατάσταση');?></th>
+                  </tr>
+                </thead>
+                <tbody> 
+                  <tr>
+                    <td align="left"><?php echo gks_lang('Αν έχει γίνει απόρριψη του Δελτίου από τον Λήπτη');?></td>
+                    <td align="left"><?php echo gks_lang('Rejected');?></td>
+                  </tr>
+                  <tr>
+                    <td align="left"><?php echo gks_lang('Αν έχει γίνει μερική παράδοση των αγαθών του Δελτίου');?></td>
+                    <td align="left"><?php echo gks_lang('DeliveredByCarrier με Outcome: PARTIAL');?></td>
+                  </tr>
+                  <tr>
+                    <td align="left"><?php echo gks_lang('Αποτυχία παράδοσης των αγαθών');?></td>
+                    <td align="left"><?php echo gks_lang('FailedDelivery');?></td>
+                  </tr>
+                  <tr>
+                    <td align="left"><?php echo gks_lang('Συγκεντρωτικό Δελτίο Διακίνησης (τύπος 9.2)');?></td>
+                    <td align="left"><?php echo gks_lang('InTransit');?></td>  
+                  </tr>
+                  <tr>
+                    <td align="left"><?php echo gks_lang('Δελτίο Αποστολής Αντίστροφης Διακίνησης (τύπος 9.3 με την ένδειξη reverseDeliveryNote = true)');?></td>
+                    <td align="left"><?php echo gks_lang('InTransit');?></td>  
+                  </tr>
+
+                                      
+                </tbody>                
+              </table>
+              <?php echo gks_lang('Με την επιτυχή κλήση, το Δελτίο Αποστολής μεταβαίνει σε κατάσταση <b>Completed</b>.');?>
+              <br>
+              <?php echo gks_lang('Σε περίπτωση επιτυχίας, η απόκριση περιέχει το <b>deliveryReturnMark</b>, το οποίο είναι ο Μοναδικός Αριθμός Καταχώρησης του γεγονότος.');?>
+            </div>
+	        </div>
+          
           <div class="form-group row gks_deltio_cmd_info" id="gks_deltio_cmd_info_reject" style="display:none;">
             <div class="col-md-12">
               <b><?php echo gks_lang('Διαδικασία ολικής απόρριψης διακίνησης από τον λήπτη.');?></b>
@@ -315,16 +377,7 @@ include_once('_my_header_admin.php');
               </select>
             </div>
 	        </div>
-	        <!--
-          <div class="form-group row gks_deltio_cmd_params_register" style="display:none;">
-            <label for="params_register_timeStamp" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Χρονοσφραγίδα');?>:</label>
-            <div class="col-md-8">
-              <input id="params_register_timeStamp" type="text" class="form-control form-control-sm myneedsave" value="<?php
-              echo showDate(time(), 'd/m/Y H:i', 1);
-              ?>" placeholder="" autocomplete="off">
-            </div>
-	        </div>
-	        -->
+
           <div class="form-group row gks_deltio_cmd_params_register" style="display:none;">
             <label for="params_register_carrierVatNumber" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('ΑΦΜ Μεταφορικής Εταιρείας');?>: (<span style="color:red"><i class="fas fa-asterisk"></i></span>)</label>
             <div class="col-md-8">
@@ -375,8 +428,8 @@ include_once('_my_header_admin.php');
             </div>
 	        </div>	        
           <div id="params_confirm_deliveredPackaging_div">
-          <div class="form-group row gks_deltio_cmd_params_confirm" style="display:none;">
-            <label for="params_confirm_deliveredPackaging" class="col-md-12 col-form-label form-control-sm text-md-right1"><?php echo gks_lang('Λίστα με τις συσκευασίες και τις ποσότητες που παραδόθηκαν');?>:</label>
+          <div class="form-group row" style="display1:none;">
+            <div class="col-md-12 gks_deltio_cmd_params_title" ><?php echo gks_lang('Λίστα με τις συσκευασίες και τις ποσότητες');?></div>
             <div class="col-md-12">
               <div id="params_confirm_deliveredPackaging">
                 <div class="form-group row gks_eidos_label">
@@ -477,9 +530,9 @@ include_once('_my_header_admin.php');
           <?php echo gks_lang('Διάγραμμα καταστάσεων');?>
         </div>
         <div class="card-body" <?php echo gks_card_body('help');?>> 
-          <div id="lightgallery_imgs">
-            <a class="lightgallery_img" href="img/aade_delivery_note.png" data-sub-html="<?php echo gks_lang('Διάγραμμα καταστάσεων');?>">
-              <img src="img/aade_delivery_note.png" style="width:100%" class="">
+          <div id="lightgallery_imgs" style="text-align: center;">
+            <a class="lightgallery_img" href="img/aade_delivery_note-2.0.2.png" data-sub-html="<?php echo gks_lang('Διάγραμμα καταστάσεων');?>">
+              <img src="img/aade_delivery_note-2.0.2.png" style="width:100%;max-width:1344px" class="">
             </a>
           </div>
         </div>

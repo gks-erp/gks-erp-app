@@ -208,6 +208,12 @@ www.gks.gr
             <option value="gks_eshops"><?php echo gks_lang('eshop');?></option>
             <option value="gks_custom_table"><?php echo gks_lang('Προσαρμογή');?></option>
           </optgroup>
+          <optgroup label="<?php echo gks_lang('HR');?>">
+            <option value="gks_hr_program"><?php echo gks_lang('Πρόγραμμα Υπαλλήλων');?></option>
+            <option value="gks_hr_program_status"><?php echo gks_lang('Κατάσταση Προγράμματος');?></option>
+            <option value="gks_hr_program_vardia"><?php echo gks_lang('Βάρδια');?></option>
+          </optgroup>
+
           
 <?php if ($GKS_HOTEL_BACKEND) {?>          
           <optgroup label="<?php echo gks_lang('Ξενοδοχείο');?>">

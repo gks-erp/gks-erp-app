@@ -369,6 +369,9 @@ foreach ($send_viber as $value) {
   }
 }
 
+if (file_exists('_custom/gks_fb_webhook_custom.php')) {
+  include_once('_custom/gks_fb_webhook_custom.php');
+}
 
 
 echo 'OK'; die();

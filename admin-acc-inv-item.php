@@ -350,6 +350,9 @@ if ($id==-1) {
     $row['seira_isdeliverynote']=0;
     $row['seira_is_self_pricing']=0;
     $row['seira_is_vat_payment_suspension']=0;
+
+    $row['nonObligatedRecipient']=0;
+    $row['withoutDigitalTransportTracking']=0;
     
     $row['aade_statuscode']='';
     $row['aade_invoiceuid']='';
@@ -1698,6 +1701,31 @@ include_once('_my_header_admin.php');
                   echo gks_lang('Ναι');
                 echo '</div>';?>
             </div>
+          </div>
+          
+          <div class="form-group row" id="nonObligatedRecipient_div" style="<?php if ($seira_isdeliverynote==0) echo 'display:none;';?>">
+            <label for="nonObligatedRecipient" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Μη Υπόχρεος Λήπτης');?>:</label>
+            <div class="col-md-8">
+              <?php if ($gks_lock) {
+                echo '<img src="/my/img/'.($row['nonObligatedRecipient']==1?'1':'0').'.png" style="width:22px;">'; 
+              } else { ?>
+                <input id="nonObligatedRecipient" type="checkbox" class="form-control form-control-sm switchery1_sel myneedsave" value="1" <?php if ($row['nonObligatedRecipient']!=0) echo ' checked ';?> <?php if (!$perm_gks_acc_inv_edit) echo 'disabled';?> style="font-size: 0px; display: inline-block; width: unset;height: 32px;vertical-align: middle;">
+              <?php } ?>
+              <i class="fas fa-info-circle" id="nonObligatedRecipient_info"></i> 
+            </div>
+            <div id="div_nonObligatedRecipient_info" class="col-sm-12" style="display:none;" data-show="0"></div>
+          </div>          
+          <div class="form-group row" id="withoutDigitalTransportTracking_div" style="<?php if ($seira_isdeliverynote==0) echo 'display:none;';?>">
+            <label for="withoutDigitalTransportTracking" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Χωρίς Παρακολούθηση');?>:</label>
+            <div class="col-md-8">
+              <?php if ($gks_lock) {
+                echo '<img src="/my/img/'.($row['withoutDigitalTransportTracking']==1?'1':'0').'.png" style="width:22px;">'; 
+              } else { ?>
+                <input id="withoutDigitalTransportTracking" type="checkbox" class="form-control form-control-sm switchery1_sel myneedsave" value="1" <?php if ($row['withoutDigitalTransportTracking']!=0) echo ' checked ';?> <?php if (!$perm_gks_acc_inv_edit) echo 'disabled';?> style="font-size: 0px; display: inline-block; width: unset;height: 32px;vertical-align: middle;">
+              <?php } ?>
+              <i class="fas fa-info-circle" id="withoutDigitalTransportTracking_info"></i> 
+            </div>
+            <div id="div_withoutDigitalTransportTracking_info" class="col-sm-12" style="display:none;" data-show="0"></div>
           </div>
           
           <div class="form-group row">
@@ -6331,8 +6359,16 @@ order by gks_acc_pay.pay_date desc, gks_acc_pay.id_acc_pay desc
               }
             ?></span></div>
           </div> 
+          <div class="row">
+            <label class="col-sm-4 col-form-label form-control-sm text-sm-right gks_unset_height" style="height: unset;"><?php echo gks_lang('Κατάσταση στον πάροχο');?>:</label>
+            <div class="col-sm-8 gks_unset_height"><span class="form-control-plaintext form-control-sm" style="height: auto;"><?php 
+              
+              //if (isset($row['paroxos_get_files'])) echo showDate(strtotime($row['paroxos_get_files']), 'd/m/Y H:i', 1);  
+            ?>
+            <span id="paroxos_get_status" class="btn1 btn-sm1 btn-primary1 tooltipster" title="<?php echo gks_lang('Λήψη κατάστασης παραστατικού από πάροχο');?>"><i class="fas fa-sync"></i></span>
+            </span></div>
+          </div>
           
-                   
           <?php } ?>
 
           

@@ -32,6 +32,19 @@ $perm_crm_tasks_status_edit=gks_permission_user_can_action_php($my_wp_user_id,'g
 
 
 $filters = array();
+$filters[] = array(
+  'name' => 'fdisable',
+  'class' => 'filterselectbox',
+  'style' => '',
+  'title' => gks_lang('Ενεργή'),
+  'has_custom_default' => -1,
+  'multiselect' => true,    
+  'field'  => "1=1",
+  'vals' => array(
+      array('value' => 1, 'text' => gks_lang('Ενεργή'),     'sql' => "gks_crm_tasks_status.task_status_disabled=0"),
+      array('value' => 2, 'text' => gks_lang('Μη ενεργή'),  'sql' => "gks_crm_tasks_status.task_status_disabled<>0"),
+  ),
+);
 $sortable = array(
 	array('name' => 'soid',    'field' => 'gks_crm_tasks_status.id_crm_task_status'),
 	array('name' => 'sodescr', 'field' => 'gks_crm_tasks_status.task_status_descr'),

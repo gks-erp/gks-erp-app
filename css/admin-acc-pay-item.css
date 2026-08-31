@@ -191,7 +191,7 @@ www.gks.gr
   background-color: yellow;  
 }
 
-#paxoros_check_processing, #paxoros_check_files, #paxoros_send_pdf, #paroxos_get_docstate {
+#paxoros_check_processing, #paxoros_check_files, #paxoros_send_pdf, #paroxos_get_docstate, #paroxos_get_status {
   margin-top:6px;
   color: #fff;
   background-color: #007bff;

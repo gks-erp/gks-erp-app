@@ -1366,7 +1366,7 @@ jQuery(document).ready(function($) {
     }
   });
   
-  window.myalert = function (mymessage,after_redirect='',after_reload=false, after_focus_none=false, after_focus_elem='') {
+  window.myalert = function (mymessage, after_redirect='', after_reload=false, after_focus_none=false, after_focus_elem='', dialogmaxsize=false) {
       $("#dialog_message_ok").hide();
       $("#dialog_message_error").hide();
       $("#dialog_message_info").hide();
@@ -1394,12 +1394,14 @@ jQuery(document).ready(function($) {
       dheight=$(window).height() * 0.96;
       //if (dwidth> 450) dwidth=450;
       //if (dheight> 330) dheight=330;
-      if (dwidth> 600) dwidth=600;
-      
-      if (mymessage.includes('accinvposimgqrcode')) {
+      if (dialogmaxsize==false) {
+        if (dwidth> 600) dwidth=600;
         
-      } else {
-        if (dheight> 450) dheight=450;
+        if (mymessage.includes('accinvposimgqrcode')) {
+          
+        } else {
+          if (dheight> 450) dheight=450;
+        }
       }
   	  if (typeof from_php_gks_erp_app_mobile !== 'undefined' && from_php_gks_erp_app_mobile==1) {
   	    dwidth=$(window).width();dheight=$(window).height();
@@ -1675,6 +1677,9 @@ jQuery(document).ready(function($) {
             case 'calendar_remove_other_user':
               calendar_remove_other_user();
               break;
+            case 'calendar_remove_other_posta':
+              calendar_remove_other_posta();
+              break;
             case 'gks_mysubmit_cancel':
               gks_mysubmit_cancel();
               break;
@@ -1710,6 +1715,9 @@ jQuery(document).ready(function($) {
               break;
             case 'gks_fpa_template_apply_run':  
               gks_fpa_template_apply_run();
+              break;
+            case 'gks_paroxos_signature_cancelsign':  
+              gks_paroxos_signature_cancelsign();
               break;
             default:
               myalert('error: dialog_confirm function_ok');
@@ -2588,7 +2596,7 @@ jQuery(document).ready(function($) {
   
   $('#dialog_activity_color').spectrum({
     type: "component",
-    locale:'el',
+    locale:from_php_gks_spectrum_locale,
     togglePaletteOnly: true,
     hideAfterPaletteSelect: true,
     showInput: true,
@@ -4324,7 +4332,7 @@ jQuery(document).ready(function($) {
   
 
   if (typeof(from_php_dialog_object_rel_curr)!='undefined' && typeof(from_php_id)!='undefined') {
-    if (from_php_id>0) {
+    if (from_php_id>0 || from_php_dialog_object_rel_curr=='gks_calendar') {
       //console.log(from_php_dialog_object_rel_curr,from_php_id);
       temp_ctid=0;
       if (typeof(from_php_ctid)!='undefined') temp_ctid=from_php_ctid;

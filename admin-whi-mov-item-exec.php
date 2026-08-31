@@ -672,7 +672,8 @@ $mov_whi_number_int_user=0;if (isset($_POST['mov_whi_number_int'])) $mov_whi_num
 
 $sql="SELECT gks_acc_seires.id_acc_seira,gks_acc_seires.is_xeirografi,
 gks_acc_seires.seira_isdeliverynote,
-gks_acc_seires.seira_is_reverse_delivery_note
+gks_acc_seires.seira_is_reverse_delivery_note,
+gks_acc_journal.acc_eidos_parastatikou_id
 FROM (((gks_acc_seires 
 LEFT JOIN gks_acc_journal ON gks_acc_seires.acc_journal_id = gks_acc_journal.id_acc_journal) 
 LEFT JOIN gks_company ON gks_acc_journal.company_id = gks_company.id_company) 
@@ -709,7 +710,44 @@ $row_seira = $result->fetch_assoc();
 $is_xeirografi=$row_seira['is_xeirografi'];
 $seira_isdeliverynote=intval($row_seira['seira_isdeliverynote']);
 $seira_is_reverse_delivery_note=intval($row_seira['seira_is_reverse_delivery_note']);
+$acc_eidos_parastatikou_id=intval($row_seira['acc_eidos_parastatikou_id']);
 
+$receivingNotePurpose=0;if (isset($_POST['receivingNotePurpose'])) $receivingNotePurpose=intval($_POST['receivingNotePurpose']);
+$otherReceivingNotePurposeTitle='';if (isset($_POST['otherReceivingNotePurposeTitle'])) $otherReceivingNotePurposeTitle=trim_gks(base64_decode($_POST['otherReceivingNotePurposeTitle']));
+if (in_array($acc_eidos_parastatikou_id,[971,972]) ==false) {
+  $receivingNotePurpose=0; $otherReceivingNotePurposeTitle='';
+}
+if ($receivingNotePurpose==0) $otherReceivingNotePurposeTitle='';
+$aade_receiving_note_purpose_code=0;
+if ($receivingNotePurpose>0) {
+  $sql="select aade_receiving_note_purpose_code from gks_aade_receiving_note_purpose 
+  where id_aade_receiving_note_purpose=".$receivingNotePurpose;
+  $result = $db_link->query($sql);  
+  if (!$result) {
+    debug_mail(false,'error sql',$sql);
+    $return = array('success' => false, 'message' => base64_encode('sql error'));
+    echo json_encode($return); die(); }
+  if ($result->num_rows>0) {
+    $row_temp = $result->fetch_assoc();
+    $aade_receiving_note_purpose_code=intval($row_temp['aade_receiving_note_purpose_code']);
+    if ($aade_receiving_note_purpose_code!=7) $otherReceivingNotePurposeTitle='';
+  }
+}
+if ($receivingNotePurpose==5 and         //DPP - POSOTIKOS ELEGCHOS
+    $acc_eidos_parastatikou_id==972) {  //10. 2 Deltio Posotikis Paralavis Mi Syschetizomeno
+  $temp=gks_lang('Το Δελτίο Ποσοτικής Παραλαβής Μη Συσχετιζόμενο δεν μπορεί να συνδυαστεί με ΔΠΠ - ΠΟΣΟΤΙΚΟΣ ΕΛΕΓΧΟΣ');
+  debug_mail(false,'lathos 972 me to 5 gia DPP',$temp);
+  $return = array('success' => false, 'message' => base64_encode($temp));
+  echo json_encode($return); die(); }
+
+
+
+$nonObligatedRecipient=0;if (isset($_POST['nonObligatedRecipient'])) $nonObligatedRecipient=intval($_POST['nonObligatedRecipient']);
+$withoutDigitalTransportTracking=0;if (isset($_POST['withoutDigitalTransportTracking'])) $withoutDigitalTransportTracking=intval($_POST['withoutDigitalTransportTracking']);
+if ($seira_isdeliverynote==0)  {
+  $nonObligatedRecipient=0;
+  $withoutDigitalTransportTracking=0;
+}
 
 if ($mov_state=='010draft' and $mov_state_old!='010draft' and $is_xeirografi_old==0 and $mov_whi_number_int_old>0) {
   //echo '<pre>vvv';die();
@@ -2190,6 +2228,10 @@ company_id=".$company_id.",
 mov_whi_journal_id=".$mov_whi_journal_id.",
 mov_whi_seira_id=".$mov_whi_seira_id.",
 reverse_delivery_purpose=".$reverse_delivery_purpose.",
+receivingNotePurpose=".$receivingNotePurpose.",
+otherReceivingNotePurposeTitle='".$db_link->escape_string($otherReceivingNotePurposeTitle)."',
+nonObligatedRecipient=".$nonObligatedRecipient.",
+withoutDigitalTransportTracking=".$withoutDigitalTransportTracking.",
 company_sub_id=".$company_sub_id.",
 mov_date=".($mov_date == '' ? 'null' : "'".$db_link->escape_string($mov_date)."'") .", 
 user_id=".$user_id.",

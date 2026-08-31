@@ -248,6 +248,15 @@ switch ($mycmd) {
     //echo '<pre>sssssssssssss';die();
     break;
  
+  case 'paroxos_get_status':
+    
+    $ret=gks_paroxos_invoice_get_status($doc_table,$id);
+    
+    $ret['message']=base64_encode($ret['message']);
+    echo json_encode($ret); die();
+    //echo '<pre>sssssssssssss';die();
+    break;
+
   default:
     debug_mail(false,gks_lang('Δεν βρέθηκε η εντολή'),$mycmd);
     $return = array('success' => false, 'message' => base64_encode(gks_lang('Δεν βρέθηκε η εντολή').'<br>'.gks_lang('Ανανεώστε την σελίδα')));

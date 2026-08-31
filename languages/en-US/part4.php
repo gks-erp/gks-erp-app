@@ -197,12 +197,16 @@ if (isset($gks_lang_array['part4'])==false)
   'Ο λήπτης απέρριψε την παραλαβή. (Rejected)'=>'The recipient has rejected the receipt. (Rejected)',
   'Ο εκδότης ακύρωσε το ΔΑ πριν την έναρξη της διακίνησης. (Cancelled)'=>'The issuer has cancelled the Delivery Note before the start of the transportation. (Cancelled)',
   'Ο μεταφορέας δήλωσε αποτυχία παράδοσης (FailedDelivery)'=>'The carrier has declared a failure of delivery (FailedDelivery)',
+  'Ο μεταφορέας επιστρέφει με εμπόρευμα (InTransit Return)'=>'The carrier returns with merchandise (InTransit Return)',
+  
 ),
 
 'aade_deliveryeventtype'=>array(
   'Έναρξη διακίνησης (RegisterTransfer)'=>'Start movement (RegisterTransfer)',
   'Δηλώση του αποτέλεσματος της παράδοσης (ConfirmOutcome)'=>'Declaration of the delivery outcome (ConfirmOutcome)',
-  'Απόρριψη (Rejection)'=>'Rejection',
+  'Δηλώση επιστροφής από εκδότη (ConfirmReturn)'=>'Declaration of the delivery return (ConfirmReturn)',
+  'Απόρριψη (Rejection)'=>'Rejection (Rejection)',
+  'Ακύρωση διακίνησης (CancelDeliveryNote)'=>'Cancel Delivery (CancelDeliveryNote)',
 ),
 
 'aade_packagingtypedescr'=> array(

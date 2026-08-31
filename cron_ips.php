@@ -14,6 +14,7 @@ require_once('functions.php');
 //require_once('_current/_config.php');
 //require_once(GKS_SITE_PATH.GKS_SITE_HTTPDOCS.'/wp-config.php');
 
+
 require_once('functions_ip.php');
 
 $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -36,6 +37,15 @@ $db_link->set_charset('utf8');
 ini_set('max_execution_time', 10);
 set_time_limit(10);
 
+$GKS_STAT_ENABLE=true;
+$sql="SELECT mykey, myvalue FROM gks_settings WHERE mykey='GKS_STAT_ENABLE'";
+$result = $db_link->query($sql);
+if (!$result) mail('kostas@gks.gr' , 'gks_settings' , 'stat cron ips error sql: '.$sql,$headers );  
+if ($result->num_rows==1) {
+  $row = $result->fetch_assoc();
+  $GKS_STAT_ENABLE=(trim_gks($row['myvalue']) == 'false' ? false : true);
+}
+//echo 'hhhhhhhhhh';
 //debug_mail(false,'cron_ips.php','');
 
 function myBots() {
@@ -165,12 +175,6 @@ function myIps() {
 	
 	return true;
 }
-
-
-
-
-
-
 
 
 function countryForIP(){
@@ -336,6 +340,7 @@ function gks_stat_queue_insert() {
   
 }
 
+
 if (isset($_GET['stat'])) {
   gks_stat_queue_insert();
   if (isset($_GET['redirect'])) {
@@ -345,8 +350,14 @@ if (isset($_GET['stat'])) {
 }
 
 mygks_delete_files_from_temp_folder();
-gks_stat_queue_insert();
-myIps();
-countryForIP();
-myBots();
+
+if ($GKS_STAT_ENABLE) {
+
+  
+  gks_stat_queue_insert();
+  myIps();
+  countryForIP();
+  myBots();
+}
+
 //echo 'fffffffff';

@@ -278,8 +278,10 @@ jQuery(document).ready(function($) {
     $('#gks_deltio_cmd_info_' + vvv).show();
     
     $('.gks_deltio_cmd_params_status').hide();
+    $('.gks_deltio_cmd_params_cancel').hide();
     $('.gks_deltio_cmd_params_register').hide();
     $('.gks_deltio_cmd_params_confirm').hide();
+    $('.gks_deltio_cmd_params_confirm_return').hide();
     $('.gks_deltio_cmd_params_reject').hide();
     $('.gks_deltio_cmd_params_' + vvv).show();
     
@@ -288,11 +290,18 @@ jQuery(document).ready(function($) {
     switch (vvv) {
       case 'status':
         needs_mark=true;
+        needs_qrUrl=true;
+        break;
+      case 'cancel':
+        needs_mark=true;
         break;
       case 'register':
         needs_qrUrl=true;
         break;
       case 'confirm':
+        needs_qrUrl=true;
+        break;
+      case 'confirm_return':
         needs_qrUrl=true;
         break;
       case 'reject':
@@ -303,7 +312,7 @@ jQuery(document).ready(function($) {
       default:
       
     }
-    if (vvv=='reject') {
+    if (vvv=='status' || vvv=='reject') {
       $('#needs_mark').addClass('gks_f_optional');
       $('#needs_qrUrl').addClass('gks_f_optional');
       
@@ -327,6 +336,7 @@ jQuery(document).ready(function($) {
       $('#input_qrUrl').prop('disabled', true);
     }
     
+    params_confirm_outcome_change();
   }
   $('#gks_deltio_cmd').change(gks_deltio_cmd_change);
 
@@ -341,10 +351,10 @@ jQuery(document).ready(function($) {
     mycmd=$('#gks_deltio_cmd').val();
     mymark=$('#input_mark').val().trim();
     myqrUrl=$('#input_qrUrl').val().trim();
-    if (mycmd=='status' && mymark=='') {
+    if (mycmd=='status111111' && mymark=='') {
       myalert('info:'+gks_lang('Πληκτρολογήστε πρώτα το ΜΑΡΚ στο σχετικό πεδίο'));  
       return;
-    } else if (['reject'].includes(mycmd)  && myqrUrl=='' && mymark=='') {
+    } else if (['status','reject'].includes(mycmd)  && myqrUrl=='' && mymark=='') {
       myalert('info:'+gks_lang('Πληκτρολογήστε ή σαρώστε το QRCode URL στο σχετικό πεδίο ή πληκτρολογήστε το ΜΑΡΚ'));  
       return;
     } else if (['register','confirm'].includes(mycmd)  && myqrUrl=='') {
@@ -373,6 +383,18 @@ jQuery(document).ready(function($) {
       datasend+='&pNumber=' + encodeURIComponent($.base64.encode($('#params_register_pNumber').val().trim()));
       datasend+='&longitude=' + encodeURIComponent($.base64.encode($('#params_register_longitude').val().trim()));
       datasend+='&latitude=' + encodeURIComponent($.base64.encode($('#params_register_latitude').val().trim()));
+    
+      var dpitems=[];
+      $('.deliveredPackaging_item').each(function() {
+        item={};
+        item.packagingType=$(this).find('.dpitem_packagingType').val();
+        item.quantity=$(this).find('.dpitem_quantity').val();
+        item.othertitle=$(this).find('.dpitem_othertitle').val();
+        dpitems.push(item); 
+      });
+      dpitems_str = encodeURIComponent($.base64.encode(JSON.stringify(dpitems)));
+      datasend+='&dpitems_str=' + dpitems_str;     
+    
     } else if (mycmd=='confirm') {
       datasend+='&outcome=' + encodeURIComponent($.base64.encode($('#params_confirm_outcome').val().trim()));
       datasend+='&deliveredWithoutRecipient=' + (($('#params_confirm_deliveredWithoutRecipient').is(':checked')) ? '0':'1');
@@ -538,8 +560,10 @@ jQuery(document).ready(function($) {
 //  }));
 
   function params_confirm_outcome_change() {
-    vvv=$('#params_confirm_outcome').val();
-    if (vvv=='PARTIAL') {
+    vv1=$('#gks_deltio_cmd').val();
+    vv2=$('#params_confirm_outcome').val();
+    
+    if (vv1=='register' || (vv1=='confirm' && vv2=='PARTIAL')) {
       $('#params_confirm_deliveredPackaging_div').show();
     } else {
       $('#params_confirm_deliveredPackaging_div').hide();

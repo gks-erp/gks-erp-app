@@ -2504,7 +2504,15 @@ if (isset($GKS_ACC_PAY_STATUS_BUTTONS[$pay_state])) {
               }
             ?></span></div>
           </div> 
-          
+          <div class="row">
+            <label class="col-sm-4 col-form-label form-control-sm text-sm-right gks_unset_height" style="height: unset;"><?php echo gks_lang('Κατάσταση στον πάροχο');?>:</label>
+            <div class="col-sm-8 gks_unset_height"><span class="form-control-plaintext form-control-sm" style="height: auto;"><?php 
+              
+              //if (isset($row['paroxos_get_files'])) echo showDate(strtotime($row['paroxos_get_files']), 'd/m/Y H:i', 1);  
+            ?>
+            <span id="paroxos_get_status" class="btn1 btn-sm1 btn-primary1 tooltipster" title="<?php echo gks_lang('Λήψη κατάστασης παραστατικού από πάροχο');?>"><i class="fas fa-sync"></i></span>
+            </span></div>
+          </div>
                    
           <?php } ?>
 

@@ -340,8 +340,9 @@ echo gks_custom_table_list_header($gks_custom_prepare);
       $temp='';
       if (!empty($row['notes'])) $temp.=gks_lang('Πελάτης').': <b>'.nl2br_gks($row['notes']).'</b><br>';
       if (!empty($row['subnotes'])) $temp.=gks_lang('Πελάτης (Συν)').': <b>'.nl2br_gks($row['subnotes']).'</b><br>';
-      if (!empty($row['note_production'])) $temp.=gks_lang('Παραγωγή').': <b>'.nl2br_gks($row['note_production']).'</b><br>';
+      if (!empty($row['note_doc'])) $temp.=gks_lang('Σχόλιο').': <b>'.nl2br_gks($row['note_doc']).'</b><br>';
       if (!empty($row['note_logistirio'])) $temp.=gks_lang('Λογιστήριο').': <b>'.nl2br_gks($row['note_logistirio']).'</b><br>';
+      if (!empty($row['note_production'])) $temp.=gks_lang('Παραγωγή').': <b>'.nl2br_gks($row['note_production']).'</b><br>';
       
       if ($temp!='') $temp=substr($temp, 0, strlen($temp)-4);
       echo $temp;

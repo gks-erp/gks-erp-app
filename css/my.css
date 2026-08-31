@@ -2230,10 +2230,13 @@ select > option:disabled {
 .aade_delivery_status_REJECTED             {border-radius: 15px; background: #fde3e3; padding:0px 15px 0px 15px; border: 2px solid #dd2e2e; color:#812327;white-space1: nowrap;font-weight: bold;}
 .aade_delivery_status_CANCELLED            {border-radius: 15px; background: #f1f5f9; padding:0px 15px 0px 15px; border: 2px solid #475569; color:#334168;white-space1: nowrap;font-weight: bold;}
 .aade_delivery_status_FAILEDDELIVERY       {border-radius: 15px; background: #fde3e3; padding:0px 15px 0px 15px; border: 2px solid #dc2626; color:#7f1d2d;white-space1: nowrap;font-weight: bold;}
+.aade_delivery_status_IN_TRANSIT_RETURN    {border-radius: 15px; background: #feedd6; padding:0px 15px 0px 15px; border: 2px solid #ea580c; color:#7c2d12;white-space1: nowrap;font-weight: bold;}
 
 .aade_delivery_event_type_RegisterTransfer  {border-radius: 15px; background: #dceafd; padding:0px 15px 0px 15px; border: 2px solid #3b82f6; color:#2040b3;white-space1: nowrap;font-weight: bold;}
 .aade_delivery_event_type_ConfirmOutcome    {border-radius: 15px; background: #ddfbe7; padding:0px 15px 0px 15px; border: 2px solid #16a349; color:#14532d;white-space1: nowrap;font-weight: bold;}
 .aade_delivery_event_type_Rejection         {border-radius: 15px; background: #fde3e3; padding:0px 15px 0px 15px; border: 2px solid #dd2e2e; color:#812327;white-space1: nowrap;font-weight: bold;}
+.aade_delivery_event_type_ConfirmReturn     {border-radius: 15px; background: #feedd6; padding:0px 15px 0px 15px; border: 2px solid #ea580c; color:#7c2d12;white-space1: nowrap;font-weight: bold;}
+.aade_delivery_event_type_RegisterTransferReturn {border-radius: 15px; background: #feedd6; padding:0px 15px 0px 15px; border: 2px solid #ea580c; color:#7c2d12;white-space1: nowrap;font-weight: bold;}
 
 .aade_delivery_lch_outcome_FULL    {border-radius: 15px; background: #ddfbe7; padding:0px 15px 0px 15px; border: 2px solid #16a349; color:#14532d;white-space: nowrap;font-weight: bold;} 
 .aade_delivery_lch_outcome_PARTIAL {border-radius: 15px; background: #fdf9c5; padding:0px 15px 0px 15px; border: 2px solid #cc8f0a; color:#854d0e;white-space: nowrap;font-weight: bold;}

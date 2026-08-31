@@ -748,8 +748,8 @@ echo $gks_custom_row['html'];
     <div class="col-md-12 text-center mt-2">
       
       <button type="button" class="btn btn-primary" id="submit_button_ok_custom"><?php echo gks_lang('Αποθήκευση');?></button>
-      <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_email_template'];?>" data-model="gks_email_template" data-backurl="admin-email-templates.php"><?php echo gks_lang('Διαγραφή');?></button>
       <?php if ($id>0) {?>
+      <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_email_template'];?>" data-model="gks_email_template" data-backurl="admin-email-templates.php"><?php echo gks_lang('Διαγραφή');?></button>
       <button type="button" class="btn btn-primary" id="submit_button_copy" onclick="window.location.href='admin-email-templates-item.php?id=-1&copy=<?php echo $id;?>'"><?php echo gks_lang('Δημιουργία αντιγράφου');?></button>
       <?php } ?>
 

@@ -2611,10 +2611,598 @@ if ($result->num_rows==0) {
   (1100,1100,'Bookings-Folios','Customer','en-US',now(),now(),2,2,'127.0.0.1')");
 }
 
+gks_run_sql("ALTER TABLE `gks_cache_googlemaps_place` 
+MODIFY COLUMN `place_id` VARCHAR(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+DROP INDEX `place_id`,
+ADD INDEX `place_id` USING BTREE(`place_id`(190));");
 
+gks_run_sql("ALTER TABLE `gks_cache_googlemaps_directions` 
+MODIFY COLUMN `from_place_id` VARCHAR(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+MODIFY COLUMN `to_place_id` VARCHAR(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+DROP INDEX `from_place_id`,
+ADD INDEX `from_place_id` USING BTREE(`from_place_id`(190)),
+DROP INDEX `to_place_id`,
+ADD INDEX `to_place_id` USING BTREE(`to_place_id`(190));");
+
+
+gks_run_sql("ALTER TABLE `gks_transfer_reservation`
+MODIFY COLUMN poi_from_place_id VARCHAR(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+MODIFY COLUMN poi_to_place_id VARCHAR(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL;");
+
+
+$sql="select * from gks_aade_paroxos where id_aade_paroxos=21 limit 1";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+  gks_run_sql("insert into gks_aade_paroxos (
+  id_aade_paroxos,mydate_add,mydate_edit,user_id_add,user_id_edit,myip,
+  paroxos_name,paroxos_url,paroxos_implemented,paroxos_sortorder,
+  paroxos_need_username,paroxos_need_password,paroxos_need_key,signing_author
+  ) values (
+  21,'2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1',
+  'etimologiera','https://etimologiera.gr/',0,21,
+  1,1,0,'021'
+  )");
+  
+}
+  
+$read_file=file_get_contents(GKS_SITE_PATH.GKS_SITE_HTTPDOCS.'/my/_current/_config.php');
+if (strpos($read_file, "GKS_ETIMOLOGIERA_GR_MODE_LIVE_API") === false) {
+  $pos1=strpos($read_file, "GKS_PAROCHOS_GR_MODE_LIVE_API");
+  $pos2=strpos($read_file,'\');',$pos1+10);
+  $read_file2=substr($read_file, 0,$pos2+3);
+  $read_file2.='
+  
+//define(\'GKS_ETIMOLOGIERA_GR_MODE_LIVE_API\', \'https://einvoicing-dev-api.etimologiera.gr/v4\');
+define(\'GKS_ETIMOLOGIERA_GR_MODE_LIVE_API\', \'https://einvoicing-api.etimologiera.gr/v4\');';
+  $read_file2.=substr($read_file, $pos2+3);
+  //$read_file2.=substr($read_file, $pos2);
+  //echo '<pre>'.$read_file2;die();
+  file_put_contents(GKS_SITE_PATH.GKS_SITE_HTTPDOCS.'/my/_current/_config.php',$read_file2);
+}
+
+
+gks_run_sql("update gks_acc_eidi_parastatikon set import_apo_allon='[1.1][1.4][1.5][1.6]' where id_acc_eidos_parastatikou=502");
+gks_run_sql("update gks_acc_eidi_parastatikon set import_apo_allon='[11.1][8.1][8.2]' where id_acc_eidos_parastatikou=551");
+
+gks_run_sql("update gks_acc_eidi_parastatikon set eidos_parastatikou_has_othertaxes='wh,ot,sd,fe,dd' where id_acc_eidos_parastatikou in (551,552)");
+
+
+gks_run_sql("CREATE TABLE IF NOT EXISTS `gks_hr_program` (
+  `id_hr_program` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `mydate_add` datetime DEFAULT NULL,
+  `mydate_edit` datetime DEFAULT NULL,
+  `user_id_add` int(11) NOT NULL DEFAULT 0,
+  `user_id_edit` int(11) NOT NULL DEFAULT 0,
+  `myip` varchar(48) DEFAULT NULL,
+  `odbc` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `company_id` int(11) NOT NULL DEFAULT 0,
+  `company_sub_id` int(11) NOT NULL DEFAULT 0,
+  `hr_program_date` datetime DEFAULT NULL,
+  `hr_program_is_ergasia` tinyint(4) NOT NULL DEFAULT 0,
+  `hr_program_status_id` int(11) NOT NULL DEFAULT 0,
+  `hr_program_vardia_id` int(11) NOT NULL DEFAULT 0,
+  `hr_program_date_from` datetime DEFAULT NULL,
+  `hr_program_date_to` datetime DEFAULT NULL,
+  `hr_program_color` varchar(190) DEFAULT NULL,
+  `hr_program_name` varchar(255) DEFAULT NULL,
+  `hr_program_descr` longtext DEFAULT NULL,
+  `hr_program_user_id` int(11) NOT NULL DEFAULT 0,
+  `hr_program_posto_id` int(11) DEFAULT NULL,
+  `internal_note` text DEFAULT NULL,
+  `assigned_id` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id_hr_program`) USING BTREE,
+  KEY `mydate_edit` (`mydate_edit`) USING BTREE,
+  KEY `user_id_edit` (`user_id_edit`) USING BTREE,
+  KEY `company_id` (`company_id`),
+  KEY `company_sub_id` (`company_sub_id`),
+  KEY `hr_program_date` (`hr_program_date`),
+  KEY `hr_program_is_ergasia` (`hr_program_is_ergasia`),
+  KEY `hr_program_status_id` (`hr_program_status_id`),
+  KEY `hr_program_vardia_id` (`hr_program_vardia_id`),
+  KEY `hr_program_date_from` (`hr_program_date_from`),
+  KEY `hr_program_date_to` (`hr_program_date_to`),
+  KEY `hr_program_name` (`hr_program_name`(190)) USING BTREE,
+  KEY `hr_program_descr` (`hr_program_descr`(190)) USING BTREE,
+  KEY `hr_program_user_id` (`hr_program_user_id`) USING BTREE,
+  KEY `hr_program_posto_id` (`hr_program_posto_id`),
+  KEY `assigned_id` (`assigned_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;");
+
+gks_run_sql("CREATE TABLE IF NOT EXISTS `gks_hr_program_log` (
+  `id_gks_hr_program_log` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `hr_program_id` int(11) NOT NULL DEFAULT 0,
+  `add_date` datetime NOT NULL,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `sxolio` text NOT NULL,
+  `odbc` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id_gks_hr_program_log`) USING BTREE,
+  KEY `hr_program_id` (`hr_program_id`),
+  KEY `user_id` (`user_id`),
+  KEY `add_date` (`add_date`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;");
+
+
+
+gks_run_sql("CREATE TABLE IF NOT EXISTS `gks_hr_program_messages` (
+  `id_hr_program_message` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `mydate_add` datetime DEFAULT NULL,
+  `mydate_edit` datetime DEFAULT NULL,
+  `user_id_add` int(11) NOT NULL DEFAULT 0,
+  `user_id_edit` int(11) NOT NULL DEFAULT 0,
+  `myip` varchar(48) DEFAULT NULL,
+  `odbc` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `hr_program_id` int(11) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `hr_program_message` text DEFAULT NULL,
+  `email_id` int(11) NOT NULL DEFAULT 0,
+  `sms_id` int(11) NOT NULL DEFAULT 0,
+  `connect_id` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id_hr_program_message`),
+  KEY `mydate_edit` (`mydate_edit`),
+  KEY `user_id_edit` (`user_id_edit`),
+  KEY `hr_program_id` (`hr_program_id`),
+  KEY `user_id` (`user_id`),
+  KEY `hr_program_message` (`hr_program_message`(250)),
+  KEY `email_id` (`email_id`),
+  KEY `connect_id` (`connect_id`),
+  KEY `sms_id` (`sms_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;");
+
+
+
+gks_run_sql("CREATE TABLE IF NOT EXISTS `gks_hr_program_photo` (
+  `id_hr_program_photo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `hr_program_id` int(11) NOT NULL DEFAULT 0,
+  `photo_url` varchar(255) NOT NULL,
+  `mydate` datetime NOT NULL,
+  `mysize` int(11) DEFAULT 0,
+  `ip` varchar(48) DEFAULT NULL,
+  `odbc` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `user_add_id` int(11) NOT NULL DEFAULT 0,
+  `show_print` tinyint(4) NOT NULL DEFAULT 0,
+  `filesobjectlist` tinyint(4) NOT NULL DEFAULT 0,
+  `public_expire_date` datetime DEFAULT NULL,
+  `public_shortcode` varchar(64) DEFAULT NULL,
+  `public_myopencount` int(11) NOT NULL DEFAULT 0,
+  `descr` varchar(190) DEFAULT NULL,
+  PRIMARY KEY (`id_hr_program_photo`) USING BTREE,
+  KEY `hr_program_id` (`hr_program_id`),
+  KEY `photo_url` (`photo_url`(250)),
+  KEY `mydate` (`mydate`),
+  KEY `mysize` (`mysize`),
+  KEY `ip` (`ip`),
+  KEY `filesobjectlist` (`filesobjectlist`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;");
+
+
+$sql="select * from gks_permission_object where id_permission_object=800";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+  gks_run_sql("INSERT INTO `gks_permission_object` (`id_permission_object`,`mydate_add`,`mydate_edit`,`user_id_add`,`user_id_edit`,`myip`,`card_title`,`parent_id`,`table_name`,`object_name`,`sortorder`) VALUES 
+   (800,'2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','HR',0,'gks_hr_program','Πρόγραμμα',3970)");
+
+  $sql="SELECT ssss.user_id
+  FROM (
+    SELECT user_id
+    FROM gks_permission_user
+    GROUP BY user_id
+  ) AS ssss LEFT JOIN ".GKS_WP_TABLE_PREFIX."users ON ssss.user_id = ".GKS_WP_TABLE_PREFIX."users.ID
+  WHERE (gks_wp_capabilities Like '%adminmy%' or gks_wp_capabilities Like '%administrator%')";
+  $result = gks_run_sql($sql);
+  $user_ids=array();
+  while ($row = $result->fetch_assoc()) $user_ids[]=$row['user_id'];
+  
+  foreach ($user_ids as $value) {
+    gks_run_sql("INSERT INTO `gks_permission_user` 
+    (mydate_add,mydate_edit,user_id_add,user_id_edit,myip,user_id,permission_object_id,perm_view,perm_edit,perm_add,perm_delete,perm_autocomplete) values 
+    ('2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1',".$value.",800,1,1,1,1,1)");
+  }
+}
+$sql="select * from gks_crm_activity_objects where id_crm_activity_object=58";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+  gks_run_sql("INSERT INTO `gks_crm_activity_objects` (`id_crm_activity_object`,`mydate_add`,`mydate_edit`,`user_id_add`,`user_id_edit`,`myip`,`crm_activity_object_code`,`crm_activity_object_descr`,`crm_activity_object_sortorder`,`crm_activity_object_disabled`,`crm_activity_object_page`) VALUES 
+   (58,'2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','gks_hr_program','Πρόγραμμα Υπαλλήλων',58,0,'admin-hr-program-item.php?id=%s')");
+}
+
+$sql="select * from gks_custom_table where id_custom_table=62";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+  gks_run_sql("INSERT INTO `gks_custom_table` (
+  `id_custom_table`,`mydate_add`,`mydate_edit`,`user_id_add`,`user_id_edit`,`myip`,
+  `custom_table_descr`,`custom_table_name`,field_name_id_parent,field_name_id_current,
+  custom_table_disabled,custom_priv,custom_sortorder,obj_url,num_columns
+  ) VALUES (
+  62,'2021-01-01','2021-01-01',2,2,'127.0.0.1',
+  'HR - Πρόγραμμα','gks_hr_program','id_hr_program','hr_program_id',
+  0,'hr',200,'admin-hr-program.php',2
+  )");
+}
+
+gks_run_sql("CREATE TABLE IF NOT EXISTS `gks_hr_program_status` (
+  `id_hr_program_status` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `odbc` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `mydate_add` datetime DEFAULT NULL,
+  `mydate_edit` datetime DEFAULT NULL,
+  `user_id_add` int(11) NOT NULL DEFAULT 0,
+  `user_id_edit` int(11) NOT NULL DEFAULT 0,
+  `myip` varchar(48) DEFAULT NULL,
+  `hr_program_status_descr` varchar(250) DEFAULT NULL,
+  `hr_program_status_color` varchar(250) DEFAULT NULL,
+  `hr_program_status_colorf` varchar(250) DEFAULT NULL,
+  `hr_program_status_colorcss` text DEFAULT NULL,
+  `hr_program_status_sortorder` int(11) NOT NULL DEFAULT 1000,
+  `hr_program_status_disabled` tinyint(4) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id_hr_program_status`) USING BTREE,
+  KEY `hr_program_status_descr` (`hr_program_status_descr`),
+  KEY `hr_program_status_sortorder` (`hr_program_status_sortorder`),
+  KEY `hr_program_status_disabled` (`hr_program_status_disabled`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;");
+
+$sql="select * from gks_hr_program_status limit 1";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+  gks_run_sql("INSERT INTO `gks_hr_program_status` 
+  (`id_hr_program_status`,`mydate_add`,`mydate_edit`,`user_id_add`,`user_id_edit`,`myip`,`hr_program_status_descr`,
+  `hr_program_status_color`,`hr_program_status_colorf`,`hr_program_status_colorcss`,
+  `hr_program_status_sortorder`,`hr_program_status_disabled`) 
+  VALUES 
+  (1,  '2021-01-01','2021-01-01',2,2,'127.0.0.1','Πρόχειρη',   '#777777','#ffffff','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',1,0),
+  (20, '2021-01-01','2021-01-01',2,2,'127.0.0.1','Αξιολόγηση', '#ffe8bb','#000000','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',2,0),
+  (100,'2021-01-01','2021-01-01',2,2,'127.0.0.1','Εγκρίθηκε',  '#beffbb','#000000','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',3,0),
+  (200,'2021-01-01','2021-01-01',2,2,'127.0.0.1','Aπορρίφθηκε','#ffbbbb','#000000','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',4,0);");
+}
+
+
+gks_run_sql("CREATE TABLE IF NOT EXISTS `gks_hr_program_status_photo` (
+  `id_hr_program_status_photo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `hr_program_status_id` int(11) NOT NULL DEFAULT 0,
+  `photo_url` varchar(190) NOT NULL,
+  `mydate` datetime NOT NULL,
+  `mysize` int(11) DEFAULT 0,
+  `ip` varchar(48) DEFAULT NULL,
+  `odbc` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `user_add_id` int(11) NOT NULL DEFAULT 0,
+  `show_print` tinyint(4) NOT NULL DEFAULT 0,
+  `filesobjectlist` tinyint(4) NOT NULL DEFAULT 0,
+  `public_expire_date` datetime DEFAULT NULL,
+  `public_shortcode` varchar(64) DEFAULT NULL,
+  `public_myopencount` int(11) NOT NULL DEFAULT 0,
+  `descr` varchar(190) DEFAULT NULL,
+  PRIMARY KEY (`id_hr_program_status_photo`),
+  KEY `hr_program_status_id` (`hr_program_status_id`),
+  KEY `photo_url` (`photo_url`),
+  KEY `mydate` (`mydate`),
+  KEY `mysize` (`mysize`),
+  KEY `ip` (`ip`),
+  KEY `show_print` (`show_print`),
+  KEY `filesobjectlist` (`filesobjectlist`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;");
+
+
+$sql="select * from gks_permission_object where id_permission_object=801";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+  gks_run_sql("INSERT INTO `gks_permission_object` (`id_permission_object`,`mydate_add`,`mydate_edit`,`user_id_add`,`user_id_edit`,`myip`,`card_title`,`parent_id`,`table_name`,`object_name`,`sortorder`) VALUES 
+   (801,'2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','HR',0,'gks_hr_program_status','Κατάσταση Προγράμματος',3991)");
+
+  $sql="SELECT ssss.user_id
+  FROM (
+    SELECT user_id
+    FROM gks_permission_user
+    GROUP BY user_id
+  ) AS ssss LEFT JOIN ".GKS_WP_TABLE_PREFIX."users ON ssss.user_id = ".GKS_WP_TABLE_PREFIX."users.ID
+  WHERE (gks_wp_capabilities Like '%adminmy%' or gks_wp_capabilities Like '%administrator%')";
+  $result = gks_run_sql($sql);
+  $user_ids=array();
+  while ($row = $result->fetch_assoc()) $user_ids[]=$row['user_id'];
+  
+  foreach ($user_ids as $value) {
+    gks_run_sql("INSERT INTO `gks_permission_user` 
+    (mydate_add,mydate_edit,user_id_add,user_id_edit,myip,user_id,permission_object_id,perm_view,perm_edit,perm_add,perm_delete,perm_autocomplete) values 
+    ('2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1',".$value.",801,1,1,1,1,1)");
+  }
+}
+$sql="select * from gks_crm_activity_objects where id_crm_activity_object=59";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+  gks_run_sql("INSERT INTO `gks_crm_activity_objects` (`id_crm_activity_object`,`mydate_add`,`mydate_edit`,`user_id_add`,`user_id_edit`,`myip`,`crm_activity_object_code`,`crm_activity_object_descr`,`crm_activity_object_sortorder`,`crm_activity_object_disabled`,`crm_activity_object_page`) VALUES 
+   (59,'2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','gks_hr_program_status','Κατάσταση Προγράμματος',59,0,'admin-hr-program-status-item.php?id=%s')");
+}
+
+gks_run_sql("CREATE TABLE IF NOT EXISTS `gks_hr_program_vardia` (
+  `id_hr_program_vardia` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `odbc` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `mydate_add` datetime DEFAULT NULL,
+  `mydate_edit` datetime DEFAULT NULL,
+  `user_id_add` int(11) NOT NULL DEFAULT 0,
+  `user_id_edit` int(11) NOT NULL DEFAULT 0,
+  `myip` varchar(48) DEFAULT NULL,
+  `hr_program_vardia_descr` varchar(250) DEFAULT NULL,
+  `hr_program_vardia_color` varchar(250) DEFAULT NULL,
+  `hr_program_vardia_colorf` varchar(250) DEFAULT NULL,
+  `hr_program_vardia_colorcss` text DEFAULT NULL,
+  `hr_program_vardia_sortorder` int(11) NOT NULL DEFAULT 1000,
+  `hr_program_vardia_disabled` tinyint(4) NOT NULL DEFAULT 0,
+  `hr_program_vardia_time_start` varchar(45) DEFAULT NULL,
+  `hr_program_vardia_time_end` varchar(45) DEFAULT NULL,
+  `hr_program_vardia_weekday0` tinyint(4) NOT NULL DEFAULT 0,
+  `hr_program_vardia_weekday1` tinyint(4) NOT NULL DEFAULT 0,
+  `hr_program_vardia_weekday2` tinyint(4) NOT NULL DEFAULT 0,
+  `hr_program_vardia_weekday3` tinyint(4) NOT NULL DEFAULT 0,
+  `hr_program_vardia_weekday4` tinyint(4) NOT NULL DEFAULT 0,
+  `hr_program_vardia_weekday5` tinyint(4) NOT NULL DEFAULT 0,
+  `hr_program_vardia_weekday6` tinyint(4) NOT NULL DEFAULT 0,
+  `hr_program_vardia_is_ergasia` tinyint(4) NOT NULL DEFAULT 0,
+  
+  PRIMARY KEY (`id_hr_program_vardia`) USING BTREE,
+  KEY `hr_program_vardia_descr` (`hr_program_vardia_descr`),
+  KEY `hr_program_vardia_sortorder` (`hr_program_vardia_sortorder`),
+  KEY `hr_program_vardia_disabled` (`hr_program_vardia_disabled`),
+  KEY `hr_program_vardia_time_start` (`hr_program_vardia_time_start`),
+  KEY `hr_program_vardia_time_end` (`hr_program_vardia_time_end`),
+  KEY `hr_program_vardia_is_ergasia` (`hr_program_vardia_is_ergasia`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;");
+
+gks_run_sql("CREATE TABLE IF NOT EXISTS `gks_hr_program_vardia_photo` (
+  `id_hr_program_vardia_photo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `hr_program_vardia_id` int(11) NOT NULL DEFAULT 0,
+  `photo_url` varchar(190) NOT NULL,
+  `mydate` datetime NOT NULL,
+  `mysize` int(11) DEFAULT 0,
+  `ip` varchar(48) DEFAULT NULL,
+  `odbc` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `user_add_id` int(11) NOT NULL DEFAULT 0,
+  `show_print` tinyint(4) NOT NULL DEFAULT 0,
+  `filesobjectlist` tinyint(4) NOT NULL DEFAULT 0,
+  `public_expire_date` datetime DEFAULT NULL,
+  `public_shortcode` varchar(64) DEFAULT NULL,
+  `public_myopencount` int(11) NOT NULL DEFAULT 0,
+  `descr` varchar(190) DEFAULT NULL,
+  PRIMARY KEY (`id_hr_program_vardia_photo`),
+  KEY `hr_program_vardia_id` (`hr_program_vardia_id`),
+  KEY `photo_url` (`photo_url`),
+  KEY `mydate` (`mydate`),
+  KEY `mysize` (`mysize`),
+  KEY `ip` (`ip`),
+  KEY `show_print` (`show_print`),
+  KEY `filesobjectlist` (`filesobjectlist`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;");
+
+$sql="select * from gks_hr_program_vardia limit 1";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+gks_run_sql("INSERT INTO `gks_hr_program_vardia` (`id_hr_program_vardia`,`odbc`,`mydate_add`,`mydate_edit`,`user_id_add`,`user_id_edit`,`myip`,`hr_program_vardia_descr`,`hr_program_vardia_color`,`hr_program_vardia_colorf`,`hr_program_vardia_colorcss`,`hr_program_vardia_sortorder`,`hr_program_vardia_disabled`,`hr_program_vardia_time_start`,`hr_program_vardia_time_end`,`hr_program_vardia_weekday0`,`hr_program_vardia_weekday1`,`hr_program_vardia_weekday2`,`hr_program_vardia_weekday3`,`hr_program_vardia_weekday4`,`hr_program_vardia_weekday5`,`hr_program_vardia_weekday6`,`hr_program_vardia_is_ergasia`) VALUES 
+(10, '2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Πρωινή 1','#ce7e00','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',1,0,'06:00','14:00',0,1,1,1,1,1,0,1),
+(20, '2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Πρωινή 2','#8fce00','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',2,0,'07:00','15:00',0,1,1,1,1,1,0,1),
+(30, '2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Πρωινή 3','#2986cc','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',3,0,'08:00','16:00',0,1,1,1,1,1,0,1),
+(40, '2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Πρωινή 4','#16537e','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',4,0,'09:00','17:00',0,1,1,1,1,1,0,1),
+(50, '2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Απογευματινή 1','#bf9000','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',5,0,'14:00','22:00',0,1,1,1,1,1,0,1),
+(60, '2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Απογευματινή 2','#6aa84f','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',6,0,'15:00','23:00',0,1,1,1,1,1,0,1),
+(70, '2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Απογευματινή 3','#45818e','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',7,0,'16:00','00:00',0,1,1,1,1,1,0,1),
+(80, '2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Απογευματινή 4','#3d85c6','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',8,0,'17:00','01:00',0,1,1,1,1,1,0,1),
+(90, '2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Βραδινή  1','#7f6000','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',9,0,'22:00','06:00',0,1,1,1,1,1,0,1),
+(100,'2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Βραδινή 2','#38761d','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',10,0,'23:00','07:00',0,1,1,1,1,1,0,1),
+(110,'2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Βραδινή 3','#134f5c','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',11,0,'00:00','08:00',0,1,1,1,1,1,0,1),
+(120,'2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Βραδινή 4','#0b5394','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',12,0,'01:00','09:00',0,1,1,1,1,1,0,1),
+(200,'2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','ΠΣΚ','#6a329f','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',13,0,'09:00','17:00',1,0,0,0,0,1,1,1),
+(210,'2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','ΣΚ','#674ea7','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',14,0,'09:00','17:00',1,0,0,0,0,0,1,1),
+(500,'2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Άδεια','#f44336','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',15,0,'00:00','00:00',0,1,1,1,1,1,0,0),
+(510,'2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Ρεπό','#c90076','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',16,0,'00:00','00:00',0,1,1,1,1,1,0,0),
+(520,'2021-01-01 00:00:00','2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Ασθένεια','#cc0000','white','border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;',17,0,'00:00','00:00',0,1,1,1,1,1,0,0)");
+
+}
+
+$sql="select * from gks_permission_object where id_permission_object=802";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+  gks_run_sql("INSERT INTO `gks_permission_object` (`id_permission_object`,`mydate_add`,`mydate_edit`,`user_id_add`,`user_id_edit`,`myip`,`card_title`,`parent_id`,`table_name`,`object_name`,`sortorder`) VALUES 
+   (802,'2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','HR',0,'gks_hr_program_vardia','Βάρδιες',39900)");
+
+  $sql="SELECT ssss.user_id
+  FROM (
+    SELECT user_id
+    FROM gks_permission_user
+    GROUP BY user_id
+  ) AS ssss LEFT JOIN ".GKS_WP_TABLE_PREFIX."users ON ssss.user_id = ".GKS_WP_TABLE_PREFIX."users.ID
+  WHERE (gks_wp_capabilities Like '%adminmy%' or gks_wp_capabilities Like '%administrator%')";
+  $result = gks_run_sql($sql);
+  $user_ids=array();
+  while ($row = $result->fetch_assoc()) $user_ids[]=$row['user_id'];
+  
+  foreach ($user_ids as $value) {
+    gks_run_sql("INSERT INTO `gks_permission_user` 
+    (mydate_add,mydate_edit,user_id_add,user_id_edit,myip,user_id,permission_object_id,perm_view,perm_edit,perm_add,perm_delete,perm_autocomplete) values 
+    ('2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1',".$value.",802,1,1,1,1,1)");
+  }
+}
+$sql="select * from gks_crm_activity_objects where id_crm_activity_object=60";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+  gks_run_sql("INSERT INTO `gks_crm_activity_objects` (`id_crm_activity_object`,`mydate_add`,`mydate_edit`,`user_id_add`,`user_id_edit`,`myip`,`crm_activity_object_code`,`crm_activity_object_descr`,`crm_activity_object_sortorder`,`crm_activity_object_disabled`,`crm_activity_object_page`) VALUES 
+   (60,'2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','gks_hr_program_vardia','Βάρδια',59,0,'admin-hr-program-vardia-item.php?id=%s')");
+}
+
+
+
+
+
+$sql="select lead_status_colorf from gks_crm_leads_status limit 1";
+$result = $db_link->query($sql);
+if (!$result) { //must return error
+  gks_run_sql("ALTER TABLE `gks_crm_leads_status`
+  ADD COLUMN `lead_status_colorf` varchar(250) DEFAULT NULL after lead_status_color,
+  ADD COLUMN `lead_status_colorcss` text DEFAULT NULL after lead_status_colorf");
+  
+  gks_run_sql("update gks_crm_leads_status set lead_status_colorcss='border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;';");
+  
+  $sql="select * from gks_crm_leads_status";
+  $result = gks_run_sql($sql);
+  $mylist=[];
+  while ($row = $result->fetch_assoc()) $mylist[]=$row;
+  foreach($mylist as $row) {
+    $color=color_inverse($row['lead_status_color']);
+    gks_run_sql("update gks_crm_leads_status set lead_status_colorf='".$color."' where id_crm_lead_status=".$row['id_crm_lead_status']);
+  }
+}
+
+$sql="select task_status_colorf from gks_crm_tasks_status limit 1";
+$result = $db_link->query($sql);
+if (!$result) { //must return error
+  gks_run_sql("ALTER TABLE `gks_crm_tasks_status`
+  ADD COLUMN `task_status_colorf` varchar(250) DEFAULT NULL after task_status_color,
+  ADD COLUMN `task_status_colorcss` text DEFAULT NULL after task_status_colorf");
+  
+  gks_run_sql("update gks_crm_tasks_status set task_status_colorcss='border-radius: 10px; padding:0px 10px 0px 10px; border: 1px solid #000000; white-space: nowrap;';");
+  
+  $sql="select * from gks_crm_tasks_status";
+  $result = gks_run_sql($sql);
+  $mylist=[];
+  while ($row = $result->fetch_assoc()) $mylist[]=$row;
+  foreach($mylist as $row) {
+    $color=color_inverse($row['task_status_color']);
+    gks_run_sql("update gks_crm_tasks_status set task_status_colorf='".$color."' where id_crm_task_status=".$row['id_crm_task_status']);
+  }
+}
+
+
+gks_run_sql("CREATE TABLE IF NOT EXISTS `gks_calendar_other_posta` (
+  `id_calendar_other_posta` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `mydate_add` datetime DEFAULT NULL,
+  `mydate_edit` datetime DEFAULT NULL,
+  `user_id_add` int(11) NOT NULL DEFAULT 0,
+  `user_id_edit` int(11) NOT NULL DEFAULT 0,
+  `myip` varchar(48) DEFAULT NULL,
+  `odbc` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `this_user_id` int(11) NOT NULL DEFAULT 0,
+  `other_posta_id` int(11) NOT NULL DEFAULT 0,
+  `other_posta_color` varchar(250) DEFAULT NULL,
+  `other_myobj` varchar(45) NOT NULL DEFAULT 'cal',
+  `other_visible` tinyint(4) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id_calendar_other_posta`),
+  KEY `mydate_edit` (`mydate_edit`),
+  KEY `user_id_edit` (`user_id_edit`),
+  KEY `this_user_id` (`this_user_id`),
+  KEY `other_posta_id` (`other_posta_id`),
+  KEY `other_myobj` (`other_myobj`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;");
+
+$sql="select * from gks_permission_object where id_permission_object=431";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+  gks_run_sql("INSERT INTO `gks_permission_object` (`id_permission_object`,`mydate_add`,`mydate_edit`,`user_id_add`,`user_id_edit`,`myip`,`card_title`,`parent_id`,`table_name`,`object_name`,`sortorder`) VALUES 
+   (431,'2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','CRM',0,'gks_calendar_other_posta','Πόστα σε ημερολόγιο',4301)");
+
+  $sql="SELECT ssss.user_id
+  FROM (
+    SELECT user_id
+    FROM gks_permission_user
+    GROUP BY user_id
+  ) AS ssss LEFT JOIN ".GKS_WP_TABLE_PREFIX."users ON ssss.user_id = ".GKS_WP_TABLE_PREFIX."users.ID
+  WHERE (gks_wp_capabilities Like '%adminmy%' or gks_wp_capabilities Like '%administrator%')";
+  $result = gks_run_sql($sql);
+  $user_ids=array();
+  while ($row = $result->fetch_assoc()) $user_ids[]=$row['user_id'];
+  
+  foreach ($user_ids as $value) {
+    gks_run_sql("INSERT INTO `gks_permission_user` 
+    (mydate_add,mydate_edit,user_id_add,user_id_edit,myip,user_id,permission_object_id,perm_view,perm_edit,perm_add,perm_delete,perm_autocomplete) values 
+    ('2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1',".$value.",431,1,1,1,1,1)");
+  }
+}
+
+
+$sql="select cancel_response from gks_paroxos_signature limit 1";
+$result = $db_link->query($sql);
+if (!$result) { //must return error
+  gks_run_sql("ALTER TABLE `gks_paroxos_signature`
+  ADD COLUMN `cancel_response` LONGTEXT DEFAULT NULL AFTER `response`;");
+}
+$sql="select product_cpv from gks_eshop_products limit 1";
+$result = $db_link->query($sql);
+if (!$result) { //must return error
+  gks_run_sql("ALTER TABLE `gks_eshop_products`
+  ADD COLUMN `product_cpv` varchar(48) DEFAULT NULL AFTER `product_taric`;");
+}
+
+$sql="select receivingNotePurpose from gks_whi_mov limit 1";
+$result = $db_link->query($sql);
+if (!$result) { //must return error
+  gks_run_sql("ALTER TABLE `gks_whi_mov`
+  ADD COLUMN `receivingNotePurpose`  tinyint(4) NOT NULL DEFAULT 0,
+  ADD COLUMN `otherReceivingNotePurposeTitle` varchar(190) DEFAULT NULL,
+  ADD COLUMN `nonObligatedRecipient`  tinyint(4) NOT NULL DEFAULT 0,
+  ADD COLUMN `withoutDigitalTransportTracking`  tinyint(4) NOT NULL DEFAULT 0;");
+}
+
+$sql="select nonObligatedRecipient from gks_acc_inv limit 1";
+$result = $db_link->query($sql);
+if (!$result) { //must return error
+  gks_run_sql("ALTER TABLE `gks_acc_inv`
+  ADD COLUMN `nonObligatedRecipient`  tinyint(4) NOT NULL DEFAULT 0,
+  ADD COLUMN `withoutDigitalTransportTracking`  tinyint(4) NOT NULL DEFAULT 0;");
+  
+  
+  gks_run_sql("ALTER TABLE `gks_acc_inv` MODIFY COLUMN `paroxos_tf1_url_has` INTEGER NOT NULL DEFAULT 0;");
+  gks_run_sql("ALTER TABLE `gks_acc_pay` MODIFY COLUMN `paroxos_tf1_url_has` INTEGER NOT NULL DEFAULT 0;");
+  gks_run_sql("ALTER TABLE `gks_whi_mov` MODIFY COLUMN `paroxos_tf1_url_has` INTEGER NOT NULL DEFAULT 0;");
+  
+  gks_run_sql("update `gks_acc_inv` set paroxos_tf1_url_has=8 where paroxos_tf1_url_has=1");
+  gks_run_sql("update `gks_acc_pay` set paroxos_tf1_url_has=8 where paroxos_tf1_url_has=1");
+  gks_run_sql("update `gks_whi_mov` set paroxos_tf1_url_has=8 where paroxos_tf1_url_has=1");
+  
+} 
+
+
+gks_run_sql("CREATE TABLE IF NOT EXISTS `gks_aade_receiving_note_purpose` (
+  `id_aade_receiving_note_purpose` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `mydate_add` datetime DEFAULT NULL,
+  `mydate_edit` datetime DEFAULT NULL,
+  `user_id_add` int(11) NOT NULL DEFAULT 0,
+  `user_id_edit` int(11) NOT NULL DEFAULT 0,
+  `myip` varchar(48) DEFAULT NULL,
+  `odbc` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `aade_receiving_note_purpose_code` int(11) NOT NULL DEFAULT 0,
+  `aade_receiving_note_purpose_descr` varchar(200) DEFAULT NULL,
+  `sortorder` int(11) NOT NULL DEFAULT 1000,
+  PRIMARY KEY (`id_aade_receiving_note_purpose`),
+  KEY `mydate_edit` (`mydate_edit`),
+  KEY `user_id_edit` (`user_id_edit`),
+  KEY `aade_receiving_note_purpose_code` (`aade_receiving_note_purpose_code`),
+  KEY `aade_receiving_note_purpose_descr` (`aade_receiving_note_purpose_descr`),
+  KEY `sortorder` (`sortorder`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;");
+
+$sql="select * from gks_aade_receiving_note_purpose limit 1";
+$result = gks_run_sql($sql);
+if ($result->num_rows==0) {
+  gks_run_sql("insert into gks_aade_receiving_note_purpose (
+  id_aade_receiving_note_purpose,mydate_add,mydate_edit,user_id_add,user_id_edit,myip,
+  aade_receiving_note_purpose_code,aade_receiving_note_purpose_descr,sortorder
+  ) values 
+  (1,'2020-01-01','2020-01-01',2,2,'127.0.0.1',1,'ΔΠΠ - Μη Υπόχρεος Έκδοσης',1),
+  (2,'2020-01-01','2020-01-01',2,2,'127.0.0.1',2,'ΔΠΠ - Άρνηση Έκδοσης/Εκ Παραδρομής Μη Εκδοση',2),
+  (3,'2020-01-01','2020-01-01',2,2,'127.0.0.1',3,'ΔΠΠ - Ενδοκοινοτική Απόκτηση',3),
+  (4,'2020-01-01','2020-01-01',2,2,'127.0.0.1',4,'ΔΠΠ - Απόκτηση Τρίτη Χώρα',4),
+  (5,'2020-01-01','2020-01-01',2,2,'127.0.0.1',5,'ΔΠΠ - Ποσοτικός Έλεγχος',5),
+  (6,'2020-01-01','2020-01-01',2,2,'127.0.0.1',6,'ΔΠΠ - Μη/Μερική Παράδοση',6),
+  (7,'2020-01-01','2020-01-01',2,2,'127.0.0.1',7,'ΔΠΠ - Λοιπές Περιπτώσεις',7)");
+}
+
+
+//receivingNotePurpose, Αιτία Έκδοσης Δελτίου Ποσοτικής Παραλαβής code 1-7
+//otherReceivingNotePurposeTitle //Tίτλος της Λοιπής Περίπτωσης της Αιτίας Έκδοσης Δελτίου Ποσοτικής Παραλαβή
+//nonObligatedRecipient Μη Υπόχρεος Λήπτης (Αφορά Παραστατικό Διακίνησης)
+//withoutDigitalTransportTracking  Χωρίς Ψηφιακή Παρακολούθηση Διακίνησης 
+
+
+
+gks_run_sql("update gks_permission_object set 
+object_name='Επισκόπηση Παρόχου',
+table_name='gks__paroxos_overview'
+where id_permission_object=781 and table_name='gks__paroxos_overview_ilyda'");
 
   
-
 //εσοδα
 //ΤΥΠΟΣ ΠΑΡΑΣΤΑΤΙΚΟΥ: 1.6 - Τιμολόγιο Πώλησης / Συμπληρωματικό Παραστατικό	
 //Συμπληρώνεται ανά περίπτωση τύπου παραστατικών 1.1, 1.2, 1.3, 1.4, 1.5, 1.6	

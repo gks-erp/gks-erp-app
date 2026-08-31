@@ -43,6 +43,8 @@ if ($id>0) {
 
 $lead_status_descr=''; if (isset($_POST['lead_status_descr'])) $lead_status_descr=trim_gks(base64_decode($_POST['lead_status_descr']));
 $lead_status_color=''; if (isset($_POST['lead_status_color'])) $lead_status_color=trim_gks(base64_decode($_POST['lead_status_color']));
+$lead_status_colorf=''; if (isset($_POST['lead_status_colorf'])) $lead_status_colorf=trim_gks(base64_decode($_POST['lead_status_colorf']));
+$lead_status_colorcss=''; if (isset($_POST['lead_status_colorcss'])) $lead_status_colorcss=trim_gks(base64_decode($_POST['lead_status_colorcss']));
 $lead_status_sortorder=0; if (isset($_POST['lead_status_sortorder'])) $lead_status_sortorder=intval(stripslashes(urldecode($_POST['lead_status_sortorder'])));
 $lead_status_disabled=0; if (isset($_POST['lead_status_disabled'])) $lead_status_disabled=intval($_POST['lead_status_disabled']);
 
@@ -52,6 +54,16 @@ $lead_status_disabled=0; if (isset($_POST['lead_status_disabled'])) $lead_status
 if ($lead_status_descr=='') {debug_mail(false,'lead_status_descr',$lead_status_descr);
   $return = array('success' => false, 'message' => base64_encode(gks_lang('Ορίστε την Περιγραφή'))); 
   echo json_encode($return); die(); }
+
+if ($lead_status_color=='') {debug_mail(false,'lead_status_color','');
+  $return = array('success' => false, 'message' => base64_encode(gks_lang('Ορίστε το Χρώμα φόντου'))); 
+  echo json_encode($return); die(); }
+
+if ($lead_status_colorf=='') {debug_mail(false,'lead_status_colorf','');
+  $return = array('success' => false, 'message' => base64_encode(gks_lang('Ορίστε το Χρώμα κειμένου'))); 
+  echo json_encode($return); die(); }
+
+
 
 $sql="select * from gks_crm_leads_status where lead_status_descr like '".$db_link->escape_string($lead_status_descr)."' and id_crm_lead_status<>".$id;
 $result = $db_link->query($sql);  
@@ -91,6 +103,8 @@ if ($id==-1) {
 $sql="update gks_crm_leads_status set 
 lead_status_descr='".$db_link->escape_string($lead_status_descr)."',
 lead_status_color=". ($lead_status_color =='' ? 'null' : "'".$db_link->escape_string($lead_status_color)."'").",
+lead_status_colorf=". ($lead_status_colorf =='' ? 'null' : "'".$db_link->escape_string($lead_status_colorf)."'").",
+lead_status_colorcss=". ($lead_status_colorcss =='' ? 'null' : "'".$db_link->escape_string($lead_status_colorcss)."'").",
 lead_status_sortorder=".$lead_status_sortorder.",
 lead_status_disabled=".$lead_status_disabled.",
 

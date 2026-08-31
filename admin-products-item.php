@@ -46,6 +46,7 @@ $nav_active_array=array('manage','manage_menu_product','manage_new_product');
     product_ean,
     product_isbn,
     product_taric,
+    product_cpv,
     product_disable,
     product_class,
     product_photo,
@@ -81,6 +82,7 @@ $nav_active_array=array('manage','manage_menu_product','manage_new_product');
     if (product_ean<>'', CONCAT(product_ean,'".$myrand."'),'') as product_ean_new, 
     if (product_isbn<>'', CONCAT(product_isbn,'".$myrand."'),'') as product_isbn_new, 
     product_taric,
+    product_cpv,
     product_disable,
     product_class,
     product_photo,
@@ -209,6 +211,7 @@ $nav_active_array=array('manage','manage_menu_product','manage_new_product');
       product_ean,
       product_isbn,      
       product_taric,
+      product_cpv,
       product_disable,
       product_parent_id,
       product_class,
@@ -246,6 +249,7 @@ $nav_active_array=array('manage','manage_menu_product','manage_new_product');
       if (product_isbn<>'', CONCAT(product_isbn,'".$myrand."'),'') as product_isbn_new, 
       
       product_taric, 
+      product_cpv,
       product_disable,
       ".$id." as product_parent_id_new,
       product_class,
@@ -554,6 +558,7 @@ $nav_active_array=array('manage','manage_menu_product','manage_new_product');
   $row['product_ean']='';
   $row['product_isbn']='';  
   $row['product_taric']='';
+  $row['product_cpv']='';
   $row['product_need_apostoli']=1;
   $row['product_fpa_base_id']=1001;
   $row['product_fpa_ejeresi_id']=0;
@@ -659,7 +664,7 @@ $product_variables=array();
 if ($product_class=='variable') {
   $sql_variables="select id_product,product_photo,product_code,
   product_sku,product_gtin,product_upc,product_ean,product_isbn,
-  product_taric,product_descr,product_def_comments,product_descr_small,
+  product_taric,product_cpv,product_descr,product_def_comments,product_descr_small,
   product_price,product_price_include_vat,product_price_sale,product_price_sale_from,product_price_sale_to,
   product_price_sheets_formula,product_price_quantity_formula,
   product_price_retail,product_price_retail_include_vat,product_price_retail_sale,product_price_retail_sale_from,product_price_retail_sale_to,
@@ -1364,13 +1369,26 @@ include_once('_my_header_admin.php');
               <label for="product_taric" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Taric No');?>:</label>
               <div class="col-md-8">
                 <input id="product_taric" type="text" class="form-control form-control-sm myneedsave" value="<?php echo htmlspecialchars_gks($row['product_taric']);?>" placeholder="<?php echo gks_lang('π.χ.');?> 0710 80 70">
-                <i class="product_taric_get_descr fas fa-search-plus" title="<?php echo gks_lang('Αναζήτηση περιγραφής');?>"></i>
+                <i class="product_taric_get_descr fas fa-search-plus" title="<?php echo gks_lang('Αναζήτηση');?>"></i>
                 <small>
                   <?php echo gks_lang('Αναζήτηση στο');?> <a href="https://ec.europa.eu/taxation_customs/dds2/taric/taric_consultation.jsp?Lang=el" target="_blank">ec.europa.eu</a> <?php echo gks_lang('ή/και στο');?> <a href="https://www.taxheaven.gr/codes/taric" target="_blank">taxheaven.gr</a>
                 </small>
               </div>
               <div class="col-md-12 product_taric_descr"></div>
             </div> 
+            <div class="form-group row">
+              <label for="product_cpv" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('CPV No');?>:</label>
+              <div class="col-md-8">
+                <input id="product_cpv" type="text" class="form-control form-control-sm myneedsave" value="<?php echo htmlspecialchars_gks($row['product_cpv']);?>" placeholder="<?php echo gks_lang('π.χ.');?> 32551300">
+                <i class="product_cpv_get_descr fas fa-search-plus" title="<?php echo gks_lang('Αναζήτηση');?>"></i>
+                <small>
+                  <?php echo gks_lang('Αναζήτηση στο');?> <a href="https://ted.europa.eu/el/simap/cpv" target="_blank">ec.europa.eu</a> <?php echo gks_lang('ή/και στο');?> <a href="https://cerpp.eprocurement.gov.gr/cpv/main/" target="_blank">eprocurement.gov.gr</a>
+                </small>
+              </div>
+              <div class="col-md-12 product_cpv_descr"></div>
+            </div>
+            
+            
             
                         
             <div class="form-group row " >
@@ -2130,12 +2148,20 @@ echo $gks_custom_row['html'];
                 <label for="variable_product_taric_<?php echo $paa;?>" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Taric No');?>:</label>
                 <div class="col-md-8">
                   <input id="variable_product_taric_<?php echo $paa;?>" type="text" data-paa="<?php echo $paa;?>" class="variable_product_taric form-control form-control-sm myneedsave" value="<?php echo htmlspecialchars_gks($variable_item['product_taric']);?>" placeholder="<?php echo gks_lang('π.χ.');?> 0710 80 70">
-                  <i class="product_taric_get_descr fas fa-search-plus" title="<?php echo gks_lang('Αναζήτηση περιγραφής');?>"></i>
+                  <i class="product_taric_get_descr fas fa-search-plus" title="<?php echo gks_lang('Αναζήτηση');?>"></i>
                 </div>
                 <div class="col-md-12 product_taric_descr"></div>
               </div>  
               
-                       
+              <div class="form-group row">
+                <label for="variable_product_cpv_<?php echo $paa;?>" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('CPV No');?>:</label>
+                <div class="col-md-8">
+                  <input id="variable_product_cpv_<?php echo $paa;?>" type="text" data-paa="<?php echo $paa;?>" class="variable_product_cpv form-control form-control-sm myneedsave" value="<?php echo htmlspecialchars_gks($variable_item['product_cpv']);?>" placeholder="<?php echo gks_lang('π.χ.');?> 32551300">
+                  <i class="product_cpv_get_descr fas fa-search-plus" title="<?php echo gks_lang('Αναζήτηση');?>"></i>
+                </div>
+                <div class="col-md-12 product_cpv_descr"></div>
+              </div>
+              
               <div style="height: 1px;width: 100%;background-color: lightgray;margin-bottom: 16px;"></div>
               
 
@@ -3587,6 +3613,7 @@ WHERE gks_eshop_products_brands_products.product_id=".$id."
         <span class="def_column_show_span"><input type="checkbox" id="def_column_show_8" class="def_column_show_check"><label class="def_column_show_label" for="def_column_show_8"><?php echo gks_lang('EAN');?></label></span>
         <span class="def_column_show_span"><input type="checkbox" id="def_column_show_9" class="def_column_show_check"><label class="def_column_show_label" for="def_column_show_9"><?php echo gks_lang('ISBN');?></label></span>
         <span class="def_column_show_span"><input type="checkbox" id="def_column_show_10" class="def_column_show_check"><label class="def_column_show_label" for="def_column_show_10"><?php echo gks_lang('Taric No');?></label></span>
+        <span class="def_column_show_span"><input type="checkbox" id="def_column_show_40" class="def_column_show_check"><label class="def_column_show_label" for="def_column_show_40"><?php echo gks_lang('CPV No');?></label></span>
 
         <span class="def_column_show_span"><input type="checkbox" id="def_column_show_27" class="def_column_show_check"><label class="def_column_show_label" for="def_column_show_27"><?php echo gks_lang('Κόστος');?></label></span>
 

@@ -100,7 +100,7 @@ if (endwith($address,'<br>')) $address=substr($address, 0, strlen($address)-4);
 
 //echo $gks_user_settings['lang']['backend'];die();
 $extra_address=array();
-if (isset($_POST['lead_id']) or isset($_POST['task_id']) or isset($_POST['machine_id'])) {
+if (isset($_POST['lead_id']) or isset($_POST['task_id']) or isset($_POST['machine_id']) or isset($_POST['hr_program_id'])) {
   $extra_address[]=array('id' => -1, 'descr'=> gks_lang('Βασική διεύθυνση'));
 } else {
   $extra_address[]=array('id' => -1, 'descr'=> gks_lang('Αποστολή στην ίδια διεύθυνση'));

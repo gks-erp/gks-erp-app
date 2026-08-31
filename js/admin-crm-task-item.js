@@ -66,6 +66,7 @@ jQuery(document).ready(function($) {
       need_save=true;
       $('#task_planned_date_to').datetimepicker('setOptions',{minDate:$('#task_planned_date_from').datetimepicker('getValue')});
       date_from=$('#task_planned_date_from').datetimepicker('getValue');
+      tdays=parseInt($('#hr_program_date_duration_days').val()); if (isNaN(tdays)) tdays=0;
       tval=$('#task_planned_date_duration').TimePicker('getValue');
       if (tval.length==5) {
         thour=parseInt(tval.substr(0,2)); if (isNaN(thour)) return;  
@@ -73,7 +74,7 @@ jQuery(document).ready(function($) {
         tval=thour*60+ tminu;
         date_from=$('#task_planned_date_from').datetimepicker('getValue');
         dto = new Date(date_from);
-        dto.setMinutes(dto.getMinutes() + tval);
+        dto.setMinutes(dto.getMinutes() + tval+tdays*(24*60));
         $('#task_planned_date_to').datetimepicker('setOptions', {value:dto});
       } else {
         date_to  =$('#task_planned_date_to').datetimepicker('getValue');
@@ -94,33 +95,47 @@ jQuery(document).ready(function($) {
       difmins=Math.round(difsecs/60);
       difhour=Math.floor(difmins/60);
       difmins=difmins-difhour*60;
-      if (difhour<0 || difhour>=24) {
+      if (difhour<0) {
+        $('#task_planned_date_duration_days').val('');
         $('#task_planned_date_duration').val('');
-        $('#task_planned_date_duration').TimePicker('setValue','00:00');
+        $('#task_planned_date_duration').TimePicker('setValue','');
       } else {
+        days=Math.floor(difhour/24);
+        difhour=difhour-(days*24);        
         if (difhour<=9) vval='0' + difhour+':'; else vval=difhour+':';
         if (difmins<=9) vval+='0' + difmins; else vval+=difmins+'';
+        $('#task_planned_date_duration_days').val(days);
         $('#task_planned_date_duration').val(vval);
         $('#task_planned_date_duration').TimePicker('setValue',vval);
       }
     }
   }));
+  
+  function task_planned_date_duration_change() {
+    
+    need_save=true;
+    tdays=parseInt($('#task_planned_date_duration_days').val()); if (isNaN(tdays)) tdays=0;
+    tval=$('#task_planned_date_duration').TimePicker('getValue');
+    if (tval.length==5) {
+      thour=parseInt(tval.substr(0,2)); if (isNaN(thour)) return;  
+      tminu=parseInt(tval.substr(3,2)); if (isNaN(tminu)) return; 
+      tval=thour*60+ tminu;
+      date_from=$('#task_planned_date_from').datetimepicker('getValue');
+      dto = new Date(date_from);
+      dto.setMinutes(dto.getMinutes() + tval+tdays*(24*60));
+      $('#task_planned_date_to').datetimepicker('setOptions', {value:dto});
+    }    
+  }
+  
   $('#task_planned_date_duration').TimePickerAlone({mask:'29:59',dragAndDrop:true,mouseWheel:true,twelveHoursFormat:false,seconds:false,ampm:false,saveOnChange:true,defaultTime:'',inputFormat:'HH:mm',onChange:
     function(ct,$i){
-      need_save=true;
-      tval=$('#task_planned_date_duration').TimePicker('getValue');
-      if (tval.length==5) {
-        thour=parseInt(tval.substr(0,2)); if (isNaN(thour)) return;  
-        tminu=parseInt(tval.substr(3,2)); if (isNaN(tminu)) return; 
-        tval=thour*60+ tminu;
-        date_from=$('#task_planned_date_from').datetimepicker('getValue');
-        dto = new Date(date_from);
-        dto.setMinutes(dto.getMinutes() + tval);
-        $('#task_planned_date_to').datetimepicker('setOptions', {value:dto});
-      }
+      task_planned_date_duration_change();
     }
   });
-    
+  $('#task_planned_date_duration_days').on(mychange, function() {
+    task_planned_date_duration_change();
+  })
+  
   $('#task_date').datetimepicker(jQuery.extend({},gks_datetimepicker_defaults,{mask:'39/19/9999 29:59',format:'d/m/Y H:i', timepicker:true,dayOfWeekStart:1,onChangeDateTime:
     function(ct,$i){
       need_save=true;
@@ -136,7 +151,7 @@ jQuery(document).ready(function($) {
   
   $('#task_color').spectrum({
     type: "component",
-    locale:'el',
+    locale:from_php_gks_spectrum_locale,
     togglePaletteOnly: true,
     hideAfterPaletteSelect: true,
     showInput: true,
@@ -149,6 +164,7 @@ jQuery(document).ready(function($) {
     togglePaletteLessText: gks_lang('Παλέτα'),
     clearText : gks_lang('Καθαρισμός'),
     noColorSelectedText: gks_lang('Διάφανο'),
+    change: function(color) {need_save=true;}
   });
  
   $('#country_id').change(function() {

@@ -15,7 +15,7 @@ use PHPMailer\PHPMailer\Exception;
 
 function debug_mail($and_die, $message_public, $message_dev='', $subject='', $add_email_to ='') {
   if (GKS_DEBUG) file_put_contents(GKS_SITE_PATH.'tmp/debug_mail_'.time().'_'.rand(1000,9999).rand(1000,9999).'.txt',$subject."\n".$message_public."\n".$message_dev);
-  //if ($_SERVER['HTTP_HOST']=='test.easyfilesselection.com') return;
+  if ($_SERVER['HTTP_HOST']=='test.easyfilesselection.com') return;
   
   global $_gks_session;
   global $_gks_id_session;

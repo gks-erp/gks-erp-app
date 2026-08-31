@@ -24,7 +24,7 @@ print '<pre>';
 $id=0;if (isset($_GET['id'])) $id=intval($_GET['id']);
 $myjson_send=null; $myjson_response=null;
 if ($id>0) {
-  $sql="select response from gks_paroxos_signature where id_paroxos_signature=".$id;
+  $sql="select response,cancel_response from gks_paroxos_signature where id_paroxos_signature=".$id;
   $result = $db_link->query($sql);
   if (!$result) { debug_mail(false,'error sql',$sql);die('sql error');}  
   if ($result->num_rows==0) {
@@ -32,6 +32,13 @@ if ($id>0) {
   } 
   $row = $result->fetch_assoc();
   $myjson_response=unserialize($row['response']);
+  $cancel_response=trim_gks($row['cancel_response']);
+  
+  if ($cancel_response!='') {
+    $cancel_response=unserialize($cancel_response);
+  } else {
+    $cancel_response=false;
+  }
 } else {
   echo 'id is not set';die();
 }
@@ -46,5 +53,10 @@ if ($myjson_send!==null) {
 if ($myjson_response!==null) {
   echo 'Signature Response: '."\n";
   print_r($myjson_response);
+  print "\n\n";
+}
+if ($cancel_response!==false) {
+  echo 'Signature Cancel Response: '."\n";
+  print_r($cancel_response);
   print "\n\n";
 }

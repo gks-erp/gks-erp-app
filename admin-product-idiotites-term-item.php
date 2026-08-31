@@ -193,7 +193,9 @@ include_once('_my_header_admin.php');
     <div class="col-md-12 text-center mt-2">
               
               <button type="button" class="btn btn-primary" id="submit_button_ok"><?php echo gks_lang('Αποθήκευση');?></button>
+              <?php if ($id>0) {?>
               <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_product_idiotita_term'];?>" data-model="gks_product_idiotites_terms" data-backurl="admin-product-idiotites-term.php"><?php echo gks_lang('Διαγραφή');?></button>
+              <?php } ?>
     </div>            
   </div>            
 </div>            
@@ -331,7 +333,7 @@ jQuery(document).ready(function($) {
   
   $('#idiotita_term_color').spectrum({
     type: "component",
-    locale:'el',
+    locale:from_php_gks_spectrum_locale,
     togglePaletteOnly: true,
     hideAfterPaletteSelect: true,
     showInput: true,
@@ -344,6 +346,7 @@ jQuery(document).ready(function($) {
     togglePaletteLessText: gks_lang('Παλέτα'),
     clearText : gks_lang('Καθαρισμός'),
     noColorSelectedText: gks_lang('Διάφανο'),
+    change: function(color) {need_save=true;}
   });
     
   $(document).on('keypress', function(event) {

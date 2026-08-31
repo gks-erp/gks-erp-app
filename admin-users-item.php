@@ -1643,7 +1643,9 @@ echo $gks_custom_row['html'];
     <div class="col-md-12 text-center mt-2">
 <?php if ($show_admin or $show_hr or $show_lo) { ?>  
       <button type="button" style="margin-bottom:10px;" class="btn btn-primary" id="submit_button_ok_custom"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" style="margin-bottom:10px;" class="btn btn-danger deleterowbtn" data-id="<?php if ($id>0) echo $id;?>" data-model="wp_users" data-backurl="admin-users.php" <?php if ($id<=0) echo 'disabled';?>><?php echo gks_lang('Διαγραφή');?></button>
+      <?php } ?>
 <?php } ?>      
       
     </div> 

@@ -364,6 +364,13 @@ switch ($mymodel) {
   case 'gks_hotel_room_type':
     $sql="select id_hotel_room_type, room_type_status from gks_hotel_room_type where id_hotel_room_type=".$id; break;
   
+  case 'gks_hr_program':
+    $sql="select * from gks_hr_program where id_hr_program=".$id; break;
+  case 'gks_hr_program_status':
+    $sql="select * from gks_hr_program_status where id_hr_program_status=".$id; break;
+  case 'gks_hr_program_vardia':
+    $sql="select * from gks_hr_program_vardia where id_hr_program_vardia=".$id; break;
+  
   
   case 'gks_lang':
     $sql="select * from gks_lang where idd_lang=".$id; break;
@@ -795,6 +802,7 @@ switch ($mymodel) {
     gks_admin_delete_record_has_other($id,'company_id','gks_production_bom');
     gks_admin_delete_record_has_other($id,'company_id','gks_transfer');
     gks_admin_delete_record_has_other($id,'company_id','gks_transfer_area');
+    gks_admin_delete_record_has_other($id,'company_id','gks_hr_program');
     
     gks_admin_delete_record_has_custom($id,1004); //Campany
     gks_admin_delete_record_has_other_last(gks_lang('Δεν μπορεί να διαγραφεί η εταιρεία διότι'));
@@ -822,6 +830,7 @@ switch ($mymodel) {
     gks_admin_delete_record_has_other($id,'company_sub_id','gks_production_bom');
     gks_admin_delete_record_has_other($id,'company_sub_id','gks_transfer');
     gks_admin_delete_record_has_other($id,'company_sub_id','gks_transfer_area');
+    gks_admin_delete_record_has_other($id,'company_sub_id','gks_hr_program');
     
     gks_admin_delete_record_has_custom($id,1005); //Subcompany
     gks_admin_delete_record_has_other_last(gks_lang('Δεν μπορεί να διαγραφεί το υποκατάστημα διότι'));
@@ -1203,7 +1212,20 @@ switch ($mymodel) {
     gks_admin_delete_record_has_other_last(gks_lang('Δεν μπορεί να διαγραφεί ο τύπος δωματίου διότι'));      
     break;}
 
-
+  case 'gks_hr_program':break;
+  
+  case 'gks_hr_program_status':{ 
+    if ($id<=10000) {$error_lines[]=gks_lang('είναι του συστήματος');}
+    gks_admin_delete_record_has_other($id,'hr_program_status_id','gks_hr_program');
+  
+    gks_admin_delete_record_has_other_last(gks_lang('Δεν μπορεί να διαγραφεί η Κατάσταση Προγράμματος διότι')); 
+    break;}
+  case 'gks_hr_program_vardia':{ 
+    if ($id<=10000) {$error_lines[]=gks_lang('είναι του συστήματος');}
+    gks_admin_delete_record_has_other($id,'hr_program_vardia_id','gks_hr_program');
+  
+    gks_admin_delete_record_has_other_last(gks_lang('Δεν μπορεί να διαγραφεί η Βάρδια διότι')); 
+    break;}
   case 'gks_lang':
     $id_langs="'".$id_lang."'";
     gks_admin_delete_record_has_other($id_langs,'user_lang','gks_acc_inv');
@@ -1413,6 +1435,7 @@ switch ($mymodel) {
   
     gks_admin_delete_record_has_other($id,'last_posto_id','gks_production_line');
     gks_admin_delete_record_has_other($id,'posto_id','gks_production_line_time');
+    gks_admin_delete_record_has_other($id,'hr_program_posto_id','gks_hr_program');
     
     gks_admin_delete_record_has_custom($id,1019);//Posto ergasias
     gks_admin_delete_record_has_other_last(gks_lang('Δεν μπορεί να διαγραφεί το πόστο διότι'));
@@ -1635,6 +1658,16 @@ switch ($mymodel) {
     gks_admin_delete_record_has_other($id,'erp_app_mobile_user_id','gks_erp_app_mobile');
     gks_admin_delete_record_has_other($id,'responsible_id','gks_transfer_area');
     gks_admin_delete_record_has_other($id,'user_id','gks_barcodes');
+    gks_admin_delete_record_has_other($id,'hr_program_user_id','gks_hr_program');
+    gks_admin_delete_record_has_other($id,'assigned_id','gks_hr_program');
+    gks_admin_delete_record_has_other($id,'assigned_id','gks_orders');
+    gks_admin_delete_record_has_other($id,'assigned_id','gks_acc_inv');
+    gks_admin_delete_record_has_other($id,'assigned_id','gks_acc_pay');
+    gks_admin_delete_record_has_other($id,'assigned_id','gks_whi_mov');
+    gks_admin_delete_record_has_other($id,'assigned_id','gks_crm_leads');
+    gks_admin_delete_record_has_other($id,'assigned_id','gks_crm_tasks');
+    gks_admin_delete_record_has_other($id,'assigned_id','gks_hotel_reservation');
+    gks_admin_delete_record_has_other($id,'assigned_id','gks_transfer_reservation');
 
     
     gks_admin_delete_record_has_custom($id,1022);//Epafi
@@ -1816,7 +1849,13 @@ switch ($mymodel) {
   case 'gks_hotel_room_type':
     $sql="delete from gks_hotel_room_type where id_hotel_room_type=".$id; break;
 
-  
+  case 'gks_hr_program':
+    $sql="delete from gks_hr_program where id_hr_program=".$id; break;
+  case 'gks_hr_program_status':
+    $sql="delete from gks_hr_program_status where id_hr_program_status=".$id; break;
+  case 'gks_hr_program_vardia':
+    $sql="delete from gks_hr_program_vardia where id_hr_program_vardia=".$id; break;
+    
   case 'gks_lang':
     $sql="delete from gks_lang where idd_lang=".$id; break;
   case 'gks_mass_messages':
@@ -2411,6 +2450,17 @@ switch ($mymodel) {
     gks_admin_delete_record_after($id,'hotel_room_type_id','gks_hotel_room_type_lang');
     gks_admin_delete_record_after($id,'hotel_room_type_id','gks_hotel_room_type_photo');
     break;  }
+  case 'gks_hr_program':{
+
+    gks_admin_delete_record_after($id,'hr_program_id','gks_hr_program_messages');
+    gks_admin_delete_record_after($id,'hr_program_id','gks_hr_program_log');
+    gks_admin_delete_record_after($id,'hr_program_id','gks_hr_program_photo');
+
+    break;  }
+    
+  case 'gks_hr_program_status': break;
+  case 'gks_hr_program_vardia': break;
+    
   case 'gks_lang':
     gks_admin_delete_record_after($id,'lang_idd','gks_lang_lang');
     gks_admin_delete_record_after($id,'lang_idd','gks_lang_photo');
@@ -3013,6 +3063,9 @@ function gks_admin_delete_record_has_other($id,$ofield,$otable,$message_input=''
         case 'gks_hr_interview': $tblname=gks_lang('συνεντεύξεις'); break;  
         case 'gks_hr_user': $tblname=gks_lang('υποψήφιος'); break;  
         case 'gks_hr_user_cvs': $tblname=gks_lang('βιογραφικά'); break;  
+        
+        case 'gks_hr_program': $tblname=gks_lang('Πρόγραμμα Υπαλλήλων'); break; 
+  
         
 
         case 'gks_mass_messages': $tblname=gks_lang('μαζικές αποστολές SMS-Viber-email'); break;  

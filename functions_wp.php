@@ -539,6 +539,9 @@ function stat_record() {
   global $my_wp_user_info;
   global $my_page_title;
   global $_gks_id_session;
+  global $GKS_STAT_ENABLE;
+  
+  if ($GKS_STAT_ENABLE==false) return;
   
   $my_page_title_db=$my_page_title.'';
   
@@ -2770,7 +2773,7 @@ function load_settings() {
   global $GKS_ORDERS_COL_ITEMPRICE;
   global $GKS_ORDERS_COL_ITEMPRICE_CHECK_FPA;
   global $GKS_ORDERS_COL_FPA;
-
+  global $GKS_ORDERS_CREATE_ACC_INV_MODE;
   
   global $GKS_ACC_INV_COL_ITEMPRICE;
   global $GKS_ACC_INV_COL_ITEMPRICE_CHECK_FPA;
@@ -2785,6 +2788,7 @@ function load_settings() {
   global $GKS_ORDERS_ENABLE;
   global $GKS_ORDERS_OCCASION;
   global $GKS_ORDERS_PRODUCTION;
+  global $GKS_HR_ENABLE;
   global $GKS_CRM_ENABLE;
   global $GKS_CRM_LEADS_ENABLE;
   global $GKS_CRM_TASKS_ENABLE;
@@ -2794,6 +2798,7 @@ function load_settings() {
   global $GKS_WARE_HOUSE_ENABLE;
   global $GKS_PRODUCT_LOTS_SERIALS;
   
+  global $GKS_STAT_ENABLE;
   global $GKS_ASSETS_ENABLE;
   global $GKS_BASKET_CALC_ITEM_DECIMAL;
   global $GKS_BASKET_CALC_EKPTOSI_DECIMAL;
@@ -2922,6 +2927,7 @@ function load_settings() {
       case 'GKS_ORDERS_COL_ITEMPRICE': $GKS_ORDERS_COL_ITEMPRICE=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
       case 'GKS_ORDERS_COL_ITEMPRICE_CHECK_FPA': $GKS_ORDERS_COL_ITEMPRICE_CHECK_FPA=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
       case 'GKS_ORDERS_COL_FPA': $GKS_ORDERS_COL_FPA=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
+      case 'GKS_ORDERS_CREATE_ACC_INV_MODE': $GKS_ORDERS_CREATE_ACC_INV_MODE=(trim_gks($row['myvalue']) == '0' ? 0 : 1); break;
 
       
       case 'GKS_ACC_INV_COL_ITEMPRICE': $GKS_ACC_INV_COL_ITEMPRICE=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
@@ -2937,6 +2943,7 @@ function load_settings() {
       case 'GKS_ORDERS_ENABLE': $GKS_ORDERS_ENABLE=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
       case 'GKS_ORDERS_OCCASION': $GKS_ORDERS_OCCASION=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
       case 'GKS_ORDERS_PRODUCTION': $GKS_ORDERS_PRODUCTION=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
+      case 'GKS_HR_ENABLE': $GKS_HR_ENABLE=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
       case 'GKS_CRM_ENABLE': $GKS_CRM_ENABLE=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
       case 'GKS_CRM_LEADS_ENABLE': $GKS_CRM_LEADS_ENABLE=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
       case 'GKS_CRM_TASKS_ENABLE': $GKS_CRM_TASKS_ENABLE=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
@@ -2948,6 +2955,7 @@ function load_settings() {
       case 'GKS_WARE_HOUSE_ENABLE': $GKS_WARE_HOUSE_ENABLE=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
       case 'GKS_PRODUCT_LOTS_SERIALS': $GKS_PRODUCT_LOTS_SERIALS=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
 
+      case 'GKS_STAT_ENABLE': $GKS_STAT_ENABLE=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
       case 'GKS_ASSETS_ENABLE': $GKS_ASSETS_ENABLE=(trim_gks($row['myvalue']) == 'false' ? false : true); break;
 
   
@@ -4583,7 +4591,12 @@ function gks_get_user_settings($user_id, $myobject='', $mysubobject='') {
   if (isset($ret['calendar']['user_color_task'])== false) $ret['calendar']['user_color_task']='#bf9000';
   if (isset($ret['calendar']['visible_cal'])== false) $ret['calendar']['visible_cal']=1;
   if (isset($ret['calendar']['visible_task'])== false) $ret['calendar']['visible_task']=1;
+  if (isset($ret['calendar']['slotDuration'])== false) $ret['calendar']['slotDuration']='00:15:00';
+  if (isset($ret['calendar']['businessDays'])== false) $ret['calendar']['businessDays']='[1,2,3,4,5]';
+  if (isset($ret['calendar']['businessStartT'])== false) $ret['calendar']['businessStartT']='09:00';
+  if (isset($ret['calendar']['businessEndT'])== false) $ret['calendar']['businessEndT']='17:00';
   
+
   
   if (isset($ret['menu'])==false) $ret['menu']=array();
   if (isset($ret['menu']['pos'])== false) $ret['menu']['pos']='';
@@ -4723,7 +4736,7 @@ function gks_get_leads_status(&$array,&$styles) {
   $array=array();
   while ($row = $result->fetch_assoc()) {
     $array[$row['id_crm_lead_status']]=$row;
-    $styles.='.lead_status_'.$row['id_crm_lead_status'].'        {border-radius: 10px; background: '.$row['lead_status_color'].'; padding:0px 10px 0px 10px; border: 1px solid #000000; color:'.color_inverse($row['lead_status_color']).';white-space: nowrap;}'."\n";
+    $styles.='.lead_status_'.$row['id_crm_lead_status'].' {background-color: '.$row['lead_status_color'].'; color:'.$row['lead_status_colorf'].';'.$row['lead_status_colorcss'].'}'."\n";
   }
   return true;
 }
@@ -4738,11 +4751,39 @@ function gks_get_tasks_status(&$array,&$styles) {
   $array=array();
   while ($row = $result->fetch_assoc()) {
     $array[$row['id_crm_task_status']]=$row;
-    $styles.='.task_status_'.$row['id_crm_task_status'].'        {border-radius: 10px; background: '.$row['task_status_color'].'; padding:0px 10px 0px 10px; border: 1px solid #000000; color:'.color_inverse($row['task_status_color']).';white-space: nowrap;}'."\n";
+    $styles.='.task_status_'.$row['id_crm_task_status'].' {background-color: '.$row['task_status_color'].'; color:'.$row['task_status_colorf'].';'.$row['task_status_colorcss'].'}'."\n";
+  }
+  return true;
+}
+function gks_get_hr_program_status(&$array,&$styles) {
+  global $db_link;
+  $sql="select * from gks_hr_program_status order by hr_program_status_sortorder";
+  $result = $db_link->query($sql);
+  if (!$result) {debug_mail(false,'error sql',$sql);die('error sql');}  
+  
+  $styles='';
+  $array=array();
+  while ($row = $result->fetch_assoc()) {
+    $array[$row['id_hr_program_status']]=$row;
+    $styles.='.hr_program_status_'.$row['id_hr_program_status'].' {background-color: '.$row['hr_program_status_color'].'; color:'.$row['hr_program_status_colorf'].'; '.$row['hr_program_status_colorcss'].';}'."\n";
   }
   return true;
 }
 
+function gks_get_hr_program_vardia(&$array,&$styles) {
+  global $db_link;
+  $sql="select * from gks_hr_program_vardia order by hr_program_vardia_sortorder";
+  $result = $db_link->query($sql);
+  if (!$result) {debug_mail(false,'error sql',$sql);die('error sql');}  
+  
+  $styles='';
+  $array=array();
+  while ($row = $result->fetch_assoc()) {
+    $array[$row['id_hr_program_vardia']]=$row;
+    $styles.='.hr_program_vardia_'.$row['id_hr_program_vardia'].' {background-color: '.$row['hr_program_vardia_color'].'; color:'.$row['hr_program_vardia_colorf'].';'.$row['hr_program_vardia_colorcss'].'}'."\n";
+  }
+  return true;
+}
 function gks_random_string($length=5) {
   $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
   $charactersLength = strlen($characters);

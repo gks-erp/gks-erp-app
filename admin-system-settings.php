@@ -273,12 +273,26 @@ include_once('_my_header_admin.php');
           
         </div>
       </div>
-                  
+
+      <div class="card gks_card_expand">
+        <div class="card-header" style="text-align:center">
+          <?php echo gks_lang('HR');?>
+        </div>
+        <div class="card-body" <?php echo gks_card_body('hr');?>>       
+          <div class="form-group row">
+            <label for="GKS_HR_ENABLE" class="col-sm-6 col-form-label form-control-sm text-sm-right"><?php echo gks_lang('Ενεργό');?>:</label>
+            <div class="col-sm-6">
+              <input type="checkbox" id="GKS_HR_ENABLE" class="switchery" <?php if ($GKS_HR_ENABLE) echo ' checked ';?> >
+            </div>
+          </div> 
+        </div> 
+      </div> 
+          
       <div class="card gks_card_expand">
         <div class="card-header" style="text-align:center">
           <?php echo gks_lang('CRM');?>
         </div>
-        <div class="card-body" <?php echo gks_card_body('wareh');?>>       
+        <div class="card-body" <?php echo gks_card_body('crm');?>>       
           <div class="form-group row">
             <label for="GKS_CRM_ENABLE" class="col-sm-6 col-form-label form-control-sm text-sm-right"><?php echo gks_lang('Ενεργό');?>:</label>
             <div class="col-sm-6">
@@ -313,7 +327,7 @@ include_once('_my_header_admin.php');
         <div class="card-header" style="text-align:center">
           <?php echo gks_lang('Αποθήκη');?>
         </div>
-        <div class="card-body" <?php echo gks_card_body('crm');?>>       
+        <div class="card-body" <?php echo gks_card_body('wareh');?>>       
           <div class="form-group row">
             <label for="GKS_WARE_HOUSE_ENABLE" class="col-sm-6 col-form-label form-control-sm text-sm-right"><?php echo gks_lang('Ενεργό');?>:</label>
             <div class="col-sm-6">
@@ -399,7 +413,18 @@ include_once('_my_header_admin.php');
               </div>
             </div> 
 
-
+            <div class="form-group row">
+              <label for="GKS_ORDERS_CREATE_ACC_INV_MODE" class="col-sm-6 col-form-label form-control-sm text-sm-right"><?php echo gks_lang('Ένα Παραστατικό');?>:</label>
+              <div class="col-sm-6">
+                <input type="checkbox" id="GKS_ORDERS_CREATE_ACC_INV_MODE" class="switchery" <?php if ($GKS_ORDERS_CREATE_ACC_INV_MODE==1) echo ' checked ';?> >
+                <small class="form-text text-muted"><?php 
+                echo gks_lang('Εάν είναι ενεργό τότε κατά στην δημιουργία παραστατικού από παραγγελία θα δημιουργηθεί ένα μόνο παραστατικό.');
+                echo '<br>';
+                echo gks_lang('Εάν δεν είναι ενεργό τότε μπορεί να δημιουργηθούν πάνω από ένα παραστατικά, ανάλογα με τα είδη της παραγγελίας π.χ τιμολόγιο πώλησης και τιμολόγιο παροχής υπηρεσιών.');
+                ?></small> 
+              </div>
+            </div> 
+            
           </div>
         </div>
       </div>
@@ -666,6 +691,20 @@ include_once('_my_header_admin.php');
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="card gks_card_expand">
+        <div class="card-header" style="text-align:center">
+          <?php echo gks_lang('Καταγραφές');?>
+        </div>
+        <div class="card-body" <?php echo gks_card_body('stat');?>>       
+          <div class="form-group row">
+            <label for="GKS_STAT_ENABLE" class="col-sm-6 col-form-label form-control-sm text-sm-right"><?php echo gks_lang('Ενεργό');?>:</label>
+            <div class="col-sm-6">
+              <input type="checkbox" id="GKS_STAT_ENABLE" class="switchery" <?php if ($GKS_STAT_ENABLE) echo ' checked ';?> >
+            </div>
+          </div> 
+        </div> 
       </div>
       
       <?php

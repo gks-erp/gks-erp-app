@@ -567,8 +567,11 @@ include_once('_my_header_admin.php');
   <tr>
     <th scope="row" nowrap class="mytdcm"><?php echo ($i + $showFrom);?></th>
     <td nowrap class="mytdcm"><?php echo $row['id_paroxos_signature'];?></td>   
-    <td class="mytdcm"><?php
+    <td class="mytdcm" nowrap><?php
           echo '<a href="admin-paroxos-signature-raw.php?id='.$row['id_paroxos_signature'].'" target="_blank">R</a>';
+          if ($row['aade_paroxos_id']==21) {
+            echo ' <a href="#" class="cancelsign_etimologiera_gr tooltipster" data-id="'.$row['id_paroxos_signature'].'" title="'.gks_lang('Ακύρωση').'">C</a>';
+          }
     ?></td>
       
 
@@ -667,8 +670,46 @@ jQuery(document).ready(function($) {
       }
   }); 
 
+  
+  $('.cancelsign_etimologiera_gr').click(function() {
+    gks_paroxos_signature_cancelsign_id=$(this).attr('data-id'); if (isNaN(gks_paroxos_signature_cancelsign_id)) gks_paroxos_signature_cancelsign_id=0;
+    if (gks_paroxos_signature_cancelsign_id<=0) return;
+    myconfirm(gks_lang('Σίγουρα θέλετε να ακυρώσετε την υπογραφή;'),'gks_paroxos_signature_cancelsign','','','');
+  });
 
- 
+  
+  var gks_paroxos_signature_cancelsign_id=0;
+  window.gks_paroxos_signature_cancelsign=function() {
+    var datasend='cmd=cancelsign_etimologiera_gr&id=' + gks_paroxos_signature_cancelsign_id;
+     
+    $('body').addClass("myloading");  
+    $.ajax({
+      url: '/my/admin-paroxos-signature-cmd.php',
+      type: 'POST',
+      cache: false,
+      dataType: 'json',
+      data: datasend,
+      error : function(jqXHR ,textStatus,  errorThrown) {
+        $("body").removeClass("myloading");
+        myalert('error:' + jqXHR.responseText);
+      },				
+      success: function(data) {
+        if (!data) {
+          $("body").removeClass("myloading");
+          myalert('error:' + gks_lang('Παρακαλώ δοκιμάστε αργότερα'));
+        } else {
+          if (data.success == true) {
+            window.location.reload();
+          } else {
+            $("body").removeClass("myloading");
+            myalert('error:' + $.base64.decode(data.message));
+          }
+        }
+      }
+    });      
+          
+    
+  }
 
   
   

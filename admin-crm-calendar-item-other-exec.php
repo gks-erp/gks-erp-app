@@ -8,7 +8,7 @@ define('SECURE', 1);
 include_once('functions.php');
 gks_permission_user_must_login_post();
 
-$my_page_title=gks_lang('Επεξεργασία ημερολογίου άλλου χρτήση');
+$my_page_title=gks_lang('Επεξεργασία ημερολογίου άλλου χρήστη');
 db_open();
 stat_record();
 $perm_ret=gks_permission_user_can_action($my_wp_user_id, 'gks_calendar_other_users','edit',0);
@@ -94,7 +94,7 @@ if ($cmd=='remove') {
 	now(),now(),".$my_wp_user_id.",".$my_wp_user_id.",'".$db_link->escape_string($gkIP)."',
 	".$my_wp_user_id.",".$other_user_id.",
 	'".$db_link->escape_string($myobj)."',
-	'#3788d8'
+	''
 	)";
   $result = $db_link->query($sql);        
   if (!$result) {
@@ -108,13 +108,14 @@ if ($cmd=='remove') {
   }
   
   $color=''; if (isset($_POST['color'])) $color=trim_gks(base64_decode($_POST['color']));
-  if (strlen($color)!=7) $color='#3788d8';
-
+  if (strlen($color)!=7) $color='';//'#3788d8';
+  
   if ($other_user_id==0) { // o idios xristis, to diko tou xroma
     $mycolor_self=array();
     if ($myobj=='cal') $mycolor_self['calendar']['user_color']=$color;
     else if ($myobj=='task') $mycolor_self['calendar']['user_color_task']=$color;
     else if ($myobj=='activ') $mycolor_self['calendar']['user_color_activ']=$color;
+    else if ($myobj=='hr_program') $mycolor_self['calendar']['user_color_hr_program']=$color;
     gks_set_user_settings($my_wp_user_id,$mycolor_self);
     
   } else {
@@ -140,6 +141,7 @@ if ($cmd=='remove') {
     if ($myobj=='cal') $mycolor_self['calendar']['visible_cal']=$other_visible;
     else if ($myobj=='task') $mycolor_self['calendar']['visible_task']=$other_visible;
     else if ($myobj=='activ') $mycolor_self['calendar']['visible_activ']=$other_visible;
+    else if ($myobj=='hr_program') $mycolor_self['calendar']['visible_hr_program']=$other_visible;
     gks_set_user_settings($my_wp_user_id,$mycolor_self);
   }
   if ($other_user_id<>0) {

@@ -179,6 +179,7 @@ jQuery(document).ready(function($) {
     datasend+='&product_ean='  + encodeURIComponent($.base64.encode($("#mypostform #product_ean").val().trim()));
     datasend+='&product_isbn='  + encodeURIComponent($.base64.encode($("#mypostform #product_isbn").val().trim()));
     datasend+='&product_taric='  + encodeURIComponent($.base64.encode($("#mypostform #product_taric").val().trim()));
+    datasend+='&product_cpv='  + encodeURIComponent($.base64.encode($("#mypostform #product_cpv").val().trim()));
     
     //GKS_PRODUCT_LOTS_SERIALS
     if (from_php_GKS_PRODUCT_LOTS_SERIALS) datasend+='&product_lot_serial=' + encodeURIComponent($.base64.encode($('input[name=product_lot_serial]:checked').val()));
@@ -378,6 +379,7 @@ jQuery(document).ready(function($) {
         item.product_ean=$(this).find('.variable_product_ean').val();
         item.product_isbn=$(this).find('.variable_product_isbn').val();
         item.product_taric=$(this).find('.variable_product_taric').val();
+        item.product_cpv=$(this).find('.variable_product_cpv').val();
         
         item.product_price_yperx=$(this).find('.variable_product_price_yperx').val();
         item.product_price_yperx_include_vat=$(this).find('.variable_product_price_yperx_include_vat').is(':checked') ? '1' : '0';
@@ -2478,10 +2480,20 @@ jQuery(document).ready(function($) {
                 '<label for="variable_product_taric_' + maxpaa + '" class="col-md-4 col-form-label form-control-sm text-md-right">' + gks_lang('Taric No') + ':</label>' +
                 '<div class="col-md-8">' +
                   '<input id="variable_product_taric_' + maxpaa + '" type="text" data-paa="' + maxpaa + '" class="variable_product_taric form-control form-control-sm myneedsave" value="" placeholder="'+gks_lang('π.χ.')+' 0710 80 70">' +
-                  ' <i class="product_taric_get_descr fas fa-search-plus" title="' + gks_lang('Αναζήτηση περιγραφής') + '"></i>' +
+                  ' <i class="product_taric_get_descr fas fa-search-plus" title="' + gks_lang('Αναζήτηση') + '"></i>' +
                 '</div>' +
                 '<div class="col-md-12 product_taric_descr"></div>' + 
               '</div>' +
+              '<div class="form-group row">' +
+                '<label for="variable_product_cpv_' + maxpaa + '" class="col-md-4 col-form-label form-control-sm text-md-right">' + gks_lang('CPV No') + ':</label>' +
+                '<div class="col-md-8">' +
+                  '<input id="variable_product_cpv_' + maxpaa + '" type="text" data-paa="' + maxpaa + '" class="variable_product_cpv form-control form-control-sm myneedsave" value="" placeholder="'+gks_lang('π.χ.')+' 0710 80 70">' +
+                  ' <i class="product_cpv_get_descr fas fa-search-plus" title="' + gks_lang('Αναζήτηση') + '"></i>' +
+                '</div>' +
+                '<div class="col-md-12 product_cpv_descr"></div>' + 
+              '</div>' +
+              
+              
               '<div style="height: 1px;width: 100%;background-color: lightgray;margin-bottom: 16px;"></div>' +
 
 '<div class="form-group row">' +
@@ -2896,7 +2908,9 @@ html+=
     });
     
     maindiv.find('.variable_product_taric').autocomplete(autocomplete_product_taric);
+    maindiv.find('.variable_product_cpv').autocomplete(autocomplete_product_cpv);
     maindiv.find('.product_taric_get_descr').click(product_taric_get_descr_click);
+    maindiv.find('.product_cpv_get_descr').click(product_cpv_get_descr_click);
 
     maindiv.find('.variable_product_price_yperx_sale_from').datetimepicker(jQuery.extend({},gks_datetimepicker_defaults,{mask:'39/19/9999 29:59',format:'d/m/Y H:i', timepicker:true,dayOfWeekStart:1,onChangeDateTime:
       function(ct,$i){
@@ -4293,7 +4307,7 @@ html+=
           });
           
           
-          for (i=2; i<=31; i++) {
+          for (i=2; i<def_column_show.length; i++) {
             if (def_column_show[i]) {
               switch (i) {
                 case 2:
@@ -4362,6 +4376,12 @@ html+=
                     if (list_paa>0) $('.variable_product_taric[data-paa=' + list_paa + ']').val($(this).val());
                   });
                   break;
+                case 40:
+                  $('.variable_product_cpv_list').each(function() {
+                    list_paa=parseInt($(this).attr('data-list_paa')); if (isNaN(list_paa)) list_paa=0;
+                    if (list_paa>0) $('.variable_product_cpv[data-paa=' + list_paa + ']').val($(this).val());
+                  });
+                  break; 
                   
                 case 32:
                   $('.variable_product_price_yperx_list').each(function() {
@@ -4692,8 +4712,9 @@ html+=
     if (typeof def_column_show[37] == 'undefined') def_column_show[37]=true; 
     if (typeof def_column_show[38] == 'undefined') def_column_show[38]=true; 
     if (typeof def_column_show[39] == 'undefined') def_column_show[39]=true; 
+    if (typeof def_column_show[40] == 'undefined') def_column_show[40]=true; 
 
-    for (i=0; i<=39;i++) {
+    for (i=0; i<def_column_show.length;i++) {
       if (def_column_show[i]) $('#def_column_show_' + i).prop('checked',true); else $('#def_column_show_' + i).prop('checked',false);  
     }
     
@@ -4710,14 +4731,6 @@ html+=
     if (typeof def_column_width[9]  == 'undefined') def_column_width[9]=150; 
     if (typeof def_column_width[10] == 'undefined') def_column_width[10]=150; 
 
-    if (typeof def_column_width[32] == 'undefined') def_column_width[32]=110;  
-    if (typeof def_column_width[33] == 'undefined') def_column_width[33]=50;  
-    if (typeof def_column_width[34] == 'undefined') def_column_width[34]=110;  
-    if (typeof def_column_width[35] == 'undefined') def_column_width[35]=80;  
-    if (typeof def_column_width[36] == 'undefined') def_column_width[36]=130;
-    if (typeof def_column_width[37] == 'undefined') def_column_width[37]=130;
-    if (typeof def_column_width[38] == 'undefined') def_column_width[38]=450;
-    if (typeof def_column_width[39] == 'undefined') def_column_width[39]=450;
 
     if (typeof def_column_width[11] == 'undefined') def_column_width[11]=70;  
     if (typeof def_column_width[12] == 'undefined') def_column_width[12]=50;  
@@ -4740,7 +4753,17 @@ html+=
     if (typeof def_column_width[29] == 'undefined') def_column_width[29]=200;
     if (typeof def_column_width[30] == 'undefined') def_column_width[30]=130;
     if (typeof def_column_width[31] == 'undefined') def_column_width[31]=70; 
+
+    if (typeof def_column_width[32] == 'undefined') def_column_width[32]=110;  
+    if (typeof def_column_width[33] == 'undefined') def_column_width[33]=50;  
+    if (typeof def_column_width[34] == 'undefined') def_column_width[34]=110;  
+    if (typeof def_column_width[35] == 'undefined') def_column_width[35]=80;  
+    if (typeof def_column_width[36] == 'undefined') def_column_width[36]=130;
+    if (typeof def_column_width[37] == 'undefined') def_column_width[37]=130;
+    if (typeof def_column_width[38] == 'undefined') def_column_width[38]=450;
+    if (typeof def_column_width[39] == 'undefined') def_column_width[39]=450;
     
+    if (typeof def_column_width[40] == 'undefined') def_column_width[40]=150; 
     
     
     var_column_order[0] = 0;
@@ -4783,6 +4806,7 @@ html+=
     var_column_order[37]=29;
     var_column_order[38]=30;
     var_column_order[39]=31;    
+    var_column_order[40]=11;    
     
     $('#dialog_variable_list_table').html('');
     var listhtml='';
@@ -4800,6 +4824,7 @@ html+=
     listhtml+='<th data-cid="8"  class="table-dark" scope="col" style="text-align: center !important;vertical-align: middle;' + (def_column_show[8] ==false ? 'display:none;' : '') + '"  width="0%"><div class="dialog_variable_list_table_th" data-cid="8"  style="width:' + def_column_width[8]  + 'px;">' + gks_lang('EAN') + '</div></th>';
     listhtml+='<th data-cid="9"  class="table-dark" scope="col" style="text-align: center !important;vertical-align: middle;' + (def_column_show[9] ==false ? 'display:none;' : '') + '"  width="0%"><div class="dialog_variable_list_table_th" data-cid="9"  style="width:' + def_column_width[9]  + 'px;">' + gks_lang('ISBN') + '</div></th>';
     listhtml+='<th data-cid="10" class="table-dark" scope="col" style="text-align: center !important;vertical-align: middle;' + (def_column_show[10]==false ? 'display:none;' : '') + '"  width="0%"><div class="dialog_variable_list_table_th" data-cid="10" style="width:' + def_column_width[10] + 'px;">' + gks_lang('Taric No') + '</div></th>';
+    listhtml+='<th data-cid="40" class="table-dark" scope="col" style="text-align: center !important;vertical-align: middle;' + (def_column_show[40]==false ? 'display:none;' : '') + '"  width="0%"><div class="dialog_variable_list_table_th" data-cid="40" style="width:' + def_column_width[40] + 'px;">' + gks_lang('CPV No') + '</div></th>';
 
     listhtml+='<th data-cid="27" class="table-dark" scope="col" style="text-align: center !important;vertical-align: middle;' + (def_column_show[27]==false ? 'display:none;' : '') + '"  width="0%"><div class="dialog_variable_list_table_th" data-cid="27" style="width:' + def_column_width[27] + 'px;">' + gks_lang('Κόστος') + '</div></th>';
 
@@ -4868,6 +4893,7 @@ html+=
         listhtml+='<td data-cid="8"  style="' + (def_column_show[8]  ==false ? 'display:none;' : '') + '" class="mytdcm" nowrap><input data-list_paa="' + paa + '" data-vp_cc="' + vp_cc + '" type="text"     value="' + $(this).find('.variable_product_ean').val() + '" class="variable_product_ean_list form-control form-control-sm dialog_variable_list_table_text"></td>';
         listhtml+='<td data-cid="9"  style="' + (def_column_show[9]  ==false ? 'display:none;' : '') + '" class="mytdcm" nowrap><input data-list_paa="' + paa + '" data-vp_cc="' + vp_cc + '" type="text"     value="' + $(this).find('.variable_product_isbn').val() + '" class="variable_product_isbn_list form-control form-control-sm dialog_variable_list_table_text"></td>';
         listhtml+='<td data-cid="10" style="' + (def_column_show[10] ==false ? 'display:none;' : '') + '" class="mytdcm" nowrap><input data-list_paa="' + paa + '" data-vp_cc="' + vp_cc + '" type="text"     value="' + $(this).find('.variable_product_taric').val() + '" class="variable_product_taric_list form-control form-control-sm dialog_variable_list_table_text"></td>';
+        listhtml+='<td data-cid="40" style="' + (def_column_show[40] ==false ? 'display:none;' : '') + '" class="mytdcm" nowrap><input data-list_paa="' + paa + '" data-vp_cc="' + vp_cc + '" type="text"     value="' + $(this).find('.variable_product_cpv').val() + '" class="variable_product_cpv_list form-control form-control-sm dialog_variable_list_table_text"></td>';
         listhtml+='<td data-cid="27" style="' + (def_column_show[27] ==false ? 'display:none;' : '') + '" class="mytdcm" nowrap><input data-list_paa="' + paa + '" data-vp_cc="' + vp_cc + '" type="number"   value="' + $(this).find('.variable_product_kostos').val() + '" class="variable_product_kostos_list form-control form-control-sm dialog_variable_list_table_number" min="0" step="' + from_php_GKS_INPUT_STEP_AJIA + '"></td>';
         
         listhtml+='<td data-cid="32" style="' + (def_column_show[32] ==false ? 'display:none;' : '') + '" class="mytdcm" nowrap><input data-list_paa="' + paa + '" data-vp_cc="' + vp_cc + '" type="number"   value="' + $(this).find('.variable_product_price_yperx').val() + '" class="variable_product_price_yperx_list form-control form-control-sm dialog_variable_list_table_number" min="0" step="' + from_php_GKS_INPUT_STEP_AJIA + '"></td>';
@@ -5000,7 +5026,7 @@ html+=
     
     
     $('.variable_product_code_list, .variable_product_descr_list, ' +
-      '.variable_product_sku_list, .variable_product_gtin_list, .variable_product_upc_list, .variable_product_ean_list, .variable_product_isbn_list, .variable_product_taric_list, ' +
+      '.variable_product_sku_list, .variable_product_gtin_list, .variable_product_upc_list, .variable_product_ean_list, .variable_product_isbn_list, .variable_product_taric_list, .variable_product_cpv_list, ' +
 
       '.variable_product_price_yperx_list, .variable_product_price_yperx_include_vat_list, ' +
       '.variable_product_price_yperx_sale_list, .variable_product_price_yperx_sale_dates_list, ' +
@@ -5211,7 +5237,7 @@ html+=
         }
       });
     },
-    minLength: 3,
+    minLength: 2,
     autoFocus: true,
     delay: 300, //default
     select: function( event, ui ) {
@@ -5358,6 +5384,182 @@ html+=
   }
 
   $('.product_taric_get_descr').click(product_taric_get_descr_click);
+
+
+
+
+
+  autocomplete_product_cpv={
+    source: function(request, response) {
+      mydata={
+        term: request.term,
+      };
+      $.ajax({
+        url: 'admin-autocomplete-cpv.php',
+        dataType: "json",
+        cache: false,
+        data: mydata,
+        error : function(jqXHR ,textStatus,  errorThrown) {
+  				myalert('error:' + jqXHR.responseText);
+  			},
+        success: function( data ) {
+          if (data.success == true) {
+            response( data.list);
+          } else {
+            myalert('error:' + $.base64.decode(data.message));
+          }
+        }
+      });
+    },
+    minLength: 2,
+    autoFocus: true,
+    delay: 300, //default
+    select: function( event, ui ) {
+      need_save=true;
+
+      elem=$(event.target);
+      tval=elem.val().trim();
+      eid=elem.attr('id');
+      elem_descr=elem.parent().parent().find('.product_cpv_descr');
+      elem_get=elem.parent().find('.product_cpv_get_descr');
+      //console.log(tval,eid);
+      
+      if (tval=='') elem_descr.hide();
+      else setTimeout(function(myelem) {
+        elem_get.click();
+      }, 500,elem_get);
+      
+    },
+    change: function (event, ui) {
+      need_save=true;
+
+      elem=$(event.target);
+      tval=elem.val().trim();
+      eid=elem.attr('id');
+      elem_descr=elem.parent().parent().find('.product_cpv_descr');
+      elem_get=elem.parent().find('.product_cpv_get_descr');
+      //console.log(tval,eid);
+      
+      if (tval=='') elem_descr.hide();
+      else setTimeout(function(myelem) {
+        elem_get.click();
+      }, 500,elem_get);
+      
+      
+    },
+    create: function () {
+      $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
+        return $('<li>')
+          .append('<a class="gks_autocomplete_id">' + item.value + '</a>' + '<span class="gks_autocomplete_text">' + item.descr + '</span>')
+          .appendTo(ul);
+      };
+    },
+    open: function(event, ui) {
+      var mymaxui_id=0;
+      $(this).data('ui-autocomplete').menu.element.find('li .gks_autocomplete_id').each(function() {
+        temp=$(this).outerWidth();
+        if (temp>mymaxui_id) mymaxui_id=temp;
+      });
+      var mymaxui_text=0;
+      $(this).data('ui-autocomplete').menu.element.find('li .gks_autocomplete_text').each(function() {
+        temp=$(this).outerWidth();
+        if (temp>mymaxui_text) mymaxui_text=temp;
+      });
+      mymaxui_id+=4;
+      $(this).data('ui-autocomplete').menu.element.find('li .gks_autocomplete_id').each(function() {
+        $(this).css({'min-width':mymaxui_id + 'px','display' : 'inline-block'});
+      }); 
+      mymaxui_text+=mymaxui_id + 4;
+      $(this).data('ui-autocomplete').menu.element.css('width',mymaxui_text+'px');
+    },
+            
+  };  
+  $('#product_cpv, .variable_product_cpv').autocomplete(autocomplete_product_cpv);
+
+  var product_cpv_get_descr_run=false;
+  function product_cpv_get_descr_click() {
+    if (product_cpv_get_descr_run) return;
+    
+    cpv_code=$(this).parent().find('input.myneedsave').val().trim();
+    elem_product_cpv_descr=$(this).parent().parent().find('.product_cpv_descr');
+    if (cpv_code=='') {
+      elem_product_cpv_descr.html('<div class="alert alert-warning alert-dismissible fade show" role="alert">' +
+        gks_lang('Πληκρολογήστε κάποιον κωδικό στο παραπάνω πεδίο') +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+      '</div>').show();
+      gks_myscroll();
+      return;
+    }
+    
+    product_cpv_get_descr_run=true;
+    elem_product_cpv_descr.html('<div><img src="img/wait.gif"></div>').show();  
+    gks_myscroll();    
+    datasend='code=' + encodeURIComponent($.base64.encode(cpv_code));
+    $.ajax({
+      url: 'admin-autocomplete-cpv-get-descr.php',
+      type: 'POST',
+      dataType: "json",
+      cache: false,
+      data: datasend,
+      gks_elem_product_cpv_descr:elem_product_cpv_descr,
+      error : function(jqXHR ,textStatus,  errorThrown) {
+				product_cpv_get_descr_run=false;
+				this.gks_elem_product_cpv_descr.html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+          gks_lang('Σφάλμα') + ': ' + jqXHR.responseText + 
+          '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+        '</div>').show();
+        gks_myscroll();
+			},
+      success: function( data ) {
+        product_cpv_get_descr_run=false;
+        if (data.success == true) {
+          //console.log(data);
+          tabledata='';
+          if (data.data && data.data.length >= 1) {
+            tabledata=
+            '<table class="table table-sm table-responsive1 table-striped table-bordered gkstable100 product_cpv_descr_table" border="0" cellspacing="0" cellpadding="5" align="center">' +
+            '<thead>' +
+              '<tr>' +
+                '<th class="table-dark" scope="col" style="width:0%">#</th>' +
+                '<th class="table-dark" scope="col" style="width:20%">' + gks_lang('Κωδικός') + '</th>' +
+                '<th class="table-dark" scope="col" style="width:80%">' + gks_lang('Περιγραφή') + '</th>' +
+              '</tr>' +
+            '</thead>' + 
+            '<tbody>';
+            for(i=0; i < data.data.length;i++) {
+              isbold='';
+              if (data.code==data.data[i].c) isbold=' style="font-weight:bold"';
+              
+              tabledata+='<tr>' +
+              '<td class="mytdcm aa">' +  (i+1) + '</td>' +
+              '<td class="mytdcml" ' + isbold + '>' +  data.data[i].c + '</td>' +
+              '<td class="mytdcml" ' + isbold + '>' +  data.data[i].d + '</td>' +
+              '</tr>';
+              if (isbold!='' && data.code.length>=10) break;
+            }
+            tabledata+='</tbody></table>';
+          }
+          this.gks_elem_product_cpv_descr.html('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+            '<div class="product_cpv_descr_text">' + $.base64.decode(data.message) + '</div>' + 
+            tabledata + 
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+          '</div>').show();
+          gks_myscroll();
+        } else {
+  				this.gks_elem_product_cpv_descr.html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+            gks_lang('Σφάλμα') + ': ' + $.base64.decode(data.message) + 
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+          '</div>').show();
+          gks_myscroll();
+        }
+      }
+    });
+          
+  }
+
+  $('.product_cpv_get_descr').click(product_cpv_get_descr_click);
+
+
 
   //generic
   gks_page_loading=false;

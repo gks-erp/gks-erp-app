@@ -147,8 +147,10 @@ echo $gks_custom_row['html'];
   <div class="form-group1 row">
     <div class="col-md-12 text-center mt-2">
       <button type="button" class="btn btn-primary" id="submit_button_ok"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $id;?>" data-model="<?php echo $custom_table_name;?>" data-backurl="admin-ct.php?ctid=<?php echo $ctid;?>"><?php echo gks_lang('Διαγραφή');?></button>
       <button type="button" class="btn btn-dark" id="submit_button_print"><?php echo gks_lang('Εκτύπωση');?> <i class="fas fa-print" style="color: #35dc35;font-size: 120%;"></i></button>
+      <?php } ?>
     </div>
   </div>
 </div>

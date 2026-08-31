@@ -1345,7 +1345,7 @@ $sql="select * from gks_permission_object where id_permission_object=781";
 $result = gks_run_sql($sql);
 if ($result->num_rows==0) {
   gks_run_sql("INSERT INTO `gks_permission_object` (`id_permission_object`,`mydate_add`,`mydate_edit`,`user_id_add`,`user_id_edit`,`myip`,`card_title`,`parent_id`,`table_name`,`object_name`,`sortorder`) VALUES 
-   (781,'2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Λογιστική',0,'gks__paroxos_overview_ilyda','Επισκόπηση Παρόχου ΙΛΥΔΑ',8810)");
+   (781,'2021-01-01 00:00:00','2021-01-01 00:00:00',2,2,'127.0.0.1','Λογιστική',0,'gks__paroxos_overview','Επισκόπηση Παρόχου',8810)");
 
   $sql="SELECT ssss.user_id
   FROM (

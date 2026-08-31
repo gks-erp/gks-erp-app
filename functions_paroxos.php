@@ -5,10 +5,15 @@ gks ERP
 www.gks.gr
 */
 
+//delete me paroxo1-9
+
 include_once(GKS_SITE_PATH.GKS_SITE_HTTPDOCS.'/my/functions_paroxos_ilyda_com.php');   //8
 include_once(GKS_SITE_PATH.GKS_SITE_HTTPDOCS.'/my/functions_paroxos_tesae_gr.php');    //16
 include_once(GKS_SITE_PATH.GKS_SITE_HTTPDOCS.'/my/functions_paroxos_parochos_gr.php'); //20
- 
+include_once(GKS_SITE_PATH.GKS_SITE_HTTPDOCS.'/my/functions_paroxos_etimologiera_gr.php'); //21
+include_once(GKS_SITE_PATH.GKS_SITE_HTTPDOCS.'/my/functions_paroxos_etimologiera_gr2.php'); //21
+include_once(GKS_SITE_PATH.GKS_SITE_HTTPDOCS.'/my/functions_paroxos_etimologiera_gr3.php'); //21
+
 function gks_paroxos_log($params) {
   global $db_link;
   global $gkIP;
@@ -252,6 +257,8 @@ function gks_paroxos_invoice_run($id,$force_options) {
     id_company_sub,gks_acc_inv.company_sub_id,company_sub_title,
     gks_acc_inv.cancel_for_acc_inv_id,
     gks_acc_journal.acc_journal_descr,
+    gks_acc_journal.acc_eidos_parastatikou_whi_id,
+    gks_acc_journal.acc_eidos_parastatikou_other_entity,    
     gks_acc_seires.is_xeirografi,
     gks_acc_seires.send_mydata,gks_acc_seires.send_paroxos,gks_acc_seires.aade_lock_send_numbers,
     gks_acc_seires.seira_descr,
@@ -279,6 +286,8 @@ function gks_paroxos_invoice_run($id,$force_options) {
     id_company_sub,gks_acc_pay.company_sub_id,company_sub_title,
     gks_acc_pay.cancel_for_acc_pay_id,
     gks_acc_journal.acc_journal_descr,
+    gks_acc_journal.acc_eidos_parastatikou_whi_id,
+    gks_acc_journal.acc_eidos_parastatikou_other_entity,    
     gks_acc_seires.is_xeirografi,
     gks_acc_seires.send_mydata,gks_acc_seires.send_paroxos,gks_acc_seires.aade_lock_send_numbers,
     gks_acc_seires.seira_descr,
@@ -306,6 +315,8 @@ function gks_paroxos_invoice_run($id,$force_options) {
     id_company_sub,gks_whi_mov.company_sub_id,company_sub_title,
     gks_whi_mov.cancel_for_whi_mov_id,
     gks_acc_journal.acc_journal_descr,
+    gks_acc_journal.acc_eidos_parastatikou_whi_id,
+    gks_acc_journal.acc_eidos_parastatikou_other_entity,    
     gks_acc_seires.is_xeirografi,
     gks_acc_seires.send_mydata,gks_acc_seires.send_paroxos,gks_acc_seires.aade_lock_send_numbers,
     gks_acc_seires.seira_descr,
@@ -744,17 +755,24 @@ function gks_paroxos_invoice_xml_create($id,$doc_table,$paroxos_params) {
     gks_company.company_odos,gks_company.company_arithmos,gks_company.company_orofos,gks_company.company_perioxi,gks_company.company_poli,gks_company.company_tk,company_nomoi.nomos_descr as company_nomos_descr,
     company_country.country_initials as company_country_initials,company_country.country_name as company_country_name,
     company_country.country_ee as company_country_ee,
-    gks_company.company_email,gks_company.company_phone,
+    gks_company.company_email,gks_company.company_phone,gks_company.company_url,
     gks_company.company_gemi_number,
+    gks_company.company_epaggelma,
     
     gks_company_subs.company_sub_title,
     gks_company_subs.company_sub_odos,gks_company_subs.company_sub_arithmos,gks_company_subs.company_sub_orofos,gks_company_subs.company_sub_perioxi,gks_company_subs.company_sub_poli,gks_company_subs.company_sub_tk,company_sub_nomoi.nomos_descr as company_sub_nomos_descr,
     company_sub_country.country_initials as company_sub_country_initials,company_sub_country.country_name as company_sub_country_name,
     company_sub_country.country_ee as company_sub_country_ee,
-    gks_company_subs.company_sub_email,gks_company_subs.company_sub_phone,
+    gks_company_subs.company_sub_email,gks_company_subs.company_sub_phone,gks_company_subs.company_sub_url,
     
     gks_acc_journal.acc_journal_code, gks_acc_journal.acc_journal_descr, 
+    gks_acc_journal.acc_eidos_parastatikou_whi_id,
+    gks_acc_journal.acc_eidos_parastatikou_other_entity,
     gks_acc_seires.seira_code, gks_acc_seires.seira_descr, 
+    gks_acc_seires.seira_isdeliverynote,
+    0 as seira_is_reverse_delivery_note,
+    gks_acc_seires.seira_is_self_pricing,
+    gks_acc_seires.seira_is_vat_payment_suspension,
     gks_acc_eidi_parastatikon.eidos_parastatikou_aade_code,gks_acc_eidi_parastatikon.eidos_parastatikou_type_id,
     gks_acc_eidi_parastatikon.peppol_code,
     gks_acc_eidi_parastatikon.eidos_parastatikou_has_posotita,
@@ -771,6 +789,8 @@ function gks_paroxos_invoice_xml_create($id,$doc_table,$paroxos_params) {
     party_delivery_nomoi.nomos_descr as party_delivery_nomos_descr,
     gks_acc_eidi_parastatikon.eidos_parastatikou_need_afm,
     gks_aade_skopos_diakinisis.aade_skopos_diakinisis_code,
+    gks_aade_skopos_diakinisis.aade_skopos_diakinisis_descr,
+    gks_users.ma_branch as ma_branch_user,
     gks_users.gemi_number,
     gks_users.is_b2g,
     gks_users.b2g_aaht_code,
@@ -814,17 +834,24 @@ function gks_paroxos_invoice_xml_create($id,$doc_table,$paroxos_params) {
     gks_company.company_odos,gks_company.company_arithmos,gks_company.company_orofos,gks_company.company_perioxi,gks_company.company_poli,gks_company.company_tk,company_nomoi.nomos_descr as company_nomos_descr,
     company_country.country_initials as company_country_initials,company_country.country_name as company_country_name,
     company_country.country_ee as company_country_ee,
-    gks_company.company_email,gks_company.company_phone,
+    gks_company.company_email,gks_company.company_phone,gks_company.company_url,
     gks_company.company_gemi_number,
+    gks_company.company_epaggelma,
     
     gks_company_subs.company_sub_title,
     gks_company_subs.company_sub_odos,gks_company_subs.company_sub_arithmos,gks_company_subs.company_sub_orofos,gks_company_subs.company_sub_perioxi,gks_company_subs.company_sub_poli,gks_company_subs.company_sub_tk,company_sub_nomoi.nomos_descr as company_sub_nomos_descr,
     company_sub_country.country_initials as company_sub_country_initials,company_sub_country.country_name as company_sub_country_name,
     company_sub_country.country_ee as company_sub_country_ee,
-    gks_company_subs.company_sub_email,gks_company_subs.company_sub_phone,
+    gks_company_subs.company_sub_email,gks_company_subs.company_sub_phone,gks_company_subs.company_sub_url,
     
     gks_acc_journal.acc_journal_code, gks_acc_journal.acc_journal_descr, 
-    gks_acc_seires.seira_code, gks_acc_seires.seira_descr, 
+    gks_acc_journal.acc_eidos_parastatikou_whi_id,
+    gks_acc_journal.acc_eidos_parastatikou_other_entity,
+    gks_acc_seires.seira_code, gks_acc_seires.seira_descr,
+    0 as seira_isdeliverynote, 
+    0 as seira_is_reverse_delivery_note,
+    0 as seira_is_self_pricing,
+    0 as seira_is_vat_payment_suspension,   
     gks_acc_eidi_parastatikon.eidos_parastatikou_aade_code,gks_acc_eidi_parastatikon.eidos_parastatikou_type_id,
     gks_acc_eidi_parastatikon.peppol_code,
     gks_acc_eidi_parastatikon.eidos_parastatikou_has_posotita,
@@ -838,16 +865,29 @@ function gks_paroxos_invoice_xml_create($id,$doc_table,$paroxos_params) {
     
   
     gks_acc_eidi_parastatikon.eidos_parastatikou_need_afm,
-  
+                          0 as aade_skopos_diakinisis_code,
+                         '' as aade_skopos_19_descr,
+    gks_users.ma_branch as ma_branch_user,
     gks_users.gemi_number,
     gks_users.is_b2g,
     gks_users.b2g_aaht_code,
     gks_users.b2g_aaht_name,
     gks_users.b2g_aaht_foreas,
     gks_users.b2g_aaht_typos_forea,
-    gks_users.b2g_aaht_kodikos_ekatharisis
+    gks_users.b2g_aaht_kodikos_ekatharisis,
     
-    FROM ((((((((((((((((gks_acc_pay
+    ".GKS_WP_TABLE_PREFIX."users.user_email,
+    ".GKS_WP_TABLE_PREFIX."users.gks_mobile as user_mobile,
+    table_last_name.mylast_name as user_last_name, 
+    table_first_name.myfirst_name as user_first_name,
+    gks_users.eponimia,gks_users.epaggelma,
+    gks_users.afm, gks_users.doy,
+    gks_users.ma_odos,gks_users.ma_arithmos,
+    gks_users.ma_tk,gks_users.ma_poli,
+    '' as delivery_method_name,
+    '' as aade_skopos_diakinisis_descr
+
+    FROM ((((((((((((((((((gks_acc_pay
     
     LEFT JOIN ".GKS_WP_TABLE_PREFIX."users AS ".GKS_WP_TABLE_PREFIX."users_add ON gks_acc_pay.user_id_add = ".GKS_WP_TABLE_PREFIX."users_add.ID) 
     LEFT JOIN ".GKS_WP_TABLE_PREFIX."users AS ".GKS_WP_TABLE_PREFIX."users_edit ON gks_acc_pay.user_id_edit = ".GKS_WP_TABLE_PREFIX."users_edit.ID) 
@@ -862,7 +902,18 @@ function gks_paroxos_invoice_xml_create($id,$doc_table,$paroxos_params) {
     LEFT JOIN gks_acc_seires ON gks_acc_pay.pay_acc_seira_id = gks_acc_seires.id_acc_seira)
    
   
-    LEFT JOIN gks_users ON ".GKS_WP_TABLE_PREFIX."users.ID = gks_users.user_id) 
+    LEFT JOIN gks_users ON gks_acc_pay.user_id = gks_users.user_id) 
+    LEFT JOIN (
+      SELECT ".GKS_WP_TABLE_PREFIX."usermeta.user_id, ".GKS_WP_TABLE_PREFIX."usermeta.meta_value AS myfirst_name
+      FROM ".GKS_WP_TABLE_PREFIX."usermeta
+      WHERE (((".GKS_WP_TABLE_PREFIX."usermeta.meta_key)='first_name'))
+    )  AS table_first_name ON gks_acc_pay.user_id = table_first_name.user_id) 
+    LEFT JOIN (
+      SELECT ".GKS_WP_TABLE_PREFIX."usermeta.user_id, ".GKS_WP_TABLE_PREFIX."usermeta.meta_value AS mylast_name
+      FROM ".GKS_WP_TABLE_PREFIX."usermeta
+      WHERE (((".GKS_WP_TABLE_PREFIX."usermeta.meta_key)='last_name'))
+    )  AS table_last_name ON gks_acc_pay.user_id = table_last_name.user_id) 
+    
     LEFT JOIN gks_eshop_fiscal_position ON ".GKS_WP_TABLE_PREFIX."users.fiscal_position_id = gks_eshop_fiscal_position.id_fiscal_position) 
     LEFT JOIN gks_eshop_pricelist ON ".GKS_WP_TABLE_PREFIX."users.pricelist_id = gks_eshop_pricelist.id_pricelist)
     LEFT JOIN gks_country as party_country ON gks_users.ma_country_id = party_country.id_country)
@@ -903,17 +954,24 @@ function gks_paroxos_invoice_xml_create($id,$doc_table,$paroxos_params) {
     gks_company.company_odos,gks_company.company_arithmos,gks_company.company_orofos,gks_company.company_perioxi,gks_company.company_poli,gks_company.company_tk,company_nomoi.nomos_descr as company_nomos_descr,
     company_country.country_initials as company_country_initials,company_country.country_name as company_country_name,
     company_country.country_ee as company_country_ee,
-    gks_company.company_email,gks_company.company_phone,
+    gks_company.company_email,gks_company.company_phone,gks_company.company_url,
     gks_company.company_gemi_number,
+    gks_company.company_epaggelma,
     
     gks_company_subs.company_sub_title,
     gks_company_subs.company_sub_odos,gks_company_subs.company_sub_arithmos,gks_company_subs.company_sub_orofos,gks_company_subs.company_sub_perioxi,gks_company_subs.company_sub_poli,gks_company_subs.company_sub_tk,company_sub_nomoi.nomos_descr as company_sub_nomos_descr,
     company_sub_country.country_initials as company_sub_country_initials,company_sub_country.country_name as company_sub_country_name,
     company_sub_country.country_ee as company_sub_country_ee,
-    gks_company_subs.company_sub_email,gks_company_subs.company_sub_phone,
+    gks_company_subs.company_sub_email,gks_company_subs.company_sub_phone,gks_company_subs.company_sub_url,
     
     gks_acc_journal.acc_journal_code, gks_acc_journal.acc_journal_descr, 
+    gks_acc_journal.acc_eidos_parastatikou_whi_id,
+    gks_acc_journal.acc_eidos_parastatikou_other_entity,
     gks_acc_seires.seira_code, gks_acc_seires.seira_descr, 
+    gks_acc_seires.seira_isdeliverynote,
+    gks_acc_seires.seira_is_reverse_delivery_note,
+    0 as seira_is_self_pricing,
+    0 as seira_is_vat_payment_suspension,
     gks_acc_eidi_parastatikon.eidos_parastatikou_aade_code,gks_acc_eidi_parastatikon.eidos_parastatikou_type_id,
     gks_acc_eidi_parastatikon.peppol_code,
     gks_acc_eidi_parastatikon.eidos_parastatikou_has_posotita,
@@ -930,6 +988,8 @@ function gks_paroxos_invoice_xml_create($id,$doc_table,$paroxos_params) {
     party_delivery_nomoi.nomos_descr as party_delivery_nomos_descr,
     gks_acc_eidi_parastatikon.eidos_parastatikou_need_afm,
     gks_aade_skopos_diakinisis.aade_skopos_diakinisis_code,
+    gks_aade_skopos_diakinisis.aade_skopos_diakinisis_descr,
+    gks_users.ma_branch as ma_branch_user,
     gks_users.gemi_number,
     gks_users.is_b2g,
     gks_users.b2g_aaht_code,
@@ -1611,6 +1671,7 @@ function gks_paroxos_invoice_xml_create($id,$doc_table,$paroxos_params) {
       $prow['xml_vatCategory']=$prow['aade_katigoria_fpa_code'];
       
       //if ($prow['product_price_final_all_fpa']!=0)
+      $prow['xml_netValue']=$prow['product_price_final_all_net'];
       $prow['xml_vatAmount']=$prow['product_price_final_all_fpa'];
       
       if ($prow['aade_katigoria_fpa_ejeresi_code']!=0) {
@@ -1663,7 +1724,7 @@ function gks_paroxos_invoice_xml_create($id,$doc_table,$paroxos_params) {
             }
             
             
-            $cl_item['amount']=$value['amount'];
+            $cl_item['amount']=floatval($value['amount']);
             
             $prow['xml_incomeClassification'][]=$cl_item;
             
@@ -1908,13 +1969,23 @@ function gks_paroxos_invoice_xml_create($id,$doc_table,$paroxos_params) {
       $struct_data['xml']['invoiceSummary']['totalGrossValue']=floatval($row['gks_price_total']);
     
   } else if ($doc_table=='gks_acc_pay') {
-    $struct_data['xml']['invoiceSummary']['totalNetValue']=$struct_data['xml']['paymentMethods'][0]['amount'];
+    $struct_data['xml']['invoiceSummary']['totalNetValue']=floatval($struct_data['xml']['paymentMethods'][0]['amount']);
     $struct_data['xml']['invoiceSummary']['totalVatAmount']=0;
     $struct_data['xml']['invoiceSummary']['totalVatAmount_NetValue']=$struct_data['xml']['invoiceSummary']['totalNetValue'];
+    $struct_data['xml']['invoiceSummary']['totalWithheldAmount']=0;
+    $struct_data['xml']['invoiceSummary']['totalFeesAmount']=0;
+    $struct_data['xml']['invoiceSummary']['totalStampDutyAmount']=0;
+    $struct_data['xml']['invoiceSummary']['totalOtherTaxesAmount']=0;
+    $struct_data['xml']['invoiceSummary']['totalDeductionsAmount']=0;
+    $struct_data['xml']['invoiceSummary']['totalGrossValue']=$struct_data['xml']['invoiceSummary']['totalNetValue'];
+    //$struct_data['xml']['invoiceSummary']['totalPrintGrossValue']=$struct_data['xml']['invoiceSummary']['totalNetValue'];
+    
   } else if ($doc_table=='gks_whi_mov') {
     $struct_data['xml']['invoiceSummary']['totalNetValue']=0;
     $struct_data['xml']['invoiceSummary']['totalVatAmount']=0;
     $struct_data['xml']['invoiceSummary']['totalVatAmount_NetValue']=0;
+    
+    
   }
   
   //echo '<pre>struct_data prow_array'."\n";print_r($struct_data);die();
@@ -1932,7 +2003,7 @@ function gks_paroxos_invoice_xml_create($id,$doc_table,$paroxos_params) {
       }
       if ($value['classificationCategory']=='') {$ret['message']=gks_lang('Δεν βρέθηκε η κατηγορία εσόδων της ΑΑΔΕ στην σύνοψη του παραστατικού'); debug_mail(false,$ret['message']); return $ret;}
       $in_item['classificationCategory']=$value['classificationCategory'];
-      $in_item['amount']=$value['amount'];
+      $in_item['amount']=floatval($value['amount']);
     
     	$struct_data['xml']['invoiceSummary']['incomeClassification'][]=$in_item;
     	
@@ -2041,8 +2112,12 @@ Array
     case 20: //parochos_gr
       $ret=gks_paroxos_invoice_xml_build_parochos_gr($id,$paroxos_params,$struct_data);
       break;
+    case 21: //etimologiera_gr
+      $ret=gks_paroxos_invoice_xml_build_etimologiera_gr($id,$paroxos_params,$struct_data);
+      break;
+      
     default:
-    	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο'); 
+    	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο').' (1)'; 
       break;
   }
   //echo '<pre>fffffffffffffffff 22wwwsss';die();
@@ -2115,8 +2190,12 @@ Array
     case 20: //parochos_gr
       $ret=gks_paroxos_invoice_xml_send_parochos_gr($id,$paroxos_params,$struct_data,$file_data);
       break;
+    case 21: //etimologiera_gr
+      $ret=gks_paroxos_invoice_xml_send_etimologiera_gr($id,$paroxos_params,$struct_data,$file_data);
+      break;
+      
     default:
-    	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο'); 
+    	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο').' (2)'; 
       break;
   }
 
@@ -2181,7 +2260,7 @@ function gks_paroxos_invoice_xml_get_in_progress($doc_table,$ids=[], $aade_parox
         $ret=gks_paroxos_invoice_xml_get_in_progress_item_parochos_gr($doc_table,$inv_item);
         break;
       default:
-      	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο'); 
+      	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο').' (3)'; 
         break;
     }
     gks_inv_sxolio_log($inv_item['id_acc_inv'],$row_old,$products_old,$extra_address_old,gks_lang('Ενημέρωση από πάροχο').'<br>',[],$gks_custom_row_old);
@@ -2259,7 +2338,7 @@ function gks_paroxos_invoice_xml_get_files($doc_table,$ids=[], $aade_paroxos_id=
         $ret=gks_paroxos_invoice_xml_get_files_item_parochos_gr($doc_table,$inv_item);
         break;
       default:
-      	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο'); 
+      	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο').' (4)'; 
         break;
     }
     if ($ret['success']==false) {
@@ -2347,7 +2426,7 @@ function gks_paroxos_invoice_xml_send_pdf($doc_table,$ids=[], $aade_paroxos_id=[
         $ret=gks_paroxos_invoice_xml_send_pdf_item_parochos_gr($doc_table,$xxx_item);
         break;
       default:
-      	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο'); 
+      	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο').' (5)'; 
         break;
     }
     if ($ret['success']==false) {
@@ -2429,7 +2508,7 @@ function gks_paroxos_invoice_get_docstate($doc_table,$ids=[], $aade_paroxos_id=[
         $ret=gks_paroxos_invoice_get_docstate_ilyda_com($doc_table,$xxx_item);
         break;
       default:
-      	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο'); 
+      	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο').' (6)'; 
         break;
     }
     if ($ret['success']==false) {
@@ -2438,6 +2517,73 @@ function gks_paroxos_invoice_get_docstate($doc_table,$ids=[], $aade_paroxos_id=[
     }
   } 
   $ret['success']=true;  
+  return $ret;
+}
+
+function gks_paroxos_invoice_get_status($doc_table,$id) {
+  global $db_link;
+  global $gkIP;
+  global $my_wp_user_id;
+  
+  $ret = array('success' => false, 'message' => 'generic error');
+  /*
+  parochos_gr status:
+  The progress status of the procedure. InProgress = 0, Completed = 1, Failed = 2.
+  */
+
+  if ($doc_table=='gks_acc_inv') {
+    $xxx='inv';
+    $ttt='acc_inv';
+    $rrr='inv_acc';    
+  } else if ($doc_table=='gks_acc_pay') {
+    $xxx='pay';
+    $ttt='acc_pay';
+    $rrr='pay_acc';     
+  } else if ($doc_table=='gks_whi_mov') {
+    $xxx='mov';
+    $ttt='whi_mov'; 
+    $rrr='mov_whi';     
+  } else {
+    echo '<pre>error on doc_table-page'; die();
+  }
+  //echo '<pre>sssssssssssssss';die();
+  
+  $sql="select id_".$ttt.",company_id,company_sub_id,
+  aade_paroxos_id,paroxos_processId,
+  paroxos_tf1_url_has,
+  aade_invoiceuid,aade_invoicemark,
+  aade_qrurl,aade_paroxos_qrurl,aade_statuscode,aade_errors,aade_send_date,aade_sending,
+  gks_users.is_b2g
+  from (gks_".$ttt."
+  LEFT JOIN ".GKS_WP_TABLE_PREFIX."users ON gks_".$ttt.".user_id = ".GKS_WP_TABLE_PREFIX."users.ID) 
+  LEFT JOIN gks_users ON ".GKS_WP_TABLE_PREFIX."users.ID = gks_users.user_id
+  where paroxos_status=1
+  and aade_paroxos_id>0
+  and aade_invoiceuid<>''
+  and aade_send_date is not null
+  and id_".$ttt." in (".$id.")
+  order by id_".$ttt;
+  //echo '<pre>fffffffffffffff'.$sql;die();
+
+  $result = $db_link->query($sql);
+  if (!$result) {$ret['message']='sql error';debug_mail(false,$ret['message'],$sql.' '.$db_link->errno . '-'.$db_link->error); return $ret;}
+  if ($result->num_rows==0) {
+    $ret['message']=gks_lang('Το παραστατικό δεν έχει τις απαραίτητες προϋποθέσεις').' (4)';
+    $ret['success']=false;  
+    return $ret;}
+
+  $row= $result->fetch_assoc();
+  //echo '<pre>sssssssssssssssss';print_r($row);die();
+  $aade_paroxos_id=intval($row['aade_paroxos_id']);
+
+	switch ($row['aade_paroxos_id']) {   
+    case 21: //etimologiera_gr
+      $ret=gks_paroxos_invoice_get_status_etimologiera_gr($doc_table,$id,$row);
+      break;
+    default:
+      $ret['message']=gks_lang('Αυτός ο πάροχος δεν έχει αυτή την δυνατότητα');
+      $ret['success']=false;  
+  }
   return $ret;
 }
 
@@ -2484,8 +2630,12 @@ function gks_paroxos_payment_sign($id,$paroxos_params,$struct_data) {
     //case 20: //parochos_gr
     //  $ret=gks_paroxos_payment_sign_parochos_gr($id,$paroxos_params,$struct_data);
     //  break;
+    case 21: //etimologiera_gr
+      $ret=gks_paroxos_payment_sign_etimologiera_gr($id,$paroxos_params,$struct_data);
+      break;
+
     default:
-    	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο'); 
+    	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο').' (7)'; 
       break;
   }
   //echo '<pre>fffffffffffffffff 22wwwsss';die();
@@ -2501,14 +2651,17 @@ function gks_paroxos_payment_sign($id,$paroxos_params,$struct_data) {
   return $ret;  
 }
 
-function gks_paroxos_get_signature_data($signature_data) {
+function gks_paroxos_get_signature_data($signature_data,$payment_acquirer_with_id) {
   $ret = array('success' => false, 'message' => 'generic error get_signature_data');
   switch ($signature_data['id_aade_paroxos']) {   
     case 8: //ylida
       $ret=gks_paroxos_get_signature_data_ilyda_com($signature_data);
       break;
+    case 21: //etimologiera_gr
+      $ret=gks_paroxos_get_signature_data_etimologiera_gr($signature_data,$payment_acquirer_with_id);
+      break;
     default:
-    	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο').' get_signature_data'; 
+    	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο').' (8) get_signature_data'; 
       break;    
   }
   
@@ -2559,7 +2712,7 @@ function gks_paroxos_get_keys($paroxos_id) {
       $ret=gks_paroxos_get_keys_ilyda_com();
       break;
     default:
-    	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο'); 
+    	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο').' (9)'; 
       break;
   }
   //echo '<pre>fffffffffffffffff 22wwwsss';die();
@@ -2574,3 +2727,4 @@ function gks_paroxos_get_keys($paroxos_id) {
   $ret['success']=true;  
   return $ret;  
 }
+

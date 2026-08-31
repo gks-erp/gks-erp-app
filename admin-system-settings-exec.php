@@ -151,6 +151,11 @@ $sql="replace into gks_settings (mykey,myvalue) values ('GKS_HOTEL_RESERVATIONS_
 $result = $db_link->query($sql);        
 if (!$result) {debug_mail(false,'error sql',$sql);$return = array('success' => false, 'message' => base64_encode('sql error'));echo json_encode($return); die(); }
 
+$temp=0; if (isset($_POST['GKS_HR_ENABLE']))  $temp=intval($_POST['GKS_HR_ENABLE']);
+if ($temp!=0 and $temp!=1) $temp=0;
+$sql="replace into gks_settings (mykey,myvalue) values ('GKS_HR_ENABLE','".($temp!=0 ? 'true' : 'false')."')";
+$result = $db_link->query($sql);        
+if (!$result) {debug_mail(false,'error sql',$sql);$return = array('success' => false, 'message' => base64_encode('sql error'));echo json_encode($return); die(); }
 
 
 $temp=0; if (isset($_POST['GKS_CRM_ENABLE']))  $temp=intval($_POST['GKS_CRM_ENABLE']);
@@ -314,6 +319,13 @@ $result = $db_link->query($sql);
 if (!$result) {debug_mail(false,'error sql',$sql);$return = array('success' => false, 'message' => base64_encode('sql error'));echo json_encode($return); die(); }
 
 
+$temp=0; if (isset($_POST['GKS_ORDERS_CREATE_ACC_INV_MODE']))  $temp=intval($_POST['GKS_ORDERS_CREATE_ACC_INV_MODE']);
+if ($temp!=0 and $temp!=1) $temp=0;
+$sql="replace into gks_settings (mykey,myvalue) values ('GKS_ORDERS_CREATE_ACC_INV_MODE','".($temp!=0 ? '1' : '0')."')";
+$result = $db_link->query($sql);        
+if (!$result) {debug_mail(false,'error sql',$sql);$return = array('success' => false, 'message' => base64_encode('sql error'));echo json_encode($return); die(); }
+
+
 
 
 $temp=0; if (isset($_POST['GKS_ORDERS_ENABLE']))  $temp=intval($_POST['GKS_ORDERS_ENABLE']);
@@ -374,6 +386,14 @@ if ($temp!=0 and $temp!=1) $temp=0;
 $sql="replace into gks_settings (mykey,myvalue) values ('GKS_ASSETS_ENABLE','".($temp!=0 ? 'true' : 'false')."')";
 $result = $db_link->query($sql);        
 if (!$result) {debug_mail(false,'error sql',$sql);$return = array('success' => false, 'message' => base64_encode('sql error'));echo json_encode($return); die(); }
+
+
+$temp=0; if (isset($_POST['GKS_STAT_ENABLE']))  $temp=intval($_POST['GKS_STAT_ENABLE']);
+if ($temp!=0 and $temp!=1) $temp=0;
+$sql="replace into gks_settings (mykey,myvalue) values ('GKS_STAT_ENABLE','".($temp!=0 ? 'true' : 'false')."')";
+$result = $db_link->query($sql);        
+if (!$result) {debug_mail(false,'error sql',$sql);$return = array('success' => false, 'message' => base64_encode('sql error'));echo json_encode($return); die(); }
+
 
 $temp=0; if (isset($_POST['GKS_ERP_APP_MOBILE_VER'])) $temp=trim_gks($_POST['GKS_ERP_APP_MOBILE_VER']);
 $sql="replace into gks_settings (mykey,myvalue) values ('GKS_ERP_APP_MOBILE_VER','".$db_link->escape_string($temp)."')";

@@ -657,7 +657,24 @@ if ($signature_data['seira_need_signature']) {
   
   $signature_data['id_paroxos_signature']=$ret['id_paroxos_signature'];
   $signature_data['id_aade_paroxos']=$ret['id_aade_paroxos'];
-  $signature_data['signature']=$ret['response']['invoiceSignatures'][0];
+  
+  switch ($ret['id_aade_paroxos']) {
+    case 8: //ilyda_com
+      $signature_data['signature']=$ret['response']['invoiceSignatures'][0];
+      break;
+    case 21: //etimologiera_gr
+      $signature_data['signature']=$ret['response']['response'];
+      break;
+    default:
+      $signature_data['signature']=$ret['response']['invoiceSignatures'][0];
+    	$ret['message']=gks_lang('Δεν έχει γίνει ακόμα η υλοποίηση για αυτόν τον πάροχο').' (7.1)'; 
+      break;    
+  }
+ 
+  //echo '<pre>';print_r($signature_data);die();
+  
+  
+  
 
   //echo '<pre>signature_data... ';print_r($signature_data);die();
   
@@ -703,7 +720,7 @@ $aadeSignatureUID='';
 
 if ($signature_data['seira_need_signature']) {
   
-  $ret=gks_paroxos_get_signature_data($signature_data);
+  $ret=gks_paroxos_get_signature_data($signature_data,$payment_acquirer_with_id);
   //echo '<pre>get signature 1111111111 data ... ';print_r($ret);die();
   if ($ret['success']==false) {$ret['message']=base64_encode($ret['message']);echo json_encode($ret); die();}
   

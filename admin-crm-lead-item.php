@@ -870,8 +870,9 @@ echo $gks_custom_row['html'];
   <div class="form-group1 row">
     <div class="col-md-12 text-center mt-2">
       <button type="button" class="btn btn-primary" id="submit_button_ok_custom"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_crm_lead'];?>" data-model="gks_crm_leads" data-backurl="admin-crm-lead.php" <?php if ($id<=0) echo 'disabled';?>><?php echo gks_lang('Διαγραφή');?></button>
-
+      <?php } ?>
       <div style="display:inline-block;width:38px;height:38px;vertical-align:top;">
         <div style="border:1px solid gray;padding: 7px 0px 5px 0px;;border-radius:4px;background-color:#343a40;display:none;" id="calc_hourglass">
           <i class="fas fa-hourglass-half" style="color:coral;font-size:120%;"></i>

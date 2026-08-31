@@ -30,6 +30,11 @@ $perm_calendar_other_users_edit  =gks_permission_user_can_action_php($my_wp_user
 $perm_calendar_other_users_add   =gks_permission_user_can_action_php($my_wp_user_id,'gks_calendar_other_users','add',0);
 $perm_calendar_other_users_delete=gks_permission_user_can_action_php($my_wp_user_id,'gks_calendar_other_users','delete',0);
 
+$perm_calendar_other_posta_view  =gks_permission_user_can_action_php($my_wp_user_id,'gks_calendar_other_posta','view',0);
+$perm_calendar_other_posta_edit  =gks_permission_user_can_action_php($my_wp_user_id,'gks_calendar_other_posta','edit',0);
+$perm_calendar_other_posta_add   =gks_permission_user_can_action_php($my_wp_user_id,'gks_calendar_other_posta','add',0);
+$perm_calendar_other_posta_delete=gks_permission_user_can_action_php($my_wp_user_id,'gks_calendar_other_posta','delete',0);
+
 
 
 //$gks_user_settings= gks_get_user_settings($my_wp_user_id);
@@ -281,6 +286,141 @@ include_once('_my_header_admin.php');
       
       
       
+
+
+
+
+
+<?php
+
+      $calendar_user_color_hr_program='#134f5c';
+      if (isset($gks_user_settings['calendar']['user_color_hr_program'])) $calendar_user_color_hr_program=$gks_user_settings['calendar']['user_color_hr_program'];
+      $calendar_visible_hr_program=1;
+      if (isset($gks_user_settings['calendar']['visible_hr_program'])) $calendar_visible_hr_program=$gks_user_settings['calendar']['visible_hr_program'];
+
+      $other_users_hr_program_rows=[];
+      if ($perm_calendar_other_users_view) {
+        $sql="SELECT gks_calendar_other_users.other_user_id, gks_calendar_other_users.other_user_color,other_visible,".GKS_WP_TABLE_PREFIX."users.gks_nickname
+        FROM gks_calendar_other_users LEFT JOIN ".GKS_WP_TABLE_PREFIX."users ON gks_calendar_other_users.other_user_id = ".GKS_WP_TABLE_PREFIX."users.ID
+        WHERE gks_calendar_other_users.this_user_id=".$my_wp_user_id." and ".GKS_WP_TABLE_PREFIX."users.ID Is Not Null
+        and gks_calendar_other_users.other_myobj='hr_program'
+        ORDER BY ".GKS_WP_TABLE_PREFIX."users.gks_nickname";
+        $result = $db_link->query($sql);        
+        if (!$result) {debug_mail(false,'error sql',$sql);die('sql error');}
+        
+        
+        while ($row = $result->fetch_assoc()) {
+          $other_users_hr_program_rows[]=$row;
+        }
+      }
+      
+      $cal_allhr_program_toggle_checked=true;
+      if ($calendar_visible_hr_program==0) {
+        $cal_allhr_program_toggle_checked=false;
+      } else {
+        foreach ($other_users_hr_program_rows as $row) {
+          if ($row['other_visible']==0) {
+            $cal_allhr_program_toggle_checked=false; 
+          }
+        }
+      }  
+?>
+            
+      <div style="margin-top: 10px;">
+        <input type="checkbox" name="cal_allhr_program_toggle" id="cal_allhr_program_toggle" <?php if ($cal_allhr_program_toggle_checked) echo 'checked';?>>
+        <?php echo gks_lang('Πρόγραμμα Υπαλλήλων');?>:
+      </div>
+      <div class="cal_user_row_hr_program" data-id="0">
+        <input type="checkbox" name="cal_user_hr_program" data-id="0" id="cal_user_hr_program_0" <?php if ($calendar_visible_hr_program==1) echo 'checked';?>> 
+        <input type="text" class="cal_user_color_hr_program" data-id="0" value="<?php echo $calendar_user_color_hr_program;?>">
+        <label for="cal_user_hr_program_0" class="cal_user_label_hr_program"><?php echo gks_lang('Δικό μου');?></label>
+      </div>
+<?php
+      foreach ($other_users_hr_program_rows as $row) {
+        echo '<div class="cal_user_row_hr_program" data-id="'.$row['other_user_id'].'">'.
+        '<input type="checkbox" name="cal_user_hr_program" data-id="'.$row['other_user_id'].'" id="cal_user_hr_program_'.$row['other_user_id'].'" '.($row['other_visible']==0?'':'checked').'>'. 
+        //' <div class="cal_user_color_con"><div class="cal_user_color_wra" data-id="'.$row['other_user_id'].'" style="background-color: '.$row['other_user_color'].';">'.
+        ' <input type="text" class="cal_user_color_hr_program" data-id="'.$row['other_user_id'].'" value="'.$row['other_user_color'].'" '.($perm_company_subs_edit ? '' : 'disabled').'>'.
+        //'</div></div>'.
+        ' <label for="cal_user_hr_program_'.$row['other_user_id'].'" class="cal_user_label_hr_program">'.$row['gks_nickname'].'</label>'.
+        ($perm_company_subs_edit ? ' <i class="fas fa-trash-alt cal_user_remove_hr_program" data-aa="'.$row['other_user_id'].'" data-myobj="hr_program"></i>' : '').
+        '</div>';
+      }
+?>
+      <?php if ($perm_calendar_other_users_add) { ?>
+      <div class="cal_user_row_hr_program" id="div_cal_user_add_hr_program" >
+        <i class="fas fa-plus-circle" id="cal_user_add_hr_program"></i> 
+        <input id="cal_user_add_user_hr_program" type="text" class="form-control form-control-sm" value="" autocomplete="<?php echo $autocomplete_gks_disable;?>" style="display:none;" placeholder="<?php echo gks_lang('Πληκτρολογήστε τουλάχιστον 3 χαρακτήρες');?>">
+      </div>
+      <?php } ?>
+
+
+
+<?php
+
+
+      $other_posta_hr_program_rows=[];
+      if ($perm_calendar_other_posta_view) {
+        $sql="SELECT gks_calendar_other_posta.other_posta_id, gks_calendar_other_posta.other_posta_color,
+        other_visible,gks_production_posta.production_posto_descr
+        FROM gks_calendar_other_posta 
+        LEFT JOIN gks_production_posta ON gks_calendar_other_posta.other_posta_id = gks_production_posta.id_production_posto
+        WHERE gks_calendar_other_posta.this_user_id=".$my_wp_user_id." 
+        and gks_production_posta.id_production_posto Is Not Null
+        and gks_calendar_other_posta.other_myobj='hr_program'
+        ORDER BY gks_production_posta.production_posto_sortorder,gks_production_posta.production_posto_descr";
+        $result = $db_link->query($sql);        
+        if (!$result) {debug_mail(false,'error sql',$sql);die('sql error');}
+        
+        
+        while ($row = $result->fetch_assoc()) {
+          $other_posta_hr_program_rows[]=$row;
+        }
+      }
+      
+      $posta_allhr_program_toggle_checked=true;
+      foreach ($other_posta_hr_program_rows as $row) {
+        if ($row['other_visible']==0) {
+          $posta_allhr_program_toggle_checked=false; 
+        }
+      }
+      
+      
+      $calendar_posta_operator='or';
+      if (isset($gks_user_settings['calendar']['posta_operator'])) $calendar_posta_operator=$gks_user_settings['calendar']['posta_operator'];
+      if ($calendar_posta_operator!='or' and $calendar_posta_operator!='and')
+        $calendar_posta_operator='or';
+?>
+            
+      <div style="margin-top: 10px;">
+        <input type="checkbox" name="posta_allhr_program_toggle" id="posta_allhr_program_toggle" <?php if ($posta_allhr_program_toggle_checked) echo 'checked';?>>
+        <?php echo gks_lang('Πόστα Υπαλλήλων');?>:
+        <select id="posta_allhr_program_operator" class="form-control form-control-sm">
+          <option value="or"  <?php if ($calendar_posta_operator=='or')  echo 'selected';?>><?php echo gks_lang('ή');?></option>
+          <option value="and" <?php if ($calendar_posta_operator=='and') echo 'selected';?>><?php echo gks_lang('και');?></option>
+        </select>
+        <i id="posta_allhr_program_operator_info" class="fas fa-info-circle tooltipster" title="<?php echo gks_lang('Είναι ο τελεστής για το <b>Πρόγραμμα Υπαλλήλων</b> και/ή τα <b>Πόστα Υπαλλήλων</b>');?>"></i>
+      </div>
+
+<?php
+      foreach ($other_posta_hr_program_rows as $row) {
+        echo '<div class="cal_posta_row_hr_program" data-id="'.$row['other_posta_id'].'">'.
+        '<input type="checkbox" name="cal_posta_hr_program" data-id="'.$row['other_posta_id'].'" id="cal_posta_hr_program_'.$row['other_posta_id'].'" '.($row['other_visible']==0?'':'checked').'>'. 
+        ' <input type="text" class="cal_posta_color_hr_program" data-id="'.$row['other_posta_id'].'" value="'.$row['other_posta_color'].'" '.($perm_company_subs_edit ? '' : 'disabled').'>'.
+        ' <label for="cal_posta_hr_program_'.$row['other_posta_id'].'" class="cal_posta_label_hr_program">'.$row['production_posto_descr'].'</label>'.
+        ($perm_company_subs_edit ? ' <i class="fas fa-trash-alt cal_posta_remove_hr_program" data-aa="'.$row['other_posta_id'].'" data-myobj="hr_program"></i>' : '').
+        '</div>';
+      }
+?>
+      <?php if ($perm_calendar_other_posta_add) { ?>
+      <div class="cal_posta_row_hr_program" id="div_cal_posta_add_hr_program" >
+        <i class="fas fa-plus-circle" id="cal_posta_add_hr_program"></i> 
+        <input id="cal_posta_add_posta_hr_program" type="text" class="form-control form-control-sm" value="" autocomplete="<?php echo $autocomplete_gks_disable;?>" style="display:none;" placeholder="<?php echo gks_lang('Πληκτρολογήστε τουλάχιστον 3 χαρακτήρες');?>">
+      </div>
+      <?php } ?>
+      
+              
+
 
 
       
@@ -664,8 +804,65 @@ include_once('_my_header_admin.php');
   <i class="fas fa-sync" style="color:coral;font-size:120%;position: relative;left: -3px;"></i>
 </div>
 
-
-
+<div id="business_days_hours_div"></div>
+<div id="business_days_hours_div_panel">
+  <div id="business_days_hours_header">
+    <?php echo gks_lang('Εργάσιμες ημέρες και ώρες');?>
+  </div>
+  <div id="business_days_hours_center">
+    <div id="business_days_hours_center1">
+      <div><input type="checkbox" name="days_to_work1" id="days_to_work1">
+        <label for="days_to_work1" class="gks_td0875"><?php echo getWeekDayName(1);?></label>
+      </div>
+      <div><input type="checkbox" name="days_to_work2" id="days_to_work2">
+        <label for="days_to_work2" class="gks_td0875"><?php echo getWeekDayName(2);?></label>
+      </div>
+      <div><input type="checkbox" name="days_to_work3" id="days_to_work3">
+        <label for="days_to_work3" class="gks_td0875"><?php echo getWeekDayName(3);?></label>
+      </div>
+      <div><input type="checkbox" name="days_to_work4" id="days_to_work4">
+        <label for="days_to_work4" class="gks_td0875"><?php echo getWeekDayName(4);?></label>
+      </div>
+      <div><input type="checkbox" name="days_to_work5" id="days_to_work5">
+        <label for="days_to_work5" class="gks_td0875"><?php echo getWeekDayName(5);?></label>
+      </div>
+      <div><input type="checkbox" name="days_to_work6" id="days_to_work6">
+        <label for="days_to_work6" class="gks_td0875"><?php echo getWeekDayName(6);?></label>
+      </div>
+      <div><input type="checkbox" name="days_to_work0" id="days_to_work0">
+        <label for="days_to_work0" class="gks_td0875"><?php echo getWeekDayName(0);?></label>
+      </div>
+    </div>
+    <div id="business_days_hours_center2">
+      <div>
+        <label for="hours_to_work_from"><?php echo gks_lang('Από');?></label>
+        <select id="hours_to_work_from" class="form-control form-control-sm">
+          <?php for ($kk=0;$kk<=24;$kk++) {
+            echo '<option value="'.($kk<10?'0':'').$kk.':00">'.($kk<10?'0':'').$kk.':00</option>';
+            if ($kk<24) echo '<option value="'.($kk<10?'0':'').$kk.':30">'.($kk<10?'0':'').$kk.':30</option>';
+          } ?>
+        </select>
+      </div>
+      <div>
+        <label for="hours_to_work_to"><?php echo gks_lang('Έως');?></label>
+        <select id="hours_to_work_to" class="form-control form-control-sm">
+          <?php for ($kk=0;$kk<=24;$kk++) {
+            echo '<option value="'.($kk<10?'0':'').$kk.':00">'.($kk<10?'0':'').$kk.':00</option>';
+            if ($kk<24) echo '<option value="'.($kk<10?'0':'').$kk.':30">'.($kk<10?'0':'').$kk.':30</option>';
+          } ?>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="business_days_hours_footer_buttons">
+    <button id="business_days_hours_footer_button_save" class="btn btn-success btn-sm" type="button">
+      <i class="fas fa-save"></i>
+    </button>
+    <button id="business_days_hours_footer_button_cancel" class="btn btn-danger btn-sm" type="button">
+      <i class="fas fa-window-close"></i>
+    </button>
+  </div>
+</div>
 
 <?php include_once('_dialogs.php'); ?>
 <script type="text/javascript">
@@ -688,6 +885,13 @@ var from_php_gks_nickname=$.base64.decode('<?php echo base64_encode($my_wp_user_
     
 var from_php_view='<?php if ($id>0) echo 'timeGridDay'; else echo $gks_user_settings['calendar']['view'];?>'; 
 var from_php_full24='<?php if ($id>0) echo 1; else echo $gks_user_settings['calendar']['full24'];?>'; 
+var from_php_slotDuration='<?php echo $gks_user_settings['calendar']['slotDuration'];?>'; 
+var from_php_businessHours_daysOfWeek=JSON.parse('<?php echo $gks_user_settings['calendar']['businessDays'];?>'); 
+var from_php_businessHours_startTime='<?php echo $gks_user_settings['calendar']['businessStartT'];?>'; 
+var from_php_businessHours_endTime='<?php echo $gks_user_settings['calendar']['businessEndT'];?>'; 
+
+
+
 
 var from_php_activity_model='';
 var from_php_activity_model_id=0;

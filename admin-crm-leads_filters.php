@@ -356,7 +356,7 @@ LEFT JOIN gks_ads_campain ON gks_crm_leads.crm_channel_campain_id = gks_ads_camp
 where 1=1 " .$where . $search_where;
 
 if (empty($sorted['sql'])) {
-	$sql .= " ORDER BY gks_crm_leads.lead_date desc, gks_crm_leads.id_crm_lead desc";
+	$sql .= " ORDER BY gks_crm_leads.id_crm_lead desc";
 } else {
 	$sql .= " ORDER BY " . $sorted['sql'];
 }

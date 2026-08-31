@@ -26,8 +26,32 @@ if ($perm_ret['success']==false) {$return = array('success' => false, 'message' 
 
 $sql="SELECT id_production_posto, production_posto_descr
 FROM gks_production_posta
-where production_posto_descr like '%".$db_link->escape_string($term)."%'
-order by production_posto_sortorder, production_posto_descr
+where production_posto_descr like '%".$db_link->escape_string($term)."%'";
+
+if (isset($_GET['notids'])) {
+  //print '<pre>';print $_GET['notids'];
+  //print '<pre>';print rawurldecode($_GET['notids']);
+  $notids = trim_gks(base64_decode(rawurldecode($_GET['notids'])));
+  //print '<pre>';print $notids;die();
+	$notids = json_decode($notids, true);
+	if (!($notids === null && json_last_error() !== JSON_ERROR_NONE)) {
+	  if (is_array($notids) and count($notids)>0) {
+	    $fix=array();
+	    foreach ($notids as $value) {
+        $value=intval($value);
+        if ($value>0) {
+          $fix[]=$value;
+        }
+      } 
+      if (count($fix)>0) {
+	      //print '<pre>';print_r($fix);die();
+	      $sql.=" and gks_production_posta.id_production_posto not in (".implode(',',$fix).") ";
+	    }
+	  }
+	}
+}
+
+$sql.=" order by production_posto_sortorder, production_posto_descr
 limit 1000";
 //echo $sql;
 $result = $db_link->query($sql);

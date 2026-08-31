@@ -88,6 +88,9 @@ define('GKS_PAROCHOS_GR_MODE_TEST_API',    'https://beta-srv.parochos.gr');
 define('GKS_PAROCHOS_GR_MODE_LIVE_ACCOUNT','https://account.parochos.gr');
 define('GKS_PAROCHOS_GR_MODE_LIVE_API',    'https://srv.parochos.gr');
 
+//define('GKS_ETIMOLOGIERA_GR_MODE_LIVE_API', 'https://einvoicing-dev-api.etimologiera.gr/v4');
+define('GKS_ETIMOLOGIERA_GR_MODE_LIVE_API', 'https://einvoicing-api.etimologiera.gr/v4');
+
 define('GKS_VIVA_URL_WWW','https://www.vivapayments.com');
 
 

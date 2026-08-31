@@ -6,7 +6,7 @@ www.gks.gr
 */
 
 function gks_FilesObjectList_obj_list() {
-  
+  //mono ta palia tables pou exoyn sxetiko photo subtable, gia na mpei to public_expire_date
   $list=[
     'gks_acc_inv',
     'gks_acc_pay',
@@ -42,6 +42,9 @@ function gks_FilesObjectList_obj_list() {
     'gks_hotel_price',
     'gks_hotel_room',
     'gks_hotel_room_type',
+    'gks_hr_program',
+    'gks_hr_program_status',
+    'gks_hr_program_vardia',
     'gks_orders',
     'gks_poi',
     'gks_poi_diadromes',
@@ -198,12 +201,18 @@ function gks_FilesObjectList_map($objname) {
     case 'gks_hotel_room_type':
       $ret=array('table' => 'gks_hotel_room_type_photo', 'tid' => 'id_hotel_room_type_photo','pid' => 'hotel_room_type_id', 'path'=>'hotel/room_type/');
       break;
-
+    case 'gks_hr_program':
+      $ret=array('table' => 'gks_hr_program_photo', 'tid' => 'id_hr_program_photo','pid' => 'hr_program_id', 'path'=>'hr/program/');
+      break;
+    case 'gks_hr_program_status':
+      $ret=array('table' => 'gks_hr_program_status_photo', 'tid' => 'id_hr_program_status_photo','pid' => 'hr_program_status_id', 'path'=>'hr/program_status/');
+      break;
+    case 'gks_hr_program_vardia':
+      $ret=array('table' => 'gks_hr_program_vardia_photo', 'tid' => 'id_hr_program_vardia_photo','pid' => 'hr_program_vardia_id', 'path'=>'hr/program_vardia/');
+      break;
     case 'gks_orders':
       $ret=array('table' => 'gks_orders_photo', 'tid' => 'id_orders_photo','pid' => 'order_id', 'path'=>'order/');
       break;
-
-    
     case 'gks_poi':
       $ret=array('table' => 'gks_poi_photo', 'tid' => 'id_poi_photo','pid' => 'poi_id', 'path'=>'poi/poi/');
       break;
@@ -283,8 +292,8 @@ function gks_FilesObjectList_map($objname) {
       }
       if ($found_params==false) {
       
-        debug_mail(false,'error on gks_FilesObjectList_map',$objname);
-        echo '<pre>error on gks_FilesObjectList_map. Object '.$objname.' not supported</pre>';
+        debug_mail(false,'error on gks_FilesObjectList_map (1)',$objname);
+        echo '<pre>error on gks_FilesObjectList_map (1). Object '.$objname.' not supported</pre>';
         die();
       }
     
@@ -300,7 +309,7 @@ function gks_FilesObjectList_map($objname) {
   $result = $db_link->query($sql);
   if (!$result) {
     debug_mail(false,'error sql',$sql);
-    echo '<pre>sql error on gks_FilesObjectList_map. Object '.$objname.'</pre>';
+    echo '<pre>sql error on gks_FilesObjectList_map (2). Object '.$objname.'</pre>';
     die();}
      
   if ($result->num_rows==1) {
@@ -322,10 +331,14 @@ function gks_FilesObjectList_map($objname) {
       $ret['shortcode_prefix']='s06';
     } else if ($objname=='gks_custom_table') {
       $ret['shortcode_prefix']='s07';
+    } else if ($objname=='gks_hr_program_status') {
+      $ret['shortcode_prefix']='s08';
+    } else if ($objname=='gks_hr_program_vardia') {
+      $ret['shortcode_prefix']='s09';
       
     } else {
       debug_mail(false,'shortcode_prefix not found',$sql);
-      echo '<pre>sql error on gks_FilesObjectList_map. Object '.$objname.'</pre>';
+      echo '<pre>sql error on gks_FilesObjectList_map (3). Object '.$objname.'</pre>';
       die();
     }
   }

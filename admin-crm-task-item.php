@@ -332,7 +332,7 @@ include_once('_my_header_admin.php');
 
 
           <div class="form-group row">
-            <label for="task_date" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Ημερομηνία');?>:</label>
+            <label for="task_date" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Καταχώρηση');?>:</label>
             <div class="col-md-8">
               <input id="task_date" type="text" class="form-control form-control-sm myneedsave" value="<?php if (isset($row['task_date'])) echo  showDate(strtotime($row['task_date']), 'd/m/Y H:i', 1);?>" autocomplete="<?php echo $autocomplete_gks_disable;?>" style="max-width:200px">
             </div>
@@ -351,12 +351,7 @@ include_once('_my_header_admin.php');
                   '</span>';
                 }
               }
-              
               ?>
-              
-              
-              
-                 
             </div>
           </div>
           <div class="form-group row">
@@ -373,25 +368,27 @@ include_once('_my_header_admin.php');
           </div>          
 
           <div class="form-group row">
-            <label for="task_planned_date_from" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Προγραμματισμός');?>:</label>
+            <label for="task_planned_date_from" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Ημερομηνία');?>:</label>
             <div class="col-md-8">
               <?php
-              $duration='';
+              $duration='';$duration_days=0;
               if (isset($row['task_planned_date_from']) and isset($row['task_planned_date_to'])) {
                 $temp=strtotime($row['task_planned_date_to'])-strtotime($row['task_planned_date_from']);
-                if ($temp < 24*60*60) { //kat apo mia 1 imera
-                  $duration=date('H:i',$temp);    
-                }
+                $duration_days=floor($temp/(24*60*60));
+                $temp=$temp-$duration_days*(24*60*60);
+                //if ($temp < 24*60*60) { //kat apo mia 1 imera
+                $duration=date('H:i',$temp);    
               }
               ?>
               <span style="font-size: 0.875rem;"><?php echo gks_lang('Από');?>: </span>
-                <input id="task_planned_date_from" type="text" class="form-control form-control-sm myneedsave" value="<?php if (isset($row['task_planned_date_from'])) echo  showDate(strtotime($row['task_planned_date_from']), 'd/m/Y H:i', 1);?>" style="max-width:200px;display: inline-block;margin-bottom: 6px;" placeholder="" >
+                <input id="task_planned_date_from" type="text" class="form-control form-control-sm myneedsave" value="<?php if (isset($row['task_planned_date_from'])) echo  showDate(strtotime($row['task_planned_date_from']), 'd/m/Y H:i', 1);?>">
               <br>
               <span style="font-size: 0.875rem;"><?php echo gks_lang('Διάρκεια');?>: </span>
-                <input id="task_planned_date_duration" type="text" class="form-control form-control-sm myneedsave" value="<?php echo $duration;?>" autocomplete="off" style="max-width:169px;display: inline-block;margin-bottom: 6px;" placeholder=""">
+                <input id="task_planned_date_duration_days" type="number" class="form-control form-control-sm myneedsave tooltipster" value="<?php echo $duration_days;?>" autocomplete="off" title="<?php echo gks_lang('Ημέρες');?>" min="0">
+                <input id="task_planned_date_duration" type="text" class="form-control form-control-sm myneedsave tooltipster" value="<?php echo $duration;?>" autocomplete="off" title="<?php echo gks_lang('Ώρες:Λεπτά');?>">
               <br>
               <span style="font-size: 0.875rem;"><?php echo gks_lang('Έως');?>: </span>
-                <input id="task_planned_date_to" type="text" class="form-control form-control-sm myneedsave" value="<?php if (isset($row['task_planned_date_to'])) echo  showDate(strtotime($row['task_planned_date_to']), 'd/m/Y H:i', 1);?>" style="max-width:200px;display: inline-block;" placeholder="">
+                <input id="task_planned_date_to" type="text" class="form-control form-control-sm myneedsave" value="<?php if (isset($row['task_planned_date_to'])) echo  showDate(strtotime($row['task_planned_date_to']), 'd/m/Y H:i', 1);?>">
               
               
             </div>
@@ -401,7 +398,7 @@ include_once('_my_header_admin.php');
           <div class="form-group row">
             <label for="esoda" class="col-md-4 col-form-label form-control-sm text-md-right"><?php echo gks_lang('Αναμενόμενα έσοδα');?>:</label>
             <div class="col-md-8">
-              <input id="esoda" type="number" class="form-control form-control-sm myneedsave" value="<?php echo number_format($row['esoda'],$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL,'.','');?>" style="max-width:100px;display: inline-block;" placeholder="" min="0" step="50">
+              <input id="esoda" type="number" class="form-control form-control-sm myneedsave" value="<?php echo number_format($row['esoda'],$GKS_NUMBER_FORMAT_CURRENCY_DECIMAL,'.','');?>" style="max-width:100px;display: inline-block;" min="0" step="50">
             </div>
           </div> 
                                
@@ -717,7 +714,7 @@ include_once('_my_header_admin.php');
           <div class="form-group row">
             <label for="" class="col-md-4 col-form-label form-control-sm text-sm-right"><a class="tooltipster" title="<?php echo gks_lang('Αναζήτηση Βασικών Στοιχείων Μητρώου Επιχειρήσεων');?>" href="https://www.aade.gr/epiheiriseis/forologikes-ypiresies/mitroo/anazitisi-basikon-stoiheion-mitrooy-epiheiriseon" target="_blank">aade.gr</a>:</label>
             <div class="col-md-8">
-              <button style="" id="btn_gsis_get" class="btn btn-sm btn-primary"><?php echo gks_lang('Αναζήτηση με το ΑΦΜ');?></button>
+              <button id="btn_gsis_get" class="btn btn-sm btn-primary"><?php echo gks_lang('Αναζήτηση με το ΑΦΜ');?></button>
             </div>
           </div>
                     
@@ -1163,8 +1160,10 @@ echo $gks_custom_row['html'];
   <div class="form-group1 row">
     <div class="col-md-12 text-center mt-2">
       <button type="button" class="btn btn-primary" id="submit_button_ok_custom"><?php echo gks_lang('Αποθήκευση');?></button>
+      <?php if ($id>0) {?>
       <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_crm_task'];?>" data-model="gks_crm_tasks" data-backurl="admin-crm-task.php" <?php if ($id<=0) echo 'disabled';?>><?php echo gks_lang('Διαγραφή');?></button>
       <button type="button" class="btn btn-dark" id="submit_button_print" <?php if ($id<0) echo 'disabled';?>><?php echo gks_lang('Εκτύπωση');?> <i class="fas fa-print" style="color: #35dc35;font-size: 120%;"></i></button>
+      <?php } ?>
       <div style="display:inline-block;width:38px;height:38px;vertical-align:top;">
         <div style="border:1px solid gray;padding: 7px 0px 5px 0px;;border-radius:4px;background-color:#343a40;display:none;" id="calc_hourglass">
           <i class="fas fa-hourglass-half" style="color:coral;font-size:120%;"></i>
@@ -1221,7 +1220,7 @@ echo $gks_custom_row['html'];
               <td class="mytdcml"><?php echo showDate(strtotime($row_msg['mydate_add']), 'd/m/Y H:i', 1);?></td>  
               <td class="mytdcml"><?php echo $row_msg['gks_nickname'];?></td>  
               <td class="mytdcml"><div class="gks_dive1"><div class="gks_dive2 mydivexpand"><?php 
-                echo str_replace('[[-r]]', '<i class="fas fa-arrow-alt-circle-right gksvm" style=""></i>', $row_msg['crm_tasks_message']);
+                echo str_replace('[[-r]]', '<i class="fas fa-arrow-alt-circle-right gksvm"></i>', $row_msg['crm_tasks_message']);
                 ?></div></div></td>    
               <td class="mytdcm"><?php 
                 if ($row_msg['email_id']!=0) {
@@ -1442,7 +1441,7 @@ echo $gks_custom_row['html'];
               <th scope="row" align="center"><?php echo $j;?></th>
               <td align="left"><?php echo showDate(strtotime($row_log['add_date']), 'd/m/Y H:i:s', 1);?></td>  
               <td align="left"><?php echo $row_log['gks_nickname'];?></td>  
-              <td align="left"><?php echo str_replace('[[-r]]', '<i class="fas fa-arrow-alt-circle-right gksvm" style=""></i>', $row_log['sxolio']);?></td>    
+              <td align="left"><?php echo str_replace('[[-r]]', '<i class="fas fa-arrow-alt-circle-right gksvm"></i>', $row_log['sxolio']);?></td>    
             </tr>
             <?php } ?>                      
             </tbody>   
@@ -1552,7 +1551,7 @@ echo $gks_custom_row['html'];
 </div>
 
 <div id="dialog_user_save" title="<?php echo $GKS_SITE_HUMAN_NAME;?>" style="display: none;">
-  <div class="container-fluid " style="" >
+  <div class="container-fluid">
     <div class="form-group row">  
       <div style="font-size: 120%;font-weight: bold;text-align:center;width: 100%;"><?php echo gks_lang('Προσθήκη ή επιλογή επαφής');?></div>
     </div>
@@ -1581,7 +1580,7 @@ echo $gks_custom_row['html'];
 
 
 <div id="dialog_gsis" title="<?php echo $GKS_SITE_HUMAN_NAME;?>" style="display: none;">
-  <div class="container-fluid " style="" >
+  <div class="container-fluid">
     <div class="form-group row">  
       <div style="font-size: 120%;font-weight: bold;text-align:center;width: 100%;"><?php echo gks_lang('Αναζήτηση Βασικών Στοιχείων Μητρώου Επιχειρήσεων');?></div>
     </div>
@@ -1592,7 +1591,7 @@ echo $gks_custom_row['html'];
          <input id="dialog_gsis_afm" type="text" class="form-control form-control-sm" value="" autocomplete="<?php echo $autocomplete_gks_disable;?>">
       </div>
       <div class="col-sm-4">
-         <button style="" id="dialog_gsis_run" class="btn btn-sm btn-primary"><?php echo gks_lang('Αναζήτηση');?></button>
+         <button id="dialog_gsis_run" class="btn btn-sm btn-primary"><?php echo gks_lang('Αναζήτηση');?></button>
       </div>
     </div>
     <div class="form-group row">  
@@ -1607,7 +1606,7 @@ echo $gks_custom_row['html'];
 <?php include_once 'admin-obj-send-message.php'; ?>
 
 <div id="dialog_print" title="<?php echo $GKS_SITE_HUMAN_NAME;?>" style="display: none;">
-  <div class="container-fluid " style="" >
+  <div class="container-fluid ">
     <div class="form-group1 row">  
       <div style="font-size: 120%;font-weight: bold;text-align:center;width: 100%;"><?php echo gks_lang('Ρυθμίσεις Εκτύπωσης');?></div>
     </div>

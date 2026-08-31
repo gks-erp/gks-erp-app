@@ -66,13 +66,26 @@ $filters[] = array(
   'name' => 'fplanned',
   'class' => 'filterselectbox ui-state-default ui-corner-all',
   'style' => '',
-  'title' => gks_lang('Προγραμματισμός-Έναρξη'),
+  'title' => gks_lang('Ημερομηνία-Από'),
   'has_custom_date' => true,
   'field' => 'gks_crm_tasks.task_planned_date_from', 
   'has_custom_default' => 1,
   //		'mywherepos'=>1,
 
   'vals' => gks_filter_date_vals(['field'=>'gks_crm_tasks.task_planned_date_from','future'=>true,'today'=>$today, 'today_vardia'=>$today_vardia]),
+
+);
+$filters[] = array(
+  'name' => 'fplannedto',
+  'class' => 'filterselectbox ui-state-default ui-corner-all',
+  'style' => '',
+  'title' => gks_lang('Ημερομηνία-Έως'),
+  'has_custom_date' => true,
+  'field' => 'gks_crm_tasks.task_planned_date_to', 
+  'has_custom_default' => 1,
+  //		'mywherepos'=>1,
+
+  'vals' => gks_filter_date_vals(['field'=>'gks_crm_tasks.task_planned_date_to','future'=>true,'today'=>$today, 'today_vardia'=>$today_vardia]),
 
 );
 

@@ -46,6 +46,7 @@ function gks_calendar_event_array($row,$colors_per_user) {
   $event['c_user_id_multi'] =  []; 
   $event['c_user_id'] =        intval($row['calendar_user_id']);
   $event['c_gks_nickname'] =     trim_gks($row['gks_nickname']);
+  $event['c_posta_id'] =0;
   
   $event['c_customer'] =         '';
   $event['c_odos'] =             trim_gks($row['calendar_odos']);
@@ -115,6 +116,7 @@ function gks_calendar_event_array($row,$colors_per_user) {
   
   return $event;
 }
+
 function gks_calendar_event_task_array($row,$colors_per_user) {
   global $db_link;
   $event=array();
@@ -146,6 +148,7 @@ function gks_calendar_event_task_array($row,$colors_per_user) {
   $event['c_user_id_multi'] =  $row['multi_users']; 
   $event['c_user_id'] =        0; //intval($row['calendar_user_id']);
   $event['c_gks_nickname'] =   ''; //  trim_gks($row['gks_nickname']);
+  $event['c_posta_id'] =0;
   
   //print '<pre>';print_r($row);die();
   
@@ -212,6 +215,112 @@ function gks_calendar_event_task_array($row,$colors_per_user) {
   return $event;
 }
 
+function gks_calendar_event_hr_program_array($row,$colors_per_user) {
+  global $db_link;
+  $event=array();
+  $event['id'] = 'hr_program'.$row['id_hr_program'];
+  $event['rec_id'] = $row['id_hr_program'];
+  $event['c_table'] = 'gks_hr_program';
+  $event['title'] = $row['hr_program_name'];
+  $event['start'] = gks_calendertime($row['hr_program_date_from']);
+  $event['end'] =   gks_calendertime($row['hr_program_date_to']);
+  $event['allDay']= false; //($row['calendar_allday'] == 0 ? false : true);
+  
+  if (isset($row['hr_program_color']) and strlen(trim_gks($row['hr_program_color'])) == 7) {
+    $event['backgroundColor']=$row['hr_program_color'];
+    $event['c_custom_color'] = 1;
+  } else {
+    $event['c_custom_color'] = 0;
+    //echo '<pre>';print_r($row['multi_users']);die();
+    if (isset($colors_per_user['hr_program'][$row['hr_program_user_id']])) {
+      $event['backgroundColor']=$colors_per_user['hr_program'][$row['hr_program_user_id']];
+    } 
+  }
+  //$event['c_color'] =            trim_gks($row['calendar_color']);
+
+  //print '<pre>';print_r($event);die();
+  
+  $event['c_user_id_multi'] =  []; 
+  $event['c_user_id'] =        intval($row['hr_program_user_id']);
+  $event['c_gks_nickname'] =   trim_gks($row['gks_nickname']);
+  $event['c_posta_id'] =       intval($row['hr_program_posto_id']);
+  $event['c_production_posto_descr'] = trim_gks($row['production_posto_descr']);
+  $event['c_hr_program_vardia_descr']= trim_gks($row['hr_program_vardia_descr']);
+
+  //print '<pre>';print_r($row);die();
+  
+  $event['c_customer'] =         trim_gks($row['user_first_name'].' '.$row['user_last_name']);
+  $event['c_odos'] =             trim_gks($row['ma_odos']);
+  $event['c_arithmos'] =         trim_gks($row['ma_arithmos']);
+  $event['c_orofos'] =           trim_gks($row['ma_orofos']);
+  $event['c_perioxi'] =          trim_gks($row['ma_perioxi']);
+  $event['c_poli'] =             trim_gks($row['ma_poli']);
+  $event['c_tk'] =               trim_gks($row['ma_tk']);
+  $event['c_nomos_id'] =       intval($row['ma_nomos_id']);
+  $event['c_country_id'] =     intval($row['ma_country_id']);
+  $event['c_map_latitude'] =   0;
+  $event['c_map_longitude'] =  0;
+  $event['c_is_exclusive'] =   0; //intval($row['calendar_is_exclusive']);
+  $event['c_is_private'] =     0; //intval($row['calendar_is_private']);
+  
+  $event['c_message'] = '<a href="admin-hr-program-item.php?id='.$row['id_hr_program'].'">'.gks_lang('Πρόγραμμα Υπαλλήλων').': #'.$row['id_hr_program'].'</a><br>'.
+  gks_lang('Κατάσταση').':  <span class="hr_program_status_'.$row['hr_program_status_id'].'">'.$row['hr_program_status_descr'].'</span><br>'.
+  gks_lang('Υπάλληλος').':  <b>'.trim_gks($row['gks_nickname']).'</b><br>'.
+  gks_lang('Πόστο').': <b>'.trim_gks($row['production_posto_descr']).'</b><br>'.
+  gks_lang('Βάρδια').': <span class="hr_program_vardia_'.$row['hr_program_vardia_id'].'">'.$row['hr_program_vardia_descr'].'</span>';
+  
+  if (trim_gks($row['hr_program_name']!=''))
+    $event['c_message'].='<br><b>'.trim_gks($row['hr_program_name']).'</b>';
+  if (trim_gks($row['hr_program_descr']!=''))
+    $event['c_message'].='<br>'.trim_gks($row['hr_program_descr']);
+
+  $event['c_event_user_id_add']  = ($row['user_id_add']>0  ? '<a href="admin-users-item.php?id='.$row['user_id_add'].'">'. $row['gks_nickname_add'].'</a>'  : '');
+  $event['c_event_user_id_edit'] = ($row['user_id_edit']>0 ? '<a href="admin-users-item.php?id='.$row['user_id_edit'].'">'.$row['gks_nickname_edit'].'</a>' : '');
+  $event['c_event_mydate_add']   = (isset($row['mydate_add'])  ? showDate(strtotime($row['mydate_add']),  'd/m/Y H:i:s', 1) : '');
+  $event['c_event_mydate_edit']  = (isset($row['mydate_edit']) ? showDate(strtotime($row['mydate_edit']), 'd/m/Y H:i:s', 1) : '');
+  $event['c_event_myip']         = (isset($row['myip']) ? '<a href="admin-stat-ip.php?ip='.$row['myip'].'">'.$row['myip'].'</a>' : '');
+
+
+  $event['c_notification']=array();
+  $event['c_notification'][]=array(
+			'type' => 'notif',
+			'number' => 0,
+			'unit' => 'minute',
+		);
+
+  
+  
+  $event['c_participant']=array();
+//  foreach ($row['participant'] as $participant) {
+//  	
+//		$event['c_participant'][]=array(
+//			'user_id' => intval($participant['participant_id']),
+//			'name' => $participant['gks_nickname'],
+//			'email' => $participant['user_email'],
+//			'mobile' => $participant['gks_mobile'],
+//			'is_org' => intval($participant['is_organizer']),
+//			'is_opt' => intval($participant['is_optional']),
+//			'r_type' => trim_gks($participant['response_type']),
+//			'r_date' => (isset($participant['response_date']) ? showDate(strtotime($participant['response_date']),'d/m/Y H:i',1) : ''),
+//		);
+//  }
+  
+  $event['c_objects']=array();
+//  foreach ($row['objects'] as $object) {
+//  	$event['c_objects'][]=array(
+//  	  'obj_name' => $object['obj_name'],
+//  	  'contact_name' => $object['contact_name'],
+//  	  'contact_id' => $object['contact_id'],
+//  	  'esoda' => ($object['esoda']==0 ? '' : myCurrencyFormat($object['esoda'])),
+//  	);
+//  }
+  
+  $event['object_rel']=getObjectRels('gks_hr_program',$event['rec_id']);
+
+  
+  return $event;
+}
+
 
 function gks_calendar_event_activity_array($row,$colors_per_user) {
   global $db_link;
@@ -244,7 +353,7 @@ function gks_calendar_event_activity_array($row,$colors_per_user) {
   $event['c_user_id_multi'] =  []; 
   $event['c_user_id'] =        intval($row['activity_user_id']);
   $event['c_gks_nickname'] =   ''; //  trim_gks($row['gks_nickname']);
-  
+  $event['c_posta_id'] =0;
   //print '<pre>';print_r($row);die();
   
   $event['c_customer'] =         '';
@@ -383,6 +492,7 @@ function gks_crm_tasks_sql_event($sql_where_tasks1,$sql_where_tasks2) {
   //echo '<pre>';echo $sql;
   return $sql;
 }
+
 function gks_crm_activity_sql_event($sql_where_activity) {
   
   $sql="SELECT gks_crm_activity.*, 
@@ -406,6 +516,54 @@ function gks_crm_activity_sql_event($sql_where_activity) {
   //echo '<pre>sssssssss aaaaaa ';echo $sql;die();
   return $sql;
 }
+
+function gks_hr_program_sql_event($sql_where_hr_program) {
+  $sql ="SELECT gks_hr_program.*,
+  ".GKS_WP_TABLE_PREFIX."users_add.gks_nickname as gks_nickname_add, ".GKS_WP_TABLE_PREFIX."users_edit.gks_nickname as gks_nickname_edit,
+  ".GKS_WP_TABLE_PREFIX."users.gks_nickname,".GKS_WP_TABLE_PREFIX."users.user_email, ".GKS_WP_TABLE_PREFIX."users.gks_mobile as user_mobile,
+  table_last_name.mylast_name as user_last_name, table_first_name.myfirst_name as user_first_name,
+  gks_users.eponimia,gks_users.title,gks_users.afm,gks_users.doy,gks_users.epaggelma,
+  gks_users.order_sxolio,gks_users.pelati_sxolio,
+  gks_lang.lang_name, ".GKS_WP_TABLE_PREFIX."users.gks_lang as user_lang,
+  gks_users.ma_odos,gks_users.ma_arithmos,gks_users.ma_orofos,gks_users.ma_perioxi,gks_users.ma_poli,gks_users.ma_tk,
+  gks_users.ma_country_id,gks_country.country_name,
+  gks_users.ma_nomos_id,gks_nomoi.nomos_descr,
+  gks_company.company_title, gks_company_subs.company_sub_title,
+  ".GKS_WP_TABLE_PREFIX."users_assigned.gks_nickname AS gks_nickname_assigned,
+  gks_production_posta.production_posto_descr,
+  gks_hr_program_status.hr_program_status_descr,
+  gks_hr_program_vardia.hr_program_vardia_descr
+  FROM ((((((((((((((gks_hr_program
+  LEFT JOIN ".GKS_WP_TABLE_PREFIX."users as ".GKS_WP_TABLE_PREFIX."users_add on gks_hr_program.user_id_add = ".GKS_WP_TABLE_PREFIX."users_add.ID)
+  LEFT JOIN ".GKS_WP_TABLE_PREFIX."users as ".GKS_WP_TABLE_PREFIX."users_edit on gks_hr_program.user_id_edit = ".GKS_WP_TABLE_PREFIX."users_edit.ID)
+  LEFT JOIN gks_company ON gks_hr_program.company_id = gks_company.id_company) 
+  LEFT JOIN gks_company_subs ON gks_hr_program.company_sub_id = gks_company_subs.id_company_sub) 
+  LEFT JOIN ".GKS_WP_TABLE_PREFIX."users ON gks_hr_program.hr_program_user_id = ".GKS_WP_TABLE_PREFIX."users.ID)
+  LEFT JOIN gks_users ON ".GKS_WP_TABLE_PREFIX."users.ID = gks_users.user_id)
+  LEFT JOIN gks_country ON gks_users.ma_country_id = gks_country.id_country)
+  LEFT JOIN gks_nomoi ON gks_users.ma_nomos_id = gks_nomoi.id_nomos)
+  LEFT JOIN (
+    SELECT ".GKS_WP_TABLE_PREFIX."usermeta.user_id, ".GKS_WP_TABLE_PREFIX."usermeta.meta_value AS myfirst_name
+    FROM ".GKS_WP_TABLE_PREFIX."usermeta
+    WHERE (((".GKS_WP_TABLE_PREFIX."usermeta.meta_key)='first_name'))
+  )  AS table_first_name ON ".GKS_WP_TABLE_PREFIX."users.ID = table_first_name.user_id) 
+  LEFT JOIN (
+    SELECT ".GKS_WP_TABLE_PREFIX."usermeta.user_id, ".GKS_WP_TABLE_PREFIX."usermeta.meta_value AS mylast_name
+    FROM ".GKS_WP_TABLE_PREFIX."usermeta
+    WHERE (((".GKS_WP_TABLE_PREFIX."usermeta.meta_key)='last_name'))
+  )  AS table_last_name ON ".GKS_WP_TABLE_PREFIX."users.ID = table_last_name.user_id) 
+  LEFT JOIN gks_lang ON ".GKS_WP_TABLE_PREFIX."users.gks_lang = gks_lang.id_lang)
+  LEFT JOIN ".GKS_WP_TABLE_PREFIX."users AS ".GKS_WP_TABLE_PREFIX."users_assigned ON gks_hr_program.assigned_id = ".GKS_WP_TABLE_PREFIX."users_assigned.ID)
+  LEFT JOIN gks_production_posta ON gks_hr_program.hr_program_posto_id = gks_production_posta.id_production_posto)
+  LEFT JOIN gks_hr_program_status ON gks_hr_program.hr_program_status_id = gks_hr_program_status.id_hr_program_status)
+  LEFT JOIN gks_hr_program_vardia ON gks_hr_program.hr_program_vardia_id = gks_hr_program_vardia.id_hr_program_vardia
+
+  where ".$sql_where_hr_program."
+  order by id_hr_program";
+  //echo '<pre>'.$sql;die();
+  return $sql;
+}
+
 /*
 function gks_transfer_reservation_sql_event($sql_where_tasks1,$sql_where_tasks2) {
   
@@ -436,6 +594,7 @@ function gks_transfer_reservation_sql_event($sql_where_tasks1,$sql_where_tasks2)
   return $sql;
 }
 */
+
 function gks_calendar_get_events($params) {
 	global $db_link;
 	global $my_wp_user_id;
@@ -445,6 +604,7 @@ function gks_calendar_get_events($params) {
 	$sql_where_tasks1='';
 	$sql_where_tasks2='';
 	$sql_where_activity='';
+	$sql_where_hr_program='';
 	
 	if (isset($params['id_calendar'])) {
 	  $sql_where="gks_calendar.id_calendar=".$params['id_calendar'];
@@ -453,12 +613,16 @@ function gks_calendar_get_events($params) {
 	  $sql_where_tasks2='';
 	} else if (isset($params['id_crm_activity'])) {
 	  $sql_where_activity="gks_crm_activity.id_crm_activity=".$params['id_crm_activity'];
+	} else if (isset($params['id_hr_program'])) {
+	  $sql_where_hr_program="gks_hr_program.id_hr_program=".$params['id_hr_program'];
 	} else {
 	
   	$range_start=$params['range_start'];
   	$range_end=$params['range_end'];
-  	$users=$params['users'];
-  	
+  	$users=[]; if (isset($params['users'])) $users=$params['users'];
+  	$posta=[]; if (isset($params['posta'])) $posta=$params['posta'];
+
+    //echo '<pre>';print_r($params);die();
     
     $where='and gks_calendar.calendar_user_id in ('.implode(',',$users['cal']).')';
     $sql_where=" (
@@ -478,17 +642,39 @@ function gks_calendar_get_events($params) {
     $where='and gks_crm_activity.activity_user_id in ('.implode(',',$users['activ']).')';
     $sql_where_activity=" (
     	(gks_crm_activity.activity_duedate >='".$range_start."' and gks_crm_activity.activity_duedate <='".$range_end."')
-    	) ".$where;	
-  	
-  	
+    	) ".$where;
+
+
+    $where=[];
+    
+    if (isset($users['hr_program']) and count($users['hr_program'])>0) {
+      $where[]='gks_hr_program.hr_program_user_id in ('.implode(',',$users['hr_program']).')';
+    }
+    if (isset($posta['hr_program']) and count($posta['hr_program'])>0) {
+      $where[]='gks_hr_program.hr_program_posto_id in ('.implode(',',$posta['hr_program']).')';
+    }
+    $where=' and ('.implode(' or ',$where).') ';
+    //echo '<pre>'.$where;die();
+    
+    $sql_where_hr_program=" (
+    	(gks_hr_program.hr_program_date_from >='".$range_start."' and gks_hr_program.hr_program_date_from <'".$range_end."') or 
+    	(gks_hr_program.hr_program_date_to >'".$range_start."'    and gks_hr_program.hr_program_date_to <='".$range_end."') or
+    	(gks_hr_program.hr_program_date_from <='".$range_start."' and gks_hr_program.hr_program_date_to >='".$range_end."')
+    	) ".$where;  	
+
+    //echo '<pre>'.$sql_where_hr_program;die();
+    
   }
   $colors_per_user=array('cal' => array(), 'task' => array(), 'activ' => array());
 	
-	if (isset($gks_user_settings['calendar']['user_color']))        $colors_per_user['cal'][$my_wp_user_id]   = $gks_user_settings['calendar']['user_color'];
-	if (isset($gks_user_settings['calendar']['user_color_task']))   $colors_per_user['task'][$my_wp_user_id]  = $gks_user_settings['calendar']['user_color_task'];
-	if (isset($gks_user_settings['calendar']['user_color_activ']))  $colors_per_user['activ'][$my_wp_user_id] = $gks_user_settings['calendar']['user_color_activ'];
+	if (isset($gks_user_settings['calendar']['user_color']))            $colors_per_user['cal'][$my_wp_user_id]         = $gks_user_settings['calendar']['user_color'];
+	if (isset($gks_user_settings['calendar']['user_color_task']))       $colors_per_user['task'][$my_wp_user_id]        = $gks_user_settings['calendar']['user_color_task'];
+	if (isset($gks_user_settings['calendar']['user_color_activ']))      $colors_per_user['activ'][$my_wp_user_id]       = $gks_user_settings['calendar']['user_color_activ'];
+	if (isset($gks_user_settings['calendar']['user_color_hr_program'])) $colors_per_user['hr_program'][$my_wp_user_id]  = $gks_user_settings['calendar']['user_color_hr_program'];
 	
-	$sql="select other_user_id,other_user_color,other_myobj from gks_calendar_other_users where this_user_id=".$my_wp_user_id;
+	$sql="select other_user_id,other_user_color,other_myobj 
+  from gks_calendar_other_users 
+  where this_user_id=".$my_wp_user_id;
 	$result = $db_link->query($sql);        
 	if (!$result) {
 	  debug_mail(false,'error sql',$sql);
@@ -773,8 +959,37 @@ function gks_calendar_get_events($params) {
   }	
 	
 	
+	/////////////////////////////          gks_hr_program          /////////////////////////////
 	
-	
+	if ($sql_where_hr_program!='') {
+  	$sql=gks_hr_program_sql_event($sql_where_hr_program);
+  	
+  	$result = $db_link->query($sql);        
+  	if (!$result) {
+  	  debug_mail(false,'error sql',$sql);
+  	  $return = array('success' => false, 'message' => base64_encode('sql error'));
+  	  echo json_encode($return); die();}
+  	
+  	$rows=array();
+  	$ids=array();
+  	while ($row = $result->fetch_assoc()) {
+  	  $ids[]=$row['id_hr_program'];
+  	  
+  	  $row['notification']=array();
+  	  $row['participant']=array();
+  	  $row['objects']=array();
+  	  $rows[$row['id_hr_program']]=$row;
+  	}
+
+    //print '<pre>';print_r($rows);die();
+    
+  	foreach ($rows as $row) {
+  	  $event = gks_calendar_event_hr_program_array($row,$colors_per_user);
+  	  $myout[] = $event;
+  	} 
+  	//print '<pre>';print_r($myout);die();
+  	
+  }	
 	
 	
 	//if (GKS_DEBUG) file_put_contents('/var/www/php/test.easyfilesselection.com/tmp/ggg3.txt',print_r($rows,true));
@@ -2516,6 +2731,28 @@ function gks_get_activity_objects(&$objects) {
             );
           }
           break;
+          
+
+        case 'gks_bank_accounts': 
+          //echo '<pre>'.$objkey;die();
+          $sql_obj="SELECT id_bank_account,account_descr,
+          gks_bank_accounts.user_id, ".GKS_WP_TABLE_PREFIX."users.gks_nickname
+          FROM gks_bank_accounts 
+          LEFT JOIN ".GKS_WP_TABLE_PREFIX."users ON gks_bank_accounts.user_id = ".GKS_WP_TABLE_PREFIX."users.ID
+          WHERE gks_bank_accounts.id_bank_account In (".implode(',',$objids).")";
+          //echo '<pre>';print_r($sql_obj);die();
+          $res_obj = $db_link->query($sql_obj);        
+          if (!$res_obj) {debug_mail(false,'error sql',$sql_obj);$return = array('success' => false, 'message' => base64_encode('sql error'));echo json_encode($return); die();}   
+          while ($row_obj = $res_obj->fetch_assoc()) {
+            $myobj[$row_obj['id_bank_account']]=array(
+              'obj_name' => gks_lang('Τραπεζικός λογαριασμός').': #'.$row_obj['id_bank_account'].' '.$row_obj['account_descr'],
+              'contact_name' => $row_obj['gks_nickname'],
+              'contact_id' => $row_obj['user_id'],
+              'esoda' => 0,
+            );
+          }
+          break;
+          
         case 'gks_company':
           //echo '<pre>'.$objkey;die();
           $sql_obj="SELECT id_company, company_title FROM gks_company WHERE id_company In (".implode(',',$objids).") order by company_sortorder,company_title";
@@ -2701,6 +2938,54 @@ function gks_get_activity_objects(&$objects) {
             );
           }
           break;
+
+        case 'gks_hr_program':
+          //echo '<pre>'.$objkey;die();
+          $sql_obj="SELECT gks_hr_program.id_hr_program, hr_program_name,gks_hr_program.hr_program_date_from, 
+          gks_hr_program.hr_program_user_id, ".GKS_WP_TABLE_PREFIX."users.gks_nickname
+          FROM gks_hr_program 
+          LEFT JOIN ".GKS_WP_TABLE_PREFIX."users ON gks_hr_program.hr_program_user_id = ".GKS_WP_TABLE_PREFIX."users.ID
+          WHERE id_hr_program In (".implode(',',$objids).")";
+          $res_obj = $db_link->query($sql_obj);        
+          if (!$res_obj) {debug_mail(false,'error sql',$sql_obj);$return = array('success' => false, 'message' => base64_encode('sql error'));echo json_encode($return); die();}   
+          while ($row_obj = $res_obj->fetch_assoc()) {
+            $myobj[$row_obj['id_hr_program']]=array(
+              'obj_name' => gks_lang('Πρόγραμμα Υπαλλήλων').': #'.$row_obj['id_hr_program'].' '.$row_obj['hr_program_name'],
+              'contact_name' => $row_obj['gks_nickname'],
+              'contact_id' => $row_obj['hr_program_user_id'],
+              'esoda' => 0,
+            );
+          }
+          break;          
+        case 'gks_hr_program_status':
+          //echo '<pre>'.$objkey;die();
+          $sql_obj="SELECT id_hr_program_status, hr_program_status_descr FROM gks_hr_program_status  WHERE id_hr_program_status In (".implode(',',$objids).")";
+          $res_obj = $db_link->query($sql_obj);        
+          if (!$res_obj) {debug_mail(false,'error sql',$sql_obj);$return = array('success' => false, 'message' => base64_encode('sql error'));echo json_encode($return); die();}   
+          while ($row_obj = $res_obj->fetch_assoc()) {
+            $myobj[$row_obj['id_hr_program_status']]=array(
+              'obj_name' => gks_lang('Κατάσταση Προγράμματος').': '.$row_obj['hr_program_status_descr'],
+              'contact_name' => '',
+              'contact_id' => 0,
+              'esoda' => 0,
+            );
+          }
+          break;
+        case 'gks_hr_program_vardia':
+          //echo '<pre>'.$objkey;die();
+          $sql_obj="SELECT id_hr_program_vardia, hr_program_vardia_descr FROM gks_hr_program_vardia  WHERE id_hr_program_vardia In (".implode(',',$objids).")";
+          $res_obj = $db_link->query($sql_obj);        
+          if (!$res_obj) {debug_mail(false,'error sql',$sql_obj);$return = array('success' => false, 'message' => base64_encode('sql error'));echo json_encode($return); die();}   
+          while ($row_obj = $res_obj->fetch_assoc()) {
+            $myobj[$row_obj['id_hr_program_vardia']]=array(
+              'obj_name' => gks_lang('Βάρδια').': '.$row_obj['hr_program_vardia_descr'],
+              'contact_name' => '',
+              'contact_id' => 0,
+              'esoda' => 0,
+            );
+          }
+          break;          
+          
         case 'gks_orders':
           //echo '<pre>'.$objkey;die();
           $sql_obj="SELECT gks_orders.id_order, gks_orders.order_date, gks_orders.user_last_name, gks_orders.user_first_name, 
@@ -2775,7 +3060,22 @@ function gks_get_activity_objects(&$objects) {
             );
           }
           break;
-          
+        
+        case 'gks_template_html':
+          //echo '<pre>'.$objkey;die();
+          $sql_obj="SELECT id_template_html, template_html_descr FROM gks_template_html  WHERE id_template_html In (".implode(',',$objids).")";
+          $res_obj = $db_link->query($sql_obj);        
+          if (!$res_obj) {debug_mail(false,'error sql',$sql_obj);$return = array('success' => false, 'message' => base64_encode('sql error'));echo json_encode($return); die();}   
+          while ($row_obj = $res_obj->fetch_assoc()) {
+            $myobj[$row_obj['id_template_html']]=array(
+              'obj_name' => gks_lang('Πρότυπο HTML').': '.$row_obj['id_template_html'].' '.$row_obj['template_html_descr'],
+              'contact_name' => '',
+              'contact_id' => 0,
+              'esoda' => 0,
+            );
+          }
+          break;        
+        
         case 'gks_users_groups':
           //echo '<pre>'.$objkey;die();
           $sql_obj="SELECT id_users_group, group_title FROM gks_users_groups  WHERE id_users_group In (".implode(',',$objids).")";

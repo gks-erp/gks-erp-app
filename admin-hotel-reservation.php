@@ -865,8 +865,17 @@ echo gks_custom_table_list_header($gks_custom_prepare);
 
       
     ?></td>  
+
+    <td class="gks_td08"><div class="gks_dive1"><div class="gks_dive2 mydivexpand"><?php 
+      $temp='';
+      if (!empty($row['user_notes'])) $temp.=gks_lang('Πελάτης').': <b>'.nl2br_gks($row['user_notes']).'</b><br>';
+      if (!empty($row['sxolio'])) $temp.=gks_lang('Σχόλιο').': <b>'.nl2br_gks($row['sxolio']).'</b><br>';
+      if (!empty($row['note_logistirio'])) $temp.=gks_lang('Λογιστήριο').': <b>'.nl2br_gks($row['note_logistirio']).'</b><br>';
+      
+      if ($temp!='') $temp=substr($temp, 0, strlen($temp)-4);
+      echo $temp;
+    ?></div></div></td> 
     
-    <td class="mytdcml"><?php echo nl2br_gks(htmlspecialchars_gks($row['sxolio'],ENT_QUOTES));?></td>
     
     <td class="mytdcml"><a href="admin-users-item.php?id=<?php echo $row['assigned_id'];?>"><?php echo $row['gks_nickname_assigned'];?></a></td>
 <?php if ($GKS_CRM_ENABLE) {?>    

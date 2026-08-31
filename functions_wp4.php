@@ -13,6 +13,8 @@ function getObjectRels($objname, $id) {
   global $db_link;
   global $leads_status;
   global $tasks_status;
+  global $hr_program_status;
+  global $hr_program_vardia;
   
   
   $sql_rel="select id_object_rel,object_name1,object_id1,object_name2,object_id2 
@@ -723,6 +725,88 @@ function getObjectRels($objname, $id) {
       }
     }
   }  
+  
+  //gks_hr_program
+  $oids=array(); foreach ($object_rel as $obji => $objv) if ($objv['name']=='gks_hr_program') $oids[]=$objv['id'];
+  if (count($oids)>0) {
+    $sql_rel="SELECT id_hr_program,hr_program_name,hr_program_date_from,hr_program_color,hr_program_status_id
+    from gks_hr_program WHERE id_hr_program in (".implode(',',$oids).")";
+    $result_rel = $db_link->query($sql_rel);        
+    if (!$result_rel) {debug_mail(false,'error sql',$sql_rel);return 'sql error';}
+    
+    while ($row_rel = $result_rel->fetch_assoc()) {
+      foreach ($object_rel as $obji => $objv) {
+        if ($objv['name']=='gks_hr_program' and $objv['id']==$row_rel['id_hr_program']) {
+          $object_rel[$obji]['data']=array(
+            'objname' => gks_lang('Πρόγραμμα Υπαλλήλων'),
+            'link' => '<a href="admin-hr-program-item.php?id='.$row_rel['id_hr_program'].'">#'.$row_rel['id_hr_program'].'</a>',
+            'oname' => trim_gks($row_rel['hr_program_name']),
+            'oname_bg'=> trim_gks($row_rel['hr_program_color']),
+            'state' => '<span class="hr_program_status_'.$row_rel['hr_program_status_id'].'">'.
+                       (isset($hr_program_status[$row_rel['hr_program_status_id']]) ? $hr_program_status[$row_rel['hr_program_status_id']]['hr_program_status_descr'] : '').'</span>',
+            'price' => '',
+            'date' => showDate(strtotime($row_rel['hr_program_date_from']), 'd/m/Y\<\b\r\>H:i:s', 1),
+            'balance' => '',
+          );
+          break;
+        }
+      }
+    }
+  }
+
+  //gks_hr_program_status
+  $oids=array(); foreach ($object_rel as $obji => $objv) if ($objv['name']=='gks_hr_program_status') $oids[]=$objv['id'];
+  if (count($oids)>0) {
+    $sql_rel="SELECT id_hr_program_status,hr_program_status_descr,hr_program_status_color,hr_program_status_disabled
+    from gks_hr_program_status WHERE id_hr_program_status in (".implode(',',$oids).")";
+    $result_rel = $db_link->query($sql_rel);        
+    if (!$result_rel) {debug_mail(false,'error sql',$sql_rel);return 'sql error';}
+    
+    while ($row_rel = $result_rel->fetch_assoc()) {
+      foreach ($object_rel as $obji => $objv) {
+        if ($objv['name']=='gks_hr_program_status' and $objv['id']==$row_rel['id_hr_program_status']) {
+          $object_rel[$obji]['data']=array(
+            'objname' => gks_lang('Κατάσταση Προγράμματος'),
+            'link' => '<a href="admin-hr-program-status-item.php?id='.$row_rel['id_hr_program_status'].'">#'.$row_rel['id_hr_program_status'].'</a>',
+            'oname' => trim_gks($row_rel['hr_program_status_descr']),
+            'oname_bg'=> trim_gks($row_rel['hr_program_status_color']),
+            'state' => '<img src="img/'.($row_rel['hr_program_status_disabled']==0 ? '1' :'0').'.png" border="0" width="16">',
+            'price' => '',
+            'date' => '',
+            'balance' => '',
+          );
+          break;
+        }
+      }
+    }
+  }
+
+  //gks_hr_program_vardia
+  $oids=array(); foreach ($object_rel as $obji => $objv) if ($objv['name']=='gks_hr_program_vardia') $oids[]=$objv['id'];
+  if (count($oids)>0) {
+    $sql_rel="SELECT id_hr_program_vardia,hr_program_vardia_descr,hr_program_vardia_color,hr_program_vardia_disabled
+    from gks_hr_program_vardia WHERE id_hr_program_vardia in (".implode(',',$oids).")";
+    $result_rel = $db_link->query($sql_rel);        
+    if (!$result_rel) {debug_mail(false,'error sql',$sql_rel);return 'sql error';}
+    
+    while ($row_rel = $result_rel->fetch_assoc()) {
+      foreach ($object_rel as $obji => $objv) {
+        if ($objv['name']=='gks_hr_program_vardia' and $objv['id']==$row_rel['id_hr_program_vardia']) {
+          $object_rel[$obji]['data']=array(
+            'objname' => gks_lang('Βάρδια'),
+            'link' => '<a href="admin-hr-program-vardia-item.php?id='.$row_rel['id_hr_program_vardia'].'">#'.$row_rel['id_hr_program_vardia'].'</a>',
+            'oname' => trim_gks($row_rel['hr_program_vardia_descr']),
+            'oname_bg'=> trim_gks($row_rel['hr_program_vardia_color']),
+            'state' => '<img src="img/'.($row_rel['hr_program_vardia_disabled']==0 ? '1' :'0').'.png" border="0" width="16">',
+            'price' => '',
+            'date' => '',
+            'balance' => '',
+          );
+          break;
+        }
+      }
+    }
+  }
   
   //gks_template_html
   $oids=array(); foreach ($object_rel as $obji => $objv) if ($objv['name']=='gks_template_html') $oids[]=$objv['id'];
@@ -1824,6 +1908,7 @@ var from_php_gks_datetimepicker_locale=\''.gks_datetimepicker_locale($gks_user_s
 var from_php_gks_tinymce_locale=\''.gks_tinymce_locale($gks_user_settings['lang']['backend']).'\';
 var from_php_gks_fullcalendar_locale=\''.gks_fullcalendar_locale($gks_user_settings['lang']['backend']).'\';
 var from_php_gks_pivottable_locale=\''.gks_pivottable_locale($gks_user_settings['lang']['backend']).'\';
+var from_php_gks_spectrum_locale=\''.gks_spectrum_locale($gks_user_settings['lang']['backend']).'\';
 
   
 var from_php_GKS_SITE_URL='.$jQuery3x.'.base64.decode(\''.base64_encode(GKS_SITE_URL).'\');

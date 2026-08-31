@@ -205,6 +205,7 @@ www.gks.gr
   border-width: 0px;
   border-right: 1px solid white;
   align-content: end;
+  overflow:hidden;
 }
 
 .gkstable_gks_customtableview > tbody  {
@@ -225,11 +226,12 @@ www.gks.gr
   flex: 0 0 auto;
   border-width: 0px; 
   align-content: center;
- 
+  overflow:hidden;
 }
 .gkstable_gks_customtableview > tbody > tr > td {    
   display1: flex;
   flex: 0 0 auto;
   border-width: 0px; 
   align-content: center;
+  overflow:hidden;
 }

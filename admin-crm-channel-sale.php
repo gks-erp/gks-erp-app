@@ -108,7 +108,19 @@ $filters[] = array(
     ),
     
 );
-
+$filters[] = array(
+  'name' => 'fdisable',
+  'class' => 'filterselectbox',
+  'style' => '',
+  'title' => gks_lang('Ενεργό'),
+  'has_custom_default' => -1,
+  'multiselect' => true,    
+  'field'  => "1=1",
+  'vals' => array(
+      array('value' => 1, 'text' => gks_lang('Ενεργό'),     'sql' => "gks_crm_channel_sale.crm_channel_sale_disabled=0"),
+      array('value' => 2, 'text' => gks_lang('Μη ενεργό'),  'sql' => "gks_crm_channel_sale.crm_channel_sale_disabled<>0"),
+  ),
+);
 
 $sortable = array(
 	array('name' => 'soid',    'field' => 'gks_crm_channel_sale.id_crm_channel_sale'),

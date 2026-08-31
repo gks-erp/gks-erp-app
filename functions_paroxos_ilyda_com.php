@@ -2365,7 +2365,7 @@ function gks_paroxos_invoice_xml_build_ilyda_com($id,$paroxos_params,$struct_dat
     } else {
       if (isset($xml['counterpart']['name'])) $adata['buyer']['buyerName']=$xml['counterpart']['name'];
     }
-        
+    
     
     /*buyerLegalRegistrationIdentifier (BT-47)
       Cardinality: 0..1
@@ -3761,7 +3761,7 @@ function gks_paroxos_invoice_xml_send_ilyda_com($id,$paroxos_params,$struct_data
           $paroxos_tf1_url=$linkBaseUrl.'/'.$algorithm.'/'.$token;
       		$sql_xxx="update ".$doc_table." set
       	  paroxos_tf1_url='".$db_link->escape_string($paroxos_tf1_url)."',
-      	  paroxos_tf1_url_has=1
+      	  paroxos_tf1_url_has=8
       		where id_".$ttt."=".$id;
       	  $result_xxx = $db_link->query($sql_xxx); 
     	    if (!$result_xxx) {
@@ -4589,6 +4589,7 @@ function gks_paroxos_payment_sign_ilyda_com($id,$paroxos_params,$struct_data) {
   
   
   //echo '<pre>sign_ilyda doc_table '.$struct_data['doc_table'];die();
+  //echo '<pre>sign_ilyda doc_table ';print_r($struct_data);die();
   
   $doc_table=$struct_data['doc_table'];
   if ($doc_table=='gks_acc_inv') {
@@ -4629,7 +4630,21 @@ function gks_paroxos_payment_sign_ilyda_com($id,$paroxos_params,$struct_data) {
   $input['vatAmount']=$struct_data['sign']['vatAmount'];
   $input['grossAmount']=$struct_data['sign']['grossAmount'];
   
-  //echo '<pre>sssssss '.$struct_data['sign']['payment_acquirer_with_id'];print_r($input);die();
+  //panta to eidos_parastatikou_aade_code tha einai 8.4 dioti kai otan einai 8.5 exei to parent
+  if ($doc_table=='gks_acc_pay' and 
+      isset($struct_data['row']['eidos_parastatikou_aade_code']) and
+      in_array($struct_data['row']['eidos_parastatikou_aade_code'],['8.4','8.5']) and
+      isset($struct_data['sign']['refund_val']) and 
+      $struct_data['sign']['refund_val']>0) {
+      
+    $input['netAmount']=$struct_data['sign']['refund_val'];
+    $input['grossAmount']=$struct_data['sign']['refund_val'];
+  }
+
+  //echo '<pre>sssssssa '.$struct_data['sign']['payment_acquirer_with_id']."\r\n";print_r($input);die();
+  
+  
+  
   if ($struct_data['sign']['payment_acquirer_with_id']==1) {
     $input['vatRate']=0; //24 gia na ginei meta 2400 gia tin viva
     if ($input['netAmount']>0) {

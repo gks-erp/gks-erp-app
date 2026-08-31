@@ -186,11 +186,11 @@ if ($GKS_CRM_MACHINE_ENABLE) {
   <tr >	
     <th class="table-dark" scope="col" style="text-align: center !important;" width="0%"  ><a href="?">#</a></th>
     <th class="table-dark" scope="col" style="text-align: center !important;" width="0%" ><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'soid', gks_lang('ID')); ?></th> 
-    <th class="table-dark" scope="col" style="text-align: center !important;" width="0%" nowrap><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'sodate', gks_lang('Ημερομηνία')); ?></th>        
+    <th class="table-dark" scope="col" style="text-align: center !important;" width="0%" nowrap><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'sodate', gks_lang('Καταχώρηση')); ?></th>        
     <th class="table-dark" scope="col" style="text-align: left   !important;" width="0%"  nowrap><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'sostatus', gks_lang('Κατάσταση')); ?></th>        
     <th class="table-dark" scope="col" style="text-align: left   !important;" width="<?php echo $tr_width1;?>"  nowrap><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'sosubject', gks_lang('Εργασία')); ?></th>
     <th class="table-dark" scope="col" style="text-align: left   !important;" width="0%"  nowrap><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'soesoda', '<span class="tooltipster" title="'.gks_lang('Αναμενόμενα έσοδα').'">'.gks_lang('Α.Έσοδα').'</span>'); ?></th>        
-    <th class="table-dark" scope="col" style="text-align: left   !important;" width="0%"  nowrap><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'soplanned', gks_lang('Προγραμματισμός')); ?></th>
+    <th class="table-dark" scope="col" style="text-align: left   !important;" width="0%"  nowrap><?php echo makeSortLink($sortable, $sortable_url, $_GET, 'soplanned', gks_lang('Ημερομηνία')); ?></th>
 <?php if ($GKS_CRM_MACHINE_ENABLE) {?>
     <th class="table-dark" scope="col" style="text-align: left   !important;" width="<?php echo $tr_width1;?>"  nowrap><?php echo gks_lang('Συσκευές');?></th>
 <?php } ?>
@@ -319,6 +319,9 @@ jQuery(document).ready(function($) {
   $('#fplanned-from').datetimepicker(jQuery.extend({},gks_datetimepicker_defaults,{mask:'39/19/9999',format:'d/m/Y', timepicker:false,dayOfWeekStart:1,}));
   $('#fplanned-to').datetimepicker(jQuery.extend({},gks_datetimepicker_defaults,{mask:'39/19/9999',format:'d/m/Y', timepicker:false,dayOfWeekStart:1,}));
 
+  $('#fplannedto-from').datetimepicker(jQuery.extend({},gks_datetimepicker_defaults,{mask:'39/19/9999',format:'d/m/Y', timepicker:false,dayOfWeekStart:1,}));
+  $('#fplannedto-to').datetimepicker(jQuery.extend({},gks_datetimepicker_defaults,{mask:'39/19/9999',format:'d/m/Y', timepicker:false,dayOfWeekStart:1,}));
+
 
 
 
@@ -328,13 +331,13 @@ jQuery(document).ready(function($) {
       var multiple=$(this).attr('multiple');
       if (!(typeof multiple == 'undefined')) return;
       if (v==-2) { //is_custom_date
-        if (sname == 'ftask_date' || sname=='fplanned' || gks_custom_filters_date_elems.includes(sname)) {
+        if (sname == 'ftask_date' || sname=='fplanned' || sname=='fplannedto' || gks_custom_filters_date_elems.includes(sname)) {
           $('#filterdate-' + sname).css('display','inline-block'); 
           $('#' + sname + '-from').attr('name',sname + '-from');
           $('#' + sname + '-to').attr('name',sname + '-to');
         }
       } else {
-        if (sname == 'ftask_date' || sname=='fplanned' || gks_custom_filters_date_elems.includes(sname)) {
+        if (sname == 'ftask_date' || sname=='fplanned' || sname=='fplannedto' || gks_custom_filters_date_elems.includes(sname)) {
           $('#filterdate-' + sname).css('display','none'); 
           $('#' + sname + '-from').attr('name','');
           $('#' + sname + '-to').attr('name','');

@@ -155,12 +155,21 @@ if ($gks_html_lang!='' and $gks_html_lang!='en' and $gks_html_lang!='el-GR') {
 
 <style>
 <?php
-if (isset($leads_status_styles)==false) gks_get_leads_status($leads_status,$leads_status_styles); 
-echo $leads_status_styles;
+if ($GKS_CRM_ENABLE) {
+  if (isset($leads_status_styles)==false) gks_get_leads_status($leads_status,$leads_status_styles); 
+  echo $leads_status_styles;
 
-if (isset($tasks_status_styles)==false) gks_get_tasks_status($tasks_status,$tasks_status_styles); 
-echo $tasks_status_styles;
+  if (isset($tasks_status_styles)==false) gks_get_tasks_status($tasks_status,$tasks_status_styles); 
+  echo $tasks_status_styles;
+}
 
+if ($GKS_HR_ENABLE) {
+  if (isset($hr_program_status_styles)==false) gks_get_hr_program_status($hr_program_status,$hr_program_status_styles); 
+  echo $hr_program_status_styles;
+
+  if (isset($hr_program_vardia_styles)==false) gks_get_hr_program_vardia($hr_program_vardia,$hr_program_vardia_styles); 
+  echo $hr_program_vardia_styles;
+}
 ?> 
 </style>
 <?php
@@ -989,6 +998,58 @@ if (isset($gks_header_footer_layout)==false or $gks_header_footer_layout=='full'
       $this_root_menu_html.=$this_root_menu_transfer; 
     }
     
+    if ($GKS_HR_ENABLE) {
+      $this_menu='';
+      if (gks_permission_user_can_action_php($my_wp_user_id,'gks_hr_program','view',0)) {
+        $this_menu.='<li class="">'.
+          '<a class="dropdown-item gks_main_menu_hr_program" href="/my/admin-hr-program.php">'.gks_lang('Πρόγραμμα Υπαλλήλων').'</a>'.
+        '</li>';
+      }
+      if ($this_menu!='' and endwith($this_menu,'<li class="dropdown-divider"></li>')==false) $this_menu.='<li class="dropdown-divider"></li>';
+
+      if (gks_permission_user_can_action_php($my_wp_user_id,'gks_production_posta','view',0)) {
+        $this_menu.='<li class="">'.
+          '<a class="dropdown-item gks_main_menu_production_posta" href="/my/admin-production-posta.php">'.gks_lang('Πόστα').'</a>'.
+        '</li>';
+      }
+      
+      if (gks_permission_user_can_action_php($my_wp_user_id,'gks_hr_program_status','view',0)) {
+        $this_menu.='<li class="">'.
+          '<a class="dropdown-item gks_main_menu_hr_program_status" href="/my/admin-hr-program-status.php">'.gks_lang('Κατάσταση Προγράμματος').'</a>'.
+        '</li>';
+      }
+      if (gks_permission_user_can_action_php($my_wp_user_id,'gks_hr_program_vardia','view',0)) {
+        $this_menu.='<li class="">'.
+          '<a class="dropdown-item gks_main_menu_hr_program_vardia" href="/my/admin-hr-program-vardia.php">'.gks_lang('Βάρδιες').'</a>'.
+        '</li>';
+      }
+      
+      $this_root_menu_hr='';
+      if ($this_menu!='') {
+        if (endwith($this_menu,'<li class="dropdown-divider"></li>')) $this_menu=substr($this_menu, 0,strlen($this_menu)-34);
+        $this_root_menu_hr='<li class="nav-item dropdown gks_main_menu_hr">
+          <a id="nav_sales" class="nav-link dropdown-toggle1" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">'.
+            '<i class="fas fa-user-tie gks_menu_narrow_icon tooltipstermenu" title="'.gks_lang('HR').'" style = "font-size: 120%;position:relative;top:0px;"></i>'.
+            '<span class="gks_menu_narrow_text">'.gks_lang('HR').'</span>'.
+          '</a>
+          <ul class="dropdown-menu" aria-labelledby="nav_sales">'.
+            $this_menu.'
+          </ul>
+        </li>';
+      }
+      
+      if (gks_permission_user_can_action_php($my_wp_user_id,'gks_hr_program','add',0)) {
+        $this_root_menu_hr.=
+        '<li class="nav-item gks_main_menu_hr_new_program gks_header_add_new gks_menu_li_icon_add">'.
+          '<a class="nav-link" href="/my/admin-hr-program-item.php?id=-1"><i class="fas fa-plus-circle"></i></a>'.
+        '</li>';
+        //echo $this_root_menu_crm;
+               
+      }
+      $this_root_menu_html.=$this_root_menu_hr;
+      
+    }
+    
     if ($GKS_CRM_ENABLE) {
       
       
@@ -1638,9 +1699,12 @@ if (isset($gks_header_footer_layout)==false or $gks_header_footer_layout=='full'
       
       $this_menu_sub='';
       
-      if (gks_permission_user_can_action_php($my_wp_user_id,'gks__paroxos_overview_ilyda','view',0)) {
+      if (gks_permission_user_can_action_php($my_wp_user_id,'gks__paroxos_overview','view',0)) {
         $this_menu_sub.='<li class="">'.
           '<a class="dropdown-item gks_main_menu_accounting_paroxos_overview_ilyda" href="/my/admin-paroxos-overview-ilyda.php">'.gks_lang('ΙΛΥΔΑ').'</a>'.
+        '</li>';
+        $this_menu_sub.='<li class="">'.
+          '<a class="dropdown-item gks_main_menu_accounting_paroxos_overview_etimologiera" href="/my/admin-paroxos-overview-etimologiera.php">'.gks_lang('etimologiera').'</a>'.
         '</li>';
       }
       if ($this_menu_sub!='') {
@@ -1819,7 +1883,7 @@ if (isset($gks_header_footer_layout)==false or $gks_header_footer_layout=='full'
     }        
     
     
-    if (ur_ad()) { 
+    if (ur_ad() and $GKS_STAT_ENABLE) { 
       $this_root_menu_stat=
       '<li class="nav-item dropdown gks_main_menu_stat">'.
         '<a id="nav_stat" class="nav-link dropdown-toggle1" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">'.

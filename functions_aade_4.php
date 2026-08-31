@@ -15,6 +15,7 @@ function getAADE_InvoiceDeliveryStatus($mystate) {
     case 'DELIVERED_BY_CARRIER': return gks_lang('Ο μεταφορέας δήλωσε παράδοση (αναμονή επιβεβαίωσης από λήπτη B2B). (DeliveredByCarrier)','part4','aade_invoicedeliverystatus'); break; 
     case 'FAILED_DELIVERY': return gks_lang('Ο μεταφορέας δήλωσε αποτυχία παράδοσης (FailedDelivery)','part4','aade_invoicedeliverystatus'); break; 
     case 'COMPLETED': return gks_lang('Η διακίνηση ολοκληρώθηκε με επιτυχία (Completed)','part4','aade_invoicedeliverystatus'); break; 
+    case 'IN_TRANSIT_RETURN': return gks_lang('Ο μεταφορέας επιστρέφει με εμπόρευμα (InTransit Return)','part4','aade_invoicedeliverystatus'); break; 
     default: return $mystate; break; 
   }   
 }
@@ -29,15 +30,19 @@ function getAADE_InvoiceDeliveryStatusID($id) {
     case 6: return getAADE_InvoiceDeliveryStatus('FAILEDDELIVERY');
     case 7: return getAADE_InvoiceDeliveryStatus('FAILEDDELIVERY');
     case 8: return getAADE_InvoiceDeliveryStatus('COMPLETED');
+    case 9: return getAADE_InvoiceDeliveryStatus('IN_TRANSIT_RETURN');
     default: return $id; break; 
   }
 }
 
 function getAADE_DeliveryEventType($mystate) {
   switch ($mystate) {
-    case 'RegisterTransfer': return gks_lang('Έναρξη διακίνησης (RegisterTransfer)','part4','aade_deliveryeventtype'); break; 
-    case 'ConfirmOutcome': return gks_lang('Δηλώση του αποτέλεσματος της παράδοσης (ConfirmOutcome)','part4','aade_deliveryeventtype'); break; 
-    case 'Rejection': return gks_lang('Απόρριψη (Rejection)','part4','aade_deliveryeventtype'); break; 
+    case 'RegisterTransfer': return gks_lang('Έναρξη διακίνησης ή μεταφόρτωση (RegisterTransfer)','part4','aade_deliveryeventtype'); break; 
+    case 'ConfirmOutcome': return gks_lang('Δήλωση αποτελέσματος παράδοσης / Επιβεβαίωση παραλαβής (ConfirmOutcome)','part4','aade_deliveryeventtype'); break; 
+    case 'Rejection': return gks_lang('Ολική απόρριψη από τον λήπτη (Rejection)','part4','aade_deliveryeventtype'); break; 
+    case 'CancelDeliveryNote': return gks_lang('Ακύρωση διακίνησης (CancelDeliveryNote)','part4','aade_deliveryeventtype'); break; 
+    case 'ConfirmReturn': return gks_lang('Επιβεβαίωση από εκδότη της επιστροφής (ConfirmReturn)','part4','aade_deliveryeventtype'); break; 
+    case 'RegisterTransferReturn': return gks_lang('Επιστροφή (όταν δεν έγινε πλήρης παράδοση) (RegisterTransferReturn)','part4','aade_deliveryeventtype'); break; 
     default: return $mystate; break; 
   } 
 }
@@ -707,6 +712,32 @@ function gks_aade_delivery_note_parse_xml_status($xml_input) {
             $mm[]='<li>'.gks_lang('Στίγμα').': <b>'.$lch_latitude.' '.$lch_longitude.'</b> <a href="https://www.google.com/maps/search/?api=1&query='.$lch_latitude.','.$lch_longitude.'" target="_blank"><i class="fas fa-map-marker-alt"></i></a></li>';
           }
         }
+        
+        $lch_deliveredPackaging=$item->transportDetails->packingsDeclaration;
+        if (count($lch_deliveredPackaging)>=1) {
+          
+          $kk1=[];
+          foreach ($lch_deliveredPackaging as $dpitem) {
+            $kk2=[];
+            $pd_packagingType= (string)$dpitem->packagingType;
+            if ($pd_packagingType!='') $kk2[]=gks_lang('Είδος Συσκευασίας').': <b>'.getAADE_PackagingTypeDescr($pd_packagingType).'</b>';
+            
+            $pd_quantity= (string)$dpitem->quantity;
+            if ($pd_quantity!='') $kk2[]=gks_lang('Πλήθος').': <b>'.$pd_quantity.'</b>';
+            
+            $pd_otherPackagingTypeTitle= (string)$dpitem->otherPackagingTypeTitle;
+            if ($pd_otherPackagingTypeTitle!='') $kk2[]=gks_lang('Τίτλος για Λοιπά Είδη Συσκευασίας').': <b>'.$pd_otherPackagingTypeTitle.'</b>';
+            
+            
+            $kk1[]='<li>'.implode('<br>',$kk2).'</li>';
+            
+            
+          }
+          if (count($kk1)>0) {
+            $mm[]='<span>'.gks_lang('Πληροφορίες Συσκευασίας').':</span><ol>'.implode('',$kk1).'</ol>';
+          }
+        }        
+        
         if (count($mm)>0) {
           $tt[]='<span>'.gks_lang('Λεπτομέρειες Μεταφοράς').':</span><ul>'.implode('',$mm).'</ul>';
         }

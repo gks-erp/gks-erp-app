@@ -714,11 +714,20 @@ border: 2px solid gray;
               <?php
               $lang_prepare_gks_lang=gks_lang_data_obj_prepare('gks_lang','default');
               gks_lang_data_obj_sql_prepare($lang_prepare_gks_lang, array('lang_name'));
-          
+              $lang_dir=GKS_SITE_PATH.GKS_SITE_HTTPDOCS.'/my/languages/';
+              //die($lang_dir);
+              $dirs = array_filter(glob($lang_dir.'*'), 'is_dir');
+              $dirs2=[];
+              foreach($dirs as $vvv) {
+                $dirs2[]=substr($vvv,strlen($lang_dir));
+                
+              }
+              //echo '<pre>';print_r($dirs2);die();
+              
+
               $sql_lang="select gks_lang.*,".gks_lang_sql_field('lang_name',$lang_prepare_gks_lang)." 
               FROM ".$lang_prepare_gks_lang['sql']['from1']." gks_lang 
               ".$lang_prepare_gks_lang['sql']['from2']."
-              where lang_on_backend=1
               ORDER BY lang_sortorder";
               //echo '<pre>';echo $sql_lang."\r\n\r\n";die();
               
@@ -727,8 +736,10 @@ border: 2px solid gray;
               
               $temp_lang_array=array();
               while ($row_lang = $result_lang->fetch_assoc()) {
-                $temp_lang_array[]='<input type="radio" name="user_lang_backend" id="user_lang_backend_'.$row_lang['id_lang'].'" value="'.$row_lang['id_lang'].'" '.($gks_user_settings['lang']['backend']==$row_lang['id_lang'] ? 'checked' : '').'>'.
-                ' <label for="user_lang_backend_'.$row_lang['id_lang'].'">'.$row_lang['lang_name'].'</label>';
+                if (in_array($row_lang['id_lang'],$dirs2)) {
+                  $temp_lang_array[]='<input type="radio" name="user_lang_backend" id="user_lang_backend_'.$row_lang['id_lang'].'" value="'.$row_lang['id_lang'].'" '.($gks_user_settings['lang']['backend']==$row_lang['id_lang'] ? 'checked' : '').'>'.
+                    ' <label for="user_lang_backend_'.$row_lang['id_lang'].'">'.$row_lang['lang_name'].'</label>';
+                  }
               }
               echo implode('<br>',$temp_lang_array);
               

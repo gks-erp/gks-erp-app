@@ -58,6 +58,7 @@ jQuery(document).ready(function($) {
     datasend+='&GKS_HOTEL_BACKEND=' + encodeURIComponent(($("#GKS_HOTEL_BACKEND").is(':checked') ? '1' : '0'));
     datasend+='&GKS_HOTEL_RESERVATIONS_ONLINE=' + encodeURIComponent(($("#GKS_HOTEL_RESERVATIONS_ONLINE").is(':checked') ? '1' : '0'));
     
+    datasend+='&GKS_HR_ENABLE=' + encodeURIComponent(($("#GKS_HR_ENABLE").is(':checked') ? '1' : '0'));
     datasend+='&GKS_CRM_ENABLE=' + encodeURIComponent(($("#GKS_CRM_ENABLE").is(':checked') ? '1' : '0'));
     datasend+='&GKS_CRM_LEADS_ENABLE=' + encodeURIComponent(($("#GKS_CRM_LEADS_ENABLE").is(':checked') ? '1' : '0'));
     datasend+='&GKS_CRM_TASKS_ENABLE=' + encodeURIComponent(($("#GKS_CRM_TASKS_ENABLE").is(':checked') ? '1' : '0'));
@@ -92,6 +93,7 @@ jQuery(document).ready(function($) {
     datasend+='&GKS_ORDERS_SETS=' + encodeURIComponent(($("#GKS_ORDERS_SETS").is(':checked') ? '1' : '0'));
     datasend+='&GKS_ORDERS_SETS_VALS=' + encodeURIComponent($.base64.encode($("#GKS_ORDERS_SETS_VALS").val().trim()));
     datasend+='&GKS_ORDERS_SHEETS=' + encodeURIComponent(($("#GKS_ORDERS_SHEETS").is(':checked') ? '1' : '0'));
+    datasend+='&GKS_ORDERS_CREATE_ACC_INV_MODE=' + encodeURIComponent(($("#GKS_ORDERS_CREATE_ACC_INV_MODE").is(':checked') ? '1' : '0'));
     datasend+='&GKS_ORDERS_OCCASION=' + encodeURIComponent(($("#GKS_ORDERS_OCCASION").is(':checked') ? '1' : '0'));
     datasend+='&GKS_ORDERS_PRODUCTION=' + encodeURIComponent(($("#GKS_ORDERS_PRODUCTION").is(':checked') ? '1' : '0'));
 
@@ -103,6 +105,7 @@ jQuery(document).ready(function($) {
     datasend+='&GKS_ACC_INV_EXTRA_OPEN=' + encodeURIComponent(($("#GKS_ACC_INV_EXTRA_OPEN").is(':checked') ? '1' : '0'));
 
     datasend+='&GKS_ASSETS_ENABLE=' + encodeURIComponent(($("#GKS_ASSETS_ENABLE").is(':checked') ? '1' : '0'));
+    datasend+='&GKS_STAT_ENABLE=' + encodeURIComponent(($("#GKS_STAT_ENABLE").is(':checked') ? '1' : '0'));
     datasend+='&GKS_ERP_APP_MOBILE_VER=' + encodeURIComponent($('#GKS_ERP_APP_MOBILE_VER').val());
 
     

@@ -29,9 +29,11 @@ $users=array();
 $users['cal']=array();
 $users['task']=array();
 $users['activ']=array();
+$users['hr_program']=array();
 $users['cal'][]=$my_wp_user_id;
 $users['task'][]=$my_wp_user_id;
 $users['activ'][]=$my_wp_user_id;
+$users['hr_program'][]=$my_wp_user_id;
 
 $sql="SELECT other_myobj,other_user_id
 FROM gks_calendar_other_users 
@@ -43,28 +45,31 @@ while ($row = $result->fetch_assoc()) {
   $users[$row['other_myobj']][]=$row['other_user_id'];
 }
 
-//$range_start = date('Y-m-d H:i:s', _time_user(strtotime($_POST['start']),-1));
-//$range_end = date('Y-m-d H:i:s', _time_user(strtotime($_POST['end']),-1)); 
+$posta=[];
+$posta['hr_program']=array();
+$sql="SELECT other_myobj,other_posta_id
+FROM gks_calendar_other_posta 
+LEFT JOIN gks_production_posta ON gks_calendar_other_posta.other_posta_id = gks_production_posta.id_production_posto
+WHERE gks_calendar_other_posta.this_user_id=".$my_wp_user_id." and gks_production_posta.id_production_posto Is Not Null";
+$result = $db_link->query($sql);        
+if (!$result) {debug_mail(false,'error sql',$sql);die('sql error');}
+while ($row = $result->fetch_assoc()) {
+  $posta[$row['other_myobj']][]=$row['other_posta_id'];
+}
 
 $range_start = date('Y-m-d H:i:s', strtotime($_POST['start']));
 $range_end = date('Y-m-d H:i:s', strtotime($_POST['end'])); 
 
 
-//$where='and gks_calendar.calendar_user_id in ('.implode(',',$users).')';
-//$search_where='';
-//
-//$sql_where="(
-//	(gks_calendar.calendar_start >='".$range_start."' and gks_calendar.calendar_start <'".$range_end."') or 
-//	(gks_calendar.calendar_end >'".$range_start."'   and gks_calendar.calendar_end <='".$range_end."') or
-//	(gks_calendar.calendar_start <='".$range_start."' and gks_calendar.calendar_end >='".$range_end."')
-//	) ".$where . $search_where;
-	
-//print_r($_POST['end']); print $range_end;die();
-//echo $sql_where; die();
+
 $params=array();
 $params['range_start']=$range_start;
 $params['range_end']=$range_end;
 $params['users']=$users;
+$params['posta']=$posta;
+
+
+
 //print '<pre>';print_r($params);die();
 
 $myout=gks_calendar_get_events($params);
@@ -74,7 +79,11 @@ if ($hard==1) {
   echo json_encode($myout,JSON_PRETTY_PRINT);
   
 } else {
-  echo json_encode($myout);
+
+  $return = array('success' => true, 'message' => base64_encode('OK'),'mylist'=>$myout);
+
+  
+  echo json_encode($return);
 }
 die();
 

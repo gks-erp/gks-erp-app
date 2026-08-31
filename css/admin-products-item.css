@@ -231,23 +231,23 @@ td div.dialog_variable_list_table_th {
 .def_column_show_label {
   display:inline;padding-right:18px;padding-left: 3px;cursor: pointer;
 }
-#product_taric, .variable_product_taric {
+#product_taric, .variable_product_taric, #product_cpv, .variable_product_cpv {
  width:calc(98% - 22px);
  display:inline; 
 }
-.product_taric_get_descr {
+.product_taric_get_descr, .product_cpv_get_descr {
   color: goldenrod;
   cursor: pointer;
   vertical-align: middle; 
 }
-.product_taric_descr {
+.product_taric_descr, .product_cpv_descr {
   display:none;
   margin: 8px 0px;
 }
-.product_taric_descr_table {
+.product_taric_descr_table, .product_cpv_descr_table {
   background-color: white;
 }
-.product_taric_descr_text {
+.product_taric_descr_text, .product_cpv_descr_text {
   font-size: 0.875rem;
   margin-bottom: 10px;
 }

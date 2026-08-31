@@ -44,6 +44,9 @@ if ($name1!='gks_assets' and
     $name1!='gks_hotel_price' and
     $name1!='gks_hotel_room' and
     $name1!='gks_hotel_room_type' and
+    $name1!='gks_hr_program' and
+    $name1!='gks_hr_program_status' and
+    $name1!='gks_hr_program_vardia' and
 
     $name1!='gks_template_html' and
 
@@ -105,6 +108,9 @@ if ($name2!='gks_assets' and
     $name2!='gks_hotel_price' and
     $name2!='gks_hotel_room' and
     $name2!='gks_hotel_room_type' and
+    $name2!='gks_hr_program' and
+    $name2!='gks_hr_program_status' and
+    $name2!='gks_hr_program_vardia' and
     
     $name2!='gks_template_html' and
 
@@ -210,6 +216,9 @@ else if ($name1=='gks_hotel_floor') $sql="SELECT * from gks_hotel_floor WHERE id
 else if ($name1=='gks_hotel_price') $sql="SELECT * from gks_hotel_price WHERE id_hotel_price=".$id1;
 else if ($name1=='gks_hotel_room') $sql="SELECT * from gks_hotel_room WHERE id_hotel_room=".$id1;
 else if ($name1=='gks_hotel_room_type') $sql="SELECT * from gks_hotel_room_type WHERE id_hotel_room_type=".$id1;
+else if ($name1=='gks_hr_program') $sql="SELECT * from gks_hr_program WHERE id_hr_program=".$id1;
+else if ($name1=='gks_hr_program_status') $sql="SELECT * from gks_hr_program_status WHERE id_hr_program_status=".$id1;
+else if ($name1=='gks_hr_program_vardia') $sql="SELECT * from gks_hr_program_vardia WHERE id_hr_program_vardia=".$id1;
 
 else if ($name1=='gks_template_html') $sql="SELECT * from gks_template_html WHERE id_template_html=".$id1;
 
@@ -1107,6 +1116,81 @@ else if ($name2=='gks_hotel_room_type') {
     'oname' => $row_rel['room_type_descr'],
     'state' => '<span class="room_type_status_'.$row_rel['room_type_status'].'">'.getHotelRoomTypeStatusDescr($row_rel['room_type_status']).'</span>',
     'price' => myCurrencyFormat($row_rel['room_type_price']),
+    'date' => '',
+    'balance' => '',
+  );
+}
+else if ($name2=='gks_hr_program') {
+  gks_get_hr_program_status($hr_program_status,$hr_program_status_styles);
+  
+  $sql_rel="SELECT id_hr_program,hr_program_name,hr_program_date_from,hr_program_color,hr_program_status_id
+  from gks_hr_program WHERE id_hr_program=".$id2;
+  $result_rel = $db_link->query($sql_rel);        
+  if (!$result_rel) {
+    debug_mail(false,'error sql',$sql_rel);
+    $return = array('success' => false, 'message' => base64_encode('sql error'));
+    echo json_encode($return); die();}
+  if ($result_rel->num_rows==0) {
+    debug_mail(false,'relative object not found');
+    $return = array('success' => false, 'message' => base64_encode(gks_lang('Δεν βρέθηκε το σχετικό αντικείμενο')));
+    echo json_encode($return); die();}
+  $row_rel = $result_rel->fetch_assoc();
+  $objv=array(
+    'objname' => gks_lang('Πρόγραμμα Υπαλλήλων'),
+    'link' => '<a href="admin-hr-program-item.php?id='.$row_rel['id_hr_program'].'">#'.$row_rel['id_hr_program'].'</a>',
+    'oname' => $row_rel['hr_program_name'],
+    'oname_bg'=> trim_gks($row_rel['hr_program_color']),
+    'state' => '<span class="hr_program_status_'.$row_rel['hr_program_status_id'].'">'.
+               (isset($hr_program_status[$row_rel['hr_program_status_id']]) ? $hr_program_status[$row_rel['hr_program_status_id']]['hr_program_status_descr'] : '').'</span>',
+    'price' => '',
+    'date' => showDate(strtotime($row_rel['hr_program_date_from']), 'd/m/Y\<\b\r\>H:i:s', 1),
+    'balance' => '',
+  );
+}
+else if ($name2=='gks_hr_program_status') {
+  $sql_rel="SELECT id_hr_program_status,hr_program_status_descr,hr_program_status_color,hr_program_status_disabled
+  from gks_hr_program_status WHERE id_hr_program_status=".$id2;
+  $result_rel = $db_link->query($sql_rel);        
+  if (!$result_rel) {
+    debug_mail(false,'error sql',$sql_rel);
+    $return = array('success' => false, 'message' => base64_encode('sql error'));
+    echo json_encode($return); die();}
+  if ($result_rel->num_rows==0) {
+    debug_mail(false,'relative object not found');
+    $return = array('success' => false, 'message' => base64_encode(gks_lang('Δεν βρέθηκε το σχετικό αντικείμενο')));
+    echo json_encode($return); die();}
+  $row_rel = $result_rel->fetch_assoc();
+  $objv=array(
+    'objname' => gks_lang('Κατάσταση Προγράμματος'),
+    'link' => '<a href="admin-hr-program-status-item.php?id='.$row_rel['id_hr_program_status'].'">#'.$row_rel['id_hr_program_status'].'</a>',
+    'oname' => $row_rel['hr_program_status_descr'],
+    'oname_bg'=> trim_gks($row_rel['hr_program_status_color']),
+    'state' => '<img src="img/'.($row_rel['hr_program_status_disabled']==0 ? '1' :'0').'.png" border="0" width="16">',
+    'price' => '',
+    'date' => '',
+    'balance' => '',
+  );
+}
+else if ($name2=='gks_hr_program_vardia') {
+  $sql_rel="SELECT id_hr_program_vardia,hr_program_vardia_descr,hr_program_vardia_color,hr_program_vardia_disabled
+  from gks_hr_program_vardia WHERE id_hr_program_vardia=".$id2;
+  $result_rel = $db_link->query($sql_rel);        
+  if (!$result_rel) {
+    debug_mail(false,'error sql',$sql_rel);
+    $return = array('success' => false, 'message' => base64_encode('sql error'));
+    echo json_encode($return); die();}
+  if ($result_rel->num_rows==0) {
+    debug_mail(false,'relative object not found');
+    $return = array('success' => false, 'message' => base64_encode(gks_lang('Δεν βρέθηκε το σχετικό αντικείμενο')));
+    echo json_encode($return); die();}
+  $row_rel = $result_rel->fetch_assoc();
+  $objv=array(
+    'objname' => gks_lang('Βάρδια'),
+    'link' => '<a href="admin-hr-program-vardia-item.php?id='.$row_rel['id_hr_program_vardia'].'">#'.$row_rel['id_hr_program_vardia'].'</a>',
+    'oname' => $row_rel['hr_program_vardia_descr'],
+    'oname_bg'=> trim_gks($row_rel['hr_program_vardia_color']),
+    'state' => '<img src="img/'.($row_rel['hr_program_vardia_disabled']==0 ? '1' :'0').'.png" border="0" width="16">',
+    'price' => '',
     'date' => '',
     'balance' => '',
   );

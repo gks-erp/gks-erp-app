@@ -134,7 +134,9 @@ include_once('_my_header_admin.php');
     <div class="col-md-12 text-center mt-2">
 
               <button type="button" class="btn btn-primary" id="submit_button_ok_custom"><?php echo gks_lang('Αποθήκευση');?></button>
+              <?php if ($id>0) {?>
               <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_aade_katigoria_fpa_ejeresi'];?>" data-model="gks_aade_katigoria_fpa_ejeresi" data-backurl="admin-aade-katigoria-fpa-ejeresi.php"><?php echo gks_lang('Διαγραφή');?></button>
+              <?php } ?>
     </div>            
   </div>            
 </div>            

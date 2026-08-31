@@ -253,7 +253,7 @@ www.gks.gr
   margin-right: 46px;
 }
 
-#paxoros_check_processing, #paxoros_check_files, #paxoros_send_pdf, #paroxos_get_docstate {
+#paxoros_check_processing, #paxoros_check_files, #paxoros_send_pdf, #paroxos_get_docstate, #paroxos_get_status {
   margin-top:6px;
   color: #fff;
   background-color: #007bff;
@@ -276,6 +276,28 @@ www.gks.gr
   }
   
 }
+
+#otherReceivingNotePurposeTitle {
+  margin-top:10px;  
+}
+
+#nonObligatedRecipient_info,
+#withoutDigitalTransportTracking_info {
+  font-size:125%;
+  color:#007bff;
+  cursor:pointer;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+#div_nonObligatedRecipient_info,
+#div_withoutDigitalTransportTracking_info {
+  color: #6c757d;
+  font-size: 80%;
+  font-weight: 400;
+  margin-top: 0.25rem;    
+}
+
 
 .gks_other_entity_label {
   font-size:0.8rem;

@@ -42,15 +42,24 @@ if ($id>0) {
 
 $task_status_descr=''; if (isset($_POST['task_status_descr'])) $task_status_descr=trim_gks(base64_decode($_POST['task_status_descr']));
 $task_status_color=''; if (isset($_POST['task_status_color'])) $task_status_color=trim_gks(base64_decode($_POST['task_status_color']));
+$task_status_colorf=''; if (isset($_POST['task_status_colorf'])) $task_status_colorf=trim_gks(base64_decode($_POST['task_status_colorf']));
+$task_status_colorcss=''; if (isset($_POST['task_status_colorcss'])) $task_status_colorcss=trim_gks(base64_decode($_POST['task_status_colorcss']));
 $task_status_sortorder=0; if (isset($_POST['task_status_sortorder'])) $task_status_sortorder=intval(stripslashes(urldecode($_POST['task_status_sortorder'])));
 $task_status_disabled=0; if (isset($_POST['task_status_disabled'])) $task_status_disabled=intval($_POST['task_status_disabled']);
-
-
-
 
 if ($task_status_descr=='') {debug_mail(false,'task_status_descr',$task_status_descr);
   $return = array('success' => false, 'message' => base64_encode(gks_lang('Ορίστε την Περιγραφή'))); 
   echo json_encode($return); die(); }
+
+if ($task_status_color=='') {debug_mail(false,'task_status_color','');
+  $return = array('success' => false, 'message' => base64_encode(gks_lang('Ορίστε το Χρώμα φόντου'))); 
+  echo json_encode($return); die(); }
+
+if ($task_status_colorf=='') {debug_mail(false,'task_status_colorf','');
+  $return = array('success' => false, 'message' => base64_encode(gks_lang('Ορίστε το Χρώμα κειμένου'))); 
+  echo json_encode($return); die(); }
+
+
 
 $sql="select * from gks_crm_tasks_status where task_status_descr like '".$db_link->escape_string($task_status_descr)."' and id_crm_task_status<>".$id;
 $result = $db_link->query($sql);  
@@ -90,6 +99,8 @@ if ($id==-1) {
 $sql="update gks_crm_tasks_status set 
 task_status_descr='".$db_link->escape_string($task_status_descr)."',
 task_status_color=". ($task_status_color =='' ? 'null' : "'".$db_link->escape_string($task_status_color)."'").",
+task_status_colorf=". ($task_status_colorf =='' ? 'null' : "'".$db_link->escape_string($task_status_colorf)."'").",
+task_status_colorcss=". ($task_status_colorcss =='' ? 'null' : "'".$db_link->escape_string($task_status_colorcss)."'").",
 task_status_sortorder=".$task_status_sortorder.",
 task_status_disabled=".$task_status_disabled.",
 

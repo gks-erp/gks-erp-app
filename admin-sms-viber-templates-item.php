@@ -371,8 +371,8 @@ include_once('_my_header_admin.php');
   <div class="form-group1 row">
     <div class="col-md-12 text-center mt-2">
       <button type="button" class="btn btn-primary" id="submit_button_ok"><?php echo gks_lang('Αποθήκευση');?></button>
-      <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_sms_viber_template'];?>" data-model="gks_sms_viber_template" data-backurl="admin-sms-viber-templates.php"><?php echo gks_lang('Διαγραφή');?></button>
       <?php if ($id>0) {?>
+      <button type="button" class="btn btn-danger deleterowbtn" data-id="<?php echo $row['id_sms_viber_template'];?>" data-model="gks_sms_viber_template" data-backurl="admin-sms-viber-templates.php"><?php echo gks_lang('Διαγραφή');?></button>
       <button type="button" class="btn btn-primary" id="submit_button_copy" onclick="window.location.href='admin-sms-viber-templates-item.php?id=-1&copy=<?php echo $id;?>'"><?php echo gks_lang('Δημιουργία αντιγράφου');?></button>
       <?php } ?>
 
